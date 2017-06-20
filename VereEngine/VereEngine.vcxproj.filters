@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App.xaml.cpp" />
+    <ClCompile Include="MainRenderPage.xaml.cpp" />
+    <ClCompile Include="DeviceResources.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBaseObject.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBaseObjectsStack.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectsIDStack.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectsProcess.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectsStackManager.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResourceObject.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResourceObjectsStack.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="IDStack.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="VereEngineMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="inputclass.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadVMB.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="VereVector.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Atmosphere</Filter>
+    </ClCompile>
+    <ClCompile Include="MainEditorPage.xaml.cpp" />
+    <ClCompile Include="TreeViewBranch.xaml.cpp" />
+    <ClCompile Include="Planet.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanetData.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanetLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectSpace.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderDevice.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="LightHelper.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderState.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderDevice.cpp">
+      <Filter>TextRenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamingDataManager.cpp">
+      <Filter>StreamingData</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.xaml.h" />
+    <ClInclude Include="MainRenderPage.xaml.h" />
+    <ClInclude Include="DeviceResources.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="EnviromentHelper.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBaseObject.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBaseObjectsStack.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectsIDStack.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectsProcess.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectsStackManager.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResourceObject.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResourceObjectsStack.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TestObject.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="IDStack.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaBinding.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ShaderStructures.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="VereEngineMain.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dUtil.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx11effect.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="inputclass.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateMesh.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXHelper.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadVMS.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadVMB.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="VereMath.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="VereQueue.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="VereTextureByte4.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="VereTextureFloat.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="VereVector.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Atmosphere.h">
+      <Filter>Atmosphere</Filter>
+    </ClInclude>
+    <ClInclude Include="AtmosphereBlock.h">
+      <Filter>Atmosphere</Filter>
+    </ClInclude>
+    <ClInclude Include="AtmosphereData.h">
+      <Filter>Atmosphere</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Atmosphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Sun.h">
+      <Filter>Atmosphere</Filter>
+    </ClInclude>
+    <ClInclude Include="MainEditorPage.xaml.h" />
+    <ClInclude Include="TreeViewBranch.xaml.h" />
+    <ClInclude Include="PlanetData.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectSpace.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDevice.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTexture.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMeshBuffer.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModel.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEffect.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameVertex.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInputLayouts.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSpotLight.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="LightHelper.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePointLight.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDirectionalLight.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GameAmbientLight.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderState.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderDevice.h">
+      <Filter>TextRenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Game2DColorBrush.h">
+      <Filter>TextRenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Game2DTextLayout.h">
+      <Filter>TextRenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Game2DTextFormat.h">
+      <Filter>TextRenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanetLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanetCoordinate.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTilePlanetData.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamingDataManager.h">
+      <Filter>StreamingData</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStreamingData.h">
+      <Filter>StreamingData</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDataSet.h">
+      <Filter>StreamingData</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\Billboard.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\AtmosphereCalc.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\Body.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\Atmosphere.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\LightHelper.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\PosNormalTexTan.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\SkyBox.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\TerrainBlock.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\TerrainLOD.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\TerrainPlanetLOD.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="VereEngine.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VereEngine_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainRenderPage.xaml" />
+    <Page Include="MainEditorPage.xaml" />
+    <Page Include="TreeViewBranch.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="FX">
+      <UniqueIdentifier>{100ca563-cf09-40da-90dc-1dccf249c716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{5df04b6e-72e7-4320-aabb-6911e79fecd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object%27s Manager">
+      <UniqueIdentifier>{0e71a681-ff8c-4a37-8756-cf23f2be03ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f6579338-045b-42ec-b3dc-377198f574ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{95ac466d-d567-4b9a-9a0a-907f8d91dd67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Planet">
+      <UniqueIdentifier>{51df08ec-c8c4-47d4-b52a-ab8ac9892ad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Atmosphere">
+      <UniqueIdentifier>{140311eb-5e7a-4ab2-8162-264b1102d71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TextRenderDevice">
+      <UniqueIdentifier>{bbef4d64-23ea-493e-adb8-7253b3484b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderDevice">
+      <UniqueIdentifier>{957b3035-b0d1-4741-be7f-5ecf321809e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StreamingData">
+      <UniqueIdentifier>{9fa4ecba-3921-4366-97bc-17efef8f3e42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VereEngine.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
