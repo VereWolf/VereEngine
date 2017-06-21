@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{e0520437-0c12-46f6-81cd-2e7cd51a6759}</ProjectGuid>
+    <Keyword>DirectXXamlApp</Keyword>
+    <RootNamespace>VereEngine</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.10586.0</WindowsTargetPlatformMinVersion>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.10240.0</WindowsTargetPlatformMinVersion>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WindowsAppContainer>true</WindowsAppContainer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\lc.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <PackageCertificateThumbprint>4A2D493DFB1D9BA8DFE3CDC703A950595FCCCB5D</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>VereEngine_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)\Bullet\src;$(ProjectDir)\Lua\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)\Bullet\src;$(ProjectDir)\Lua\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <CodeAnalysisRuleSet>MixedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)\Bullet\src;$(ProjectDir)\Lua\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <AdditionalDependencies>$(ProjectDir)\Bullet\bin\BulletDynamics.lib;$(ProjectDir)\Bullet\bin\BulletCollision.lib;$(ProjectDir)\Bullet\bin\LinearMath.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;Effects11.lib;Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Bullet\src;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WarningLevel>Level1</WarningLevel>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <CustomBuild>
+      <Outputs>$(OutputPath)Fx\%(Filename).fxo</Outputs>
+      <AdditionalInputs>
+      </AdditionalInputs>
+      <Command>fxc /T fx_5_0 /Fo "$(OutputPath)Fx\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message>fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Message>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>$(ProjectDir)\Bullet\bin\BulletDynamics.lib;$(ProjectDir)\Bullet\bin\BulletCollision.lib;$(ProjectDir)\Bullet\bin\LinearMath.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;Effects11.lib;Comctl32.lib;Xaudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Bullet\src;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WarningLevel>Level1</WarningLevel>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
+    </ClCompile>
+    <CustomBuild>
+      <Outputs>$(OutputPath)Fx\%(Filename).fxo</Outputs>
+      <AdditionalInputs>
+      </AdditionalInputs>
+      <Command>fxc /T fx_5_0 /Fo "$(OutputPath)Fx\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message>fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Message>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <AdditionalDependencies>$(ProjectDir)\Bullet\bin\BulletDynamics.lib;$(ProjectDir)\Bullet\bin\BulletCollision.lib;$(ProjectDir)\Bullet\bin\LinearMath.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;Effects11.lib;Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Bullet\src;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WarningLevel>Level1</WarningLevel>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <CustomBuild>
+      <Outputs>$(OutputPath)Fx\%(Filename).fxo</Outputs>
+      <AdditionalInputs>
+      </AdditionalInputs>
+      <Command>fxc /T fx_5_0 /Fo "$(OutputPath)Fx\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message>fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Message>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>$(ProjectDir)\Bullet\bin\BulletDynamics.lib;$(ProjectDir)\Bullet\bin\BulletCollision.lib;$(ProjectDir)\Bullet\bin\LinearMath.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;Effects11.lib;Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Bullet\src;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WarningLevel>Level1</WarningLevel>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <CustomBuild>
+      <Outputs>$(OutputPath)Fx\%(Filename).fxo</Outputs>
+      <AdditionalInputs>
+      </AdditionalInputs>
+      <Command>fxc /T fx_5_0 /Fo "$(OutputPath)Fx\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message>fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Message>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.xaml.h">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Atmosphere.h" />
+    <ClInclude Include="AtmosphereBlock.h" />
+    <ClInclude Include="AtmosphereData.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Content\ShaderStructures.h" />
+    <ClInclude Include="DeviceResources.h" />
+    <ClInclude Include="DirectXHelper.h" />
+    <ClInclude Include="Game2DTextFormat.h" />
+    <ClInclude Include="Game2DTextLayout.h" />
+    <ClInclude Include="GameActor.h" />
+    <ClInclude Include="GameAmbientLight.h" />
+    <ClInclude Include="GameBaseObject.h" />
+    <ClInclude Include="GameBaseObjectsStack.h" />
+    <ClInclude Include="Game2DColorBrush.h" />
+    <ClInclude Include="GameDataSet.h" />
+    <ClInclude Include="GameDirectionalLight.h" />
+    <ClInclude Include="GameEffect.h" />
+    <ClInclude Include="GameInputLayouts.h" />
+    <ClInclude Include="GameModel.h" />
+    <ClInclude Include="GameMeshBuffer.h" />
+    <ClInclude Include="GameObjectSpace.h" />
+    <ClInclude Include="GameObjectsProcess.h" />
+    <ClInclude Include="GameObjectsStackManager.h" />
+    <ClInclude Include="GameObjectsIDStack.h" />
+    <ClInclude Include="GameStreamingData.h" />
+    <ClInclude Include="GameTilePlanetData.h" />
+    <ClInclude Include="GamePointLight.h" />
+    <ClInclude Include="GameResourceObject.h" />
+    <ClInclude Include="GameResourceObjectsStack.h" />
+    <ClInclude Include="GameSpotLight.h" />
+    <ClInclude Include="GameTexture.h" />
+    <ClInclude Include="GameVertex.h" />
+    <ClInclude Include="IDStack.h" />
+    <ClInclude Include="LuaBinding.h" />
+    <ClInclude Include="MainEditorPage.xaml.h">
+      <DependentUpon>MainEditorPage.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="MainRenderPage.xaml.h">
+      <DependentUpon>MainRenderPage.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Planet.h" />
+    <ClInclude Include="PlanetCoordinate.h" />
+    <ClInclude Include="PlanetData.h" />
+    <ClInclude Include="PlanetLOD.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="d3dx11effect.h" />
+    <ClInclude Include="Effects.h" />
+    <ClInclude Include="EnviromentHelper.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GenerateMesh.h" />
+    <ClInclude Include="inputclass.h" />
+    <ClInclude Include="LightHelper.h" />
+    <ClInclude Include="LoadVMB.h" />
+    <ClInclude Include="LoadVMS.h" />
+    <ClInclude Include="RenderState.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="StepTimer.h" />
+    <ClInclude Include="StreamingDataManager.h" />
+    <ClInclude Include="Sun.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestObject.h" />
+    <ClInclude Include="RenderDevice.h" />
+    <ClInclude Include="TextRenderDevice.h" />
+    <ClInclude Include="TreeViewBranch.xaml.h">
+      <DependentUpon>TreeViewBranch.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="VereEngineMain.h" />
+    <ClInclude Include="VereMath.h" />
+    <ClInclude Include="VereQueue.h" />
+    <ClInclude Include="VereTextureByte4.h" />
+    <ClInclude Include="VereTextureFloat.h" />
+    <ClInclude Include="VereVector.h" />
+    <ClInclude Include="Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App.xaml.cpp">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="DeviceResources.cpp" />
+    <ClCompile Include="GameBaseObject.cpp" />
+    <ClCompile Include="GameBaseObjectsStack.cpp" />
+    <ClCompile Include="GameObjectSpace.cpp" />
+    <ClCompile Include="GameObjectsProcess.cpp" />
+    <ClCompile Include="GameObjectsIDStack.cpp" />
+    <ClCompile Include="GameResourceObject.cpp" />
+    <ClCompile Include="GameResourceObjectsStack.cpp" />
+    <ClCompile Include="IDStack.cpp" />
+    <ClCompile Include="LoadVMB.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Effects.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectsStackManager.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="inputclass.cpp" />
+    <ClCompile Include="LightHelper.cpp" />
+    <ClCompile Include="MainEditorPage.xaml.cpp">
+      <DependentUpon>MainEditorPage.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="MainRenderPage.xaml.cpp">
+      <DependentUpon>MainRenderPage.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="PlanetData.cpp" />
+    <ClCompile Include="PlanetLOD.cpp" />
+    <ClCompile Include="RenderState.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="RenderDevice.cpp" />
+    <ClCompile Include="StreamingDataManager.cpp" />
+    <ClCompile Include="TextRenderDevice.cpp" />
+    <ClCompile Include="TreeViewBranch.xaml.cpp">
+      <DependentUpon>TreeViewBranch.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="VereEngineMain.cpp" />
+    <ClCompile Include="VereVector.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VereEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\LockScreenLogo.scale-200.png" />
+    <Image Include="Assets\SplashScreen.scale-200.png" />
+    <Image Include="Assets\Square150x150Logo.scale-200.png" />
+    <Image Include="Assets\Square44x44Logo.scale-200.png" />
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Image Include="Assets\StoreLogo.png" />
+    <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="small.ico" />
+    <Image Include="VereEngine.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\Billboard.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="FX\Body.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="FX\LightHelper.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="FX\PosNormalTexTan.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="FX\TerrainBlock.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\TerrainLOD.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\SkyBox.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\TerrainPlanetLOD.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\Atmosphere.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\AtmosphereCalc.fx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VereEngine_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <FileType>Document</FileType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainEditorPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainRenderPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TreeViewBranch.xaml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\lc.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.targets" />
+  </ImportGroup>
+</Project>

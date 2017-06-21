@@ -1,0 +1,2 @@
+MainPackage=C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\x64\Debug\VereEngine\VereEngine_1.0.0.0_x64_Debug.appx
+SymbolPackage=C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\AppPackages\VereEngine\VereEngine_1.0.0.0_Debug_Test\VereEngine_1.0.0.0_x64_Debug.appxsym
