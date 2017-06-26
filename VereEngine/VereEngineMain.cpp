@@ -51,6 +51,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	InputLayouts::InitAll(deviceResources.get());
 	RenderStates::InitAll(deviceResources.get());
 
+	//inprovization, start of creation scene in worldspace
+		
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 
 	int idF1 = GameTextRenderDeviceHandle->CreateTextFormat(
@@ -104,6 +106,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id4a))->CreateGameObject(id1a);
 	//((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id4a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
 
+	//end of creation scene in worldspace
+		
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 	/*
