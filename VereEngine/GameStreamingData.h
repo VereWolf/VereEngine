@@ -9,9 +9,15 @@ public:
 	GameStreamingData() {}
 	~GameStreamingData() { ReleaseStreamingData(); }
 
-	void SetStreamingData(std::vector<char> *D) { m_gameStreamingData = D; }
-	std::vector<char>* GetStreamingData() { return m_gameStreamingData; }
+	void SetStreamingData(void *data, int size)
+	{
+		m_gameStreamingData = data;
+		m_size = size;
+	}
+	void *GetStreamingData() { return m_gameStreamingData; }
+	int GetSize() { return m_size; }
 	inline void ReleaseStreamingData() { SafeDelete(m_gameStreamingData); }
 private:
-	std::vector<char> *m_gameStreamingData;
+	void* m_gameStreamingData;
+	int m_size;
 };

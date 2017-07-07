@@ -23,9 +23,9 @@ public:
 	int GetIdInRegistr() { return m_idInRegistr; }
 
 	//Persistence for saving data on disk
-	void PerformancePersistence(bool onlyGetSize, bool isSaveMod);
-	int SaveOrLoadValue(void * ptr, int size);
-	int SaveOrLoadString(std::string *S);
+	void PerformancePersistence(bool onlyGetSize, bool isSaveMod); //Save/load all relevant data to/from buffer.
+	int SaveOrLoadValue(void * ptr, int size); // for one variable, their mods  related with variables bool m_persistenceIsSaveMod and bool m_persistenceIsOnlyGetSizeMod
+	int SaveOrLoadString(std::string *S); //as SaveOrLoadValue but for string
 	int GetSizeOfBuffer() { return m_persistenceSize; }
 	std::vector<char> *GetPersistentBuffer() { return &m_persistenceBuffer; }
 	void SetPersistentBuffer(std::vector<char> * buffer, int index, int size)

@@ -22,6 +22,15 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
+	if (m_planetElementsInProcess.GetSize() > 0)
+	{
+		int id = m_planetElementsInProcess.TakeElement();
+
+		if (m_planetElements[id])
+		{
+			((TerrainPlanetLOD*)m_planetElements[id])->CreateNewLevelOfLoD();
+		}
+	}
 	m_resources->GetD3DDeviceContext()->RSSetState(RenderStates::SolidRS);
 
 	float blendFactor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -37,11 +46,12 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 	//GameObjectStackHandle->GetMainCamera()->SetUp((GameObjectStackHandle->GetMainCamera()->GetPosition() - GetLocalPosition()).normalize());
 }
 
-void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel)
+void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming)
 {
 	SetNumPointInRowInCell(cellSize);
 	SetMaxLevel(maxLevel);
-	SetMaxRenderLevel(maxRenderLevel);
+	SetLoadDataAfterAgain(loadDataAfterAgain);
+	SetMaxLevelOfStreaming(maxLevelOfStreaming);
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> terrainLOD =
 	{
@@ -78,6 +88,6 @@ void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0);
+		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, NULL, NULL);
 	}
 }

@@ -106,7 +106,7 @@ fxgroup
                 //   o1.x <- <VS return value>.PosW.x; o1.y <- <VS return value>.PosW.y; o1.z <- <VS return value>.PosW.z; 
                 //   o0.x <- <VS return value>.PosH.x; o0.y <- <VS return value>.PosH.y; o0.z <- <VS return value>.PosH.z; o0.w <- <VS return value>.PosH.w
                 //
-                #line 35 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Atmosphere.fx"
+                #line 35 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Atmosphere.fx"
                 mov r0.xyz, v1.xyzx  // r0.x <- vout.Tex.x; r0.y <- vout.Tex.y; r0.z <- vout.Tex.z
                 mov r1.xyz, v0.xyzx
                 mov r1.w, l(1.000000)
@@ -191,7 +191,7 @@ fxgroup
                 //   v2.x <- pin.Tex.x; v2.y <- pin.Tex.y; v2.z <- pin.Tex.z; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 64 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Atmosphere.fx"
+                #line 64 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Atmosphere.fx"
                 mov r0.xyzw, l(0.100000,0.300000,1.000000,0.200000)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z; r0.w <- color.w
                 
                 #line 71

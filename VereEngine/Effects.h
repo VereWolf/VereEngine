@@ -74,9 +74,15 @@ public:
 	void SetVariable(const void* V, UINT size, UINT index) { m_Variable[index]->SetRawValue(V, 0, size); }
 	void SetVector(const void* V, UINT size, UINT index) { m_Vector[index]->SetRawValue(V, 0, size); }
 	void SetMatrix(CXMMATRIX &M, UINT index) { m_Matrix[index]->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetShaderResource(ID3D11ShaderResourceView *SR, UINT index) { m_ShaderResource[index]->SetResource(SR); }
+
+	void SetVariableSize(int size) { m_VariableSize = size; }
+	void SetVectorSize(int size) { m_VectorSize = size; }
+	void SetMatrixSize(int size) { m_MatrixSize = size; }
+	void SetShaderResourceSize(int size) { m_ShaderResourceSize = size; }
 
 	void SetOnlyGetSize(bool B) { m_onlyGetSize = B; }
-	void SetSize();
+	void SetAllSize();
 
 	void BindTechnique(UINT index, LPCSTR name);
 	void BindValue(UINT index, LPCSTR name);

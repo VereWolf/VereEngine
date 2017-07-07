@@ -76,7 +76,7 @@ fxgroup
                 //   o1.x <- <VS return value>.TexTess.x; o1.y <- <VS return value>.TexTess.y; 
                 //   o0.x <- <VS return value>.PosL.x; o0.y <- <VS return value>.PosL.y; o0.z <- <VS return value>.PosL.z
                 //
-                #line 38 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainBlock.fx"
+                #line 38 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainBlock.fx"
                 mov r0.xy, v1.xyxx  // r0.x <- vout.TexTess.x; r0.y <- vout.TexTess.y
                 mov r1.xyz, v0.xyzx  // r1.x <- vout.PosL.x; r1.y <- vout.PosL.y; r1.z <- vout.PosL.z
                 mov o0.xyz, r1.xyzx
@@ -157,7 +157,7 @@ fxgroup
                 //   v[3][0].x <- p[3].PosL.x; v[3][0].y <- p[3].PosL.y; v[3][0].z <- p[3].PosL.z; 
                 //   v[3][1].x <- p[3].TexTess.x; v[3][1].y <- p[3].TexTess.y
                 //
-                #line 82 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainBlock.fx"
+                #line 82 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainBlock.fx"
                 mov r0.x, vOutputControlPointID
                 mov r0.yzw, v[r0.x + 0][0].xxyz  // r0.y <- hout.PosL.x; r0.z <- hout.PosL.y; r0.w <- hout.PosL.z
                 mov r1.xy, v[r0.x + 0][1].xyxx  // r1.x <- hout.TexTess.x; r1.y <- hout.TexTess.y
@@ -300,7 +300,7 @@ fxgroup
                 //   vicp[3][0].x <- quad[3].PosL.x; vicp[3][0].y <- quad[3].PosL.y; vicp[3][0].z <- quad[3].PosL.z; 
                 //   vicp[3][1].x <- quad[3].TexTess.x; vicp[3][1].y <- quad[3].TexTess.y
                 //
-                #line 102 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainBlock.fx"
+                #line 102 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainBlock.fx"
                 mov r0.xyz, -vicp[0][0].xyzx
                 add r0.xyz, r0.xyzx, vicp[1][0].xyzx
                 mul r0.xyz, r0.xyzx, vDomain.xxxx
@@ -412,7 +412,7 @@ fxgroup
                 //   v2.x <- pin.TexTess.x; v2.y <- pin.TexTess.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 124 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainBlock.fx"
+                #line 124 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainBlock.fx"
                 mov r0.xyz, l(1.000000,0.700000,0.700000,0)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
                 dp3 r0.w, v1.xyzx, v1.xyzx
                 sqrt r0.w, r0.w  // r0.w <- distance

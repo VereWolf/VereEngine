@@ -71,20 +71,22 @@ public:
 	}
 	~VereTextureBYTE4()
 	{
-		delete m_map;
 	}
 
-	void Init(std::vector <VBYTE4> *map, int width, int height)
+	void Init(void *map, int width, int height)
 	{
 		m_width = width;
 		m_height = height;
-		m_map = map;
+		m_map.resize(width * height);
+		memcpy(&m_map[0], map, sizeof(VBYTE4) * m_map.size());
 	}
+
+	void *GetTexture() { return &m_map[0]; }
 
 	VBYTE4 GetVariable(float x, float y)
 	{
-		x = (float)m_width * x;
-		y = (float)m_height * y;
+		x = VereMath::Clamp(((float)m_width - 1.0f) * x, 0.0f, m_width - 1);
+		y = VereMath::Clamp(((float)m_height - 1.0f) * y, 0.0f, m_height - 1);
 
 		float lx = x - (float)((int)x);
 		float ly = y - (float)((int)y);
@@ -96,31 +98,31 @@ public:
 
 		if (lx == 0.0f && ly == 0.0f)
 		{
-			x1y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x1y2 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y2 = m_map->at(((int)y) * m_width + ((int)x));
+			x1y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x1y2 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y2 = m_map.at(((int)y) * m_width + ((int)x));
 		}
 		else if (lx == 0.0f)
 		{
-			x1y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x1y2 = m_map->at(((int)y + 1) * m_width + ((int)x));
-			x2y2 = m_map->at(((int)y + 1) * m_width + ((int)x));
+			x1y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x1y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) * m_width + ((int)x));
+			x2y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) * m_width + ((int)x));
 		}
 		else if (ly == 0.0f)
 		{
-			x1y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y1 = m_map->at(((int)y) * m_width + ((int)x) + 1);
-			x1y2 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y2 = m_map->at(((int)y) * m_width + ((int)x + 1));
+			x1y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y1 = m_map.at(((int)y) * m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
+			x1y2 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y2 = m_map.at(((int)y) * m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
 		}
 		else
 		{
-			x1y1 = m_map->at(((int)y) * m_width + ((int)x));
-			x2y1 = m_map->at(((int)y) * m_width + ((int)x) + 1);
-			x1y2 = m_map->at(((int)y + 1) * m_width + ((int)x));
-			x2y2 = m_map->at(((int)y + 1) * m_width + ((int)x + 1));
+			x1y1 = m_map.at(((int)y) * m_width + ((int)x));
+			x2y1 = m_map.at(((int)y) * m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
+			x1y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) * m_width + ((int)x));
+			x2y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) *m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
 		}
 
 		VBYTE4 v1 = x1y1 + (x2y1 - x1y1) * lx;
@@ -132,34 +134,33 @@ public:
 	
 	VereTextureBYTE4 *CreateNewTextureFrom(float lvl, XMFLOAT2 offset, float height, float width)
 	{
-		float S = height * width;
-		std::vector<VBYTE4> *M = new std::vector<VBYTE4>;
+		float S = (height + 2) * (width + 2);
+		std::vector<VBYTE4> M(S);
+		float L2 = 1.0f / pow(2, lvl);
+		float H2 = 1.0f / (height + 2);
+		float W2 = 1.0f / (width + 2);
+		float OC = (height) / (height + 2.0f);
 
-		M->resize(S);
+		XMFLOAT2 OF = XMFLOAT2(offset.x * L2 * OC, offset.y * L2 * OC);
+		XMFLOAT2 INC = XMFLOAT2(L2 * W2, L2 * H2);
 
-		float L2 = 1.0 / pow(2.0, lvl);
-		XMFLOAT2 OF = XMFLOAT2(offset.x * L2, offset.y * L2);
-		XMFLOAT2 INC = XMFLOAT2(lvl / width, lvl / height);
+		XMFLOAT2 I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
 
-		int H = m_height;
-		int W = m_width;
-		XMFLOAT2 I = XMFLOAT2(OF.x, OF.y);
-
-		for (int y = 0; y < H; ++y)
+		for (int y = 0; y < (height + 2); ++y)
 		{
-			for (int x = 0; x < W; ++x)
+			for (int x = 0; x < (width + 2); ++x)
 			{
-				M->at(y * W + x) = GetVariable(I.x, I.y);
+				M[y * (width + 2) + x] = GetVariable(I.x, I.y);
 
 				I.x += INC.x;
 			}
 
-			I.x = OF.x;
+			I.x = OF.x + H2 - INC.y;
 			I.y += INC.y;
 		}
 
 		VereTextureBYTE4 *T = new VereTextureBYTE4;
-		T->Init(M, width, height);
+		T->Init(&M[0], width + 2, height + 2);
 
 		return T;
 	}
@@ -167,7 +168,7 @@ public:
 	int GetHeight() { return m_height; }
 	int GetWidth() { return m_width; }
 private:
-	std::vector<VBYTE4> *m_map;
+	std::vector<VBYTE4> m_map;
 	int m_height;
 	int m_width;
 };

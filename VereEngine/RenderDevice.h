@@ -68,6 +68,8 @@ public:
 	float m_FarRangeMod;
 	float m_FarModifier;
 	ID3D11RasterizerState* m_RasterizeState;
+
+
 	};
 
 class RenderDevice

@@ -48,6 +48,7 @@ void RenderDevice::Render(RenderMesage *message)
 	m_resources->GetD3DDeviceContext()->RSSetState(message->m_RasterizeState);
 
 	Model *model = GetModel(message->m_ModelID);
+	if (model == NULL) return;
 	ID3D11Buffer *VB = GetVerticesBuffer(model->idMeshBuffer);
 	ID3D11Buffer *IB = GetIndicesBuffer(model->idMeshBuffer);
 	ID3D11InputLayout *IL = GetInputLayouts(model->idInputLayouts);
@@ -171,13 +172,15 @@ ID3D11ShaderResourceView *RenderDevice::BuildTexture(void *map, UINT height, UIN
 	switch (format)
 	{
 	case DXGI_FORMAT_R8G8B8A8_UNORM:
-		tbsd.pSysMem = &((std::vector<VBYTE4>*)map)->at(0);
+		tbsd.pSysMem = map;
 		tbsd.SysMemPitch = width * sizeof(VBYTE4);
+		tbsd.SysMemSlicePitch = 0;
 		tdesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		break;
 	case DXGI_FORMAT_R32_FLOAT:
-		tbsd.pSysMem = &((std::vector<float>*)map)->at(0);
+		tbsd.pSysMem = map;
 		tbsd.SysMemPitch = width * sizeof(float);
+		tbsd.SysMemSlicePitch = 0;
 		tdesc.Format = DXGI_FORMAT_R32_FLOAT;
 		break;
 	default:
@@ -194,7 +197,7 @@ ID3D11ShaderResourceView *RenderDevice::BuildTexture(void *map, UINT height, UIN
 	srvDesc.ViewDimension =
 		D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = tdesc.MipLevels;
+	srvDesc.Texture2D.MipLevels = -1;
 	srvDesc.Format = tdesc.Format;
 
 	m_resources->GetD3DDevice()->CreateShaderResourceView(mapResource, &srvDesc, &textureSRV);
@@ -220,7 +223,7 @@ void RenderDevice::DeleteModel(int id)
 
 Model* RenderDevice::GetModel(int id)
 {
-	if (id >= 0)
+	if (id >= 0 && m_renderAssetsStacks.m_gameModels.GetGameObject(id) != NULL)
 	{
 		return ((GameModel*)m_renderAssetsStacks.m_gameModels.GetGameObject(id))->GetModel();
 	}
@@ -250,7 +253,12 @@ void RenderDevice::DeleteTexture(int id)
 
 ID3D11ShaderResourceView* RenderDevice::GetTexture(int id)
 {
-	return ((GameTexture*)m_renderAssetsStacks.m_gameTextures.GetGameObject(id))->GetTexture();
+	if (id >= 0 && m_renderAssetsStacks.m_gameTextures.GetGameObject(id) != NULL)
+	{
+		return ((GameTexture*)m_renderAssetsStacks.m_gameTextures.GetGameObject(id))->GetTexture();
+	}
+
+	return NULL;
 }
 
 int RenderDevice::CreateInputLayouts(int idVertices, int idEffect)

@@ -3,6 +3,25 @@
 #include "GameStreamingData.h"
 #include "GameDataSet.h"
 
+using namespace Platform;
+using namespace Windows::Foundation;
+using namespace Windows::Foundation::Collections;
+using namespace Windows::Graphics::Display;
+using namespace Windows::System::Threading;
+using namespace Windows::System;
+using namespace Windows::UI::Core;
+using namespace Windows::UI::Input;
+using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
+using namespace Windows::UI::Xaml::Controls::Primitives;
+using namespace Windows::UI::Xaml::Data;
+using namespace Windows::UI::Xaml::Input;
+using namespace Windows::UI::Xaml::Media;
+using namespace Windows::UI::Xaml::Navigation;
+using namespace Windows::ApplicationModel;
+using namespace Windows::Storage;
+using namespace Windows::Storage::Streams;
+
 StreamingDataManager::StreamingDataManager()
 {
 	GameStreamingDataHandle = this;
@@ -30,7 +49,7 @@ void StreamingDataManager::Init(DX::DeviceResources *resources)
 
 int StreamingDataManager::LoadData(string nameFile)
 {
-	std::ifstream fin(nameFile, std::ios::binary);
+	std::ifstream fin(&nameFile[0], std::ios::binary);
 
 	if (!fin)
 	{
@@ -39,39 +58,72 @@ int StreamingDataManager::LoadData(string nameFile)
 
 	fin.seekg(0, std::ios_base::end);
 	int size = (int)fin.tellg();
+	fin.seekg(0, std::ios_base::beg);
 
 	if (size <= 0)
 	{
 		return -1;
 	}
 
-	std::vector<char> *dataBuffer = new std::vector<char>();
+	char *dataBuffer = new char[size];
 
-	dataBuffer->resize(size);
+	fin.read(&dataBuffer[0], size);
+	fin.close();
 
-	fin.read(&dataBuffer->at(0), size);
-
-	return CreateStreamingData(dataBuffer);
+	return CreateStreamingData(dataBuffer, size);
 }
+
+/*bool StreamingDataManager::SaveData(String^ nameFile, int id)
+{
+
+	auto workItemHandler = ref new WorkItemHandler([this, nameFile, id](IAsyncAction ^ action)
+	{
+		Array<unsigned char> ^data = ref new Array<unsigned char>((unsigned char*)GetStreamingData(id), GetSizeOfStreamingData(id));
+
+		concurrency::create_task(KnownFolders::PicturesLibrary->CreateFileAsync(nameFile, CreationCollisionOption::ReplaceExisting));
+
+		concurrency::create_task(KnownFolders::PicturesLibrary->GetFileAsync(nameFile)).then([data](StorageFile^ sampleFile)
+		{
+			concurrency::create_task(FileIO::WriteBytesAsync(sampleFile, data));
+		});
+	});
+
+	m_Worker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
+
+	while (!(m_Worker->Status == AsyncStatus::Completed));
+
+	m_Worker->Close();
+
+	return true;
+}*/
 
 bool StreamingDataManager::SaveData(string nameFile, int id)
 {
-	std::ofstream fout(nameFile, std::ios::binary);
+
+	Platform::String^ localfolder = Windows::Storage::ApplicationData::Current->LocalFolder->Path;
+
+	std::wstring folderNameW(localfolder->Begin());
+	std::string folderNameA(folderNameW.begin(), folderNameW.end());
+
+	stringstream ss;
+
+	ss << folderNameA << "\\" << nameFile;
+
+	std::ofstream fout(ss.str(), std::ios::binary | ios::out);
 
 	if (!fout)
 	{
 		return false;
 	}
 
-	std::vector<char> dataBuffer;
-	std::vector<char> *data = GetStreamingData(id);
+	fout.write((char*)GetStreamingData(id), GetSizeOfStreamingData(id));
 
-	fout.write(&data->at(0), data->size());
+	fout.close();
 
 	return true;
 }
 
-int StreamingDataManager::LoadDataSet(string nameFile)
+/*int StreamingDataManager::LoadDataSet(string nameFile)
 {
 	std::ifstream fin(nameFile, std::ios::binary);
 
@@ -117,7 +169,7 @@ int StreamingDataManager::LoadDataSet(string nameFile)
 		data->resize(S[i]);
 		memcpy(&data[0], &dataBuffer[numDataBlock], S[i]);
 
-		SetDataSet(id, i, CreateStreamingData(data));
+		SetDataSet(id, i, CreateStreamingData(&data->at(0), S[i]));
 	}
 
 	return id;
@@ -134,11 +186,11 @@ bool StreamingDataManager::SaveDataSet(string nameFile, std::vector<int> *IDs)
 
 	std::vector<char> dataBuffer;
 	int S = IDs->size();
-	UINT dataSize = sizeof(int) + S * sizeof(UINT);
+	unsigned int dataSize = sizeof(int) + S * sizeof(UINT);
 
 	for (int i = 0; i < S; ++i)
 	{
-		dataSize += GetStreamingData(IDs->at(i))->size();
+		dataSize += GetSizeOfStreamingData(IDs->at(i));
 	}
 
 	dataBuffer.resize(dataSize);
@@ -150,16 +202,18 @@ bool StreamingDataManager::SaveDataSet(string nameFile, std::vector<int> *IDs)
 
 	for (int i = 0; i < S; ++i)
 	{
-		S2 = GetStreamingData(IDs->at(i))->size();
+		S2 = GetSizeOfStreamingData(IDs->at(i));
 		memcpy(&dataBuffer[dataSize], &S2, sizeof(S2));
 		dataSize += sizeof(S2);
 	}
 
 	for (int i = 0; i < S; ++i)
 	{
-		std::vector<char> *data = GetStreamingData(IDs->at(i));
-		memcpy(&dataBuffer[dataSize], &data->at(0), data->size());
-		dataSize += data->size();
+		void *data = GetStreamingData(IDs->at(i));
+		int DS = GetSizeOfStreamingData(IDs->at(i));
+
+		memcpy(&dataBuffer[dataSize], &data, DS);
+		dataSize += DS;
 	}
 
 	fout.write(&dataBuffer[0], dataBuffer.size());
@@ -207,13 +261,13 @@ void StreamingDataManager::SetDataSet(int id, int index, int value)
 int StreamingDataManager::GetDataSet(int id, int index)
 {
 	return ((GameDataSet*)m_streamingData.m_gameDataSet.GetGameObject(id))->GetDataSet(index);
-}
+}*/
 
-int  StreamingDataManager::CreateStreamingData(std::vector<char> *data)
+int  StreamingDataManager::CreateStreamingData(void *data, int size)
 {
 	GameStreamingData *gameStreamingData = new GameStreamingData;
 	gameStreamingData->PreInit(m_resources);
-	gameStreamingData->SetStreamingData(data);
+	gameStreamingData->SetStreamingData(data, size);
 
 	return m_streamingData.m_gameData.CreateGameObject(gameStreamingData);
 }
@@ -223,7 +277,7 @@ void StreamingDataManager::DeleteStreamingData(int id)
 	m_streamingData.m_gameData.DeleteGameObject(id);
 }
 
-std::vector<char>* StreamingDataManager::GetStreamingData(int id)
+void* StreamingDataManager::GetStreamingData(int id)
 {
 	if (id >= 0)
 	{
@@ -233,7 +287,17 @@ std::vector<char>* StreamingDataManager::GetStreamingData(int id)
 	return NULL;
 }
 
-void StreamingDataManager::CylinderMapToSquareMap(
+int StreamingDataManager::GetSizeOfStreamingData(int id)
+{
+	if (id >= 0)
+	{
+		return ((GameStreamingData*)m_streamingData.m_gameData.GetGameObject(id))->GetSize();
+	}
+
+	return NULL;
+}
+
+/*void StreamingDataManager::CylinderMapToSquareMap(
 	btScalar offsetOfMapinCylinderX, //ration
 	btScalar offsetOfMapinCylinderY, //ratio
 	btScalar ratioOfMapInCylinderX,
@@ -246,7 +310,7 @@ void StreamingDataManager::CylinderMapToSquareMap(
 	float stride,
 	btMatrix3x3 *blockMatrixs[12])
 {
-	for (int i = 0; i < 6; ++i)
+	/*for (int i = 0; i < 6; ++i)
 	{
 		for (float y = 0; y < squareSide; y += 1.0f)
 		{
@@ -258,5 +322,5 @@ void StreamingDataManager::CylinderMapToSquareMap(
 				memcpy(&GetStreamingData(idOfSideOfSquareMap[i])->at(y * pow(stride, 2) * squareSide + x* stride), &GetStreamingData(idOfCylinderMap)->at(coord.getY() * widthOfMap * stride + coord.getX()), stride);
 			}
 		}
-	}
-};
+	}*/
+//};

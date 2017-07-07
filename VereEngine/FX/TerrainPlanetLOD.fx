@@ -9,11 +9,13 @@ cbuffer cbPerFrame
 cbuffer cbPerObject
 {
 	float4x4 gWorld;
+	float3x3 gWorldN;
 	float4x4 gViewProj;
 	float gSpacing;
 	float gRadius;
 	float3 gCentrePos;
 	float3 gOffset;
+	float3 gBinorm;
 	float3 gTang;
 	float gLevel;
 	float gFarZ;
@@ -31,20 +33,20 @@ SamplerState samHeightMap
 {
 	Filter = MIN_MAG_MIP_LINEAR;
 
-	AddressU = CLAMP;
-	AddressV = CLAMP;
+	AddressU = WRAP;
+	AddressV = WRAP;
 };
 
 SamplerState samNormalMap
 {
 	Filter = MIN_MAG_MIP_LINEAR;
 
-	AddressU = CLAMP;
-	AddressV = CLAMP;
+	AddressU = WRAP;
+	AddressV = WRAP;
 };
 
-//Texture2D gHeightMap;
-//Texture2D gNormalMap;
+Texture2D gHeightMap;
+Texture2D gNormalMap;
 
 struct VertexIn
 {
@@ -119,8 +121,8 @@ struct DomainOut
 	float3 PosW     :POSITION01;
 	float3 PosV     :POSITION02;
 	float3 NormalW	:NORMAL01;
-	float3 BinormW	:NORMAL02;
-	float3 TangW	:NORMAL03;
+	//float3 BinormW	:NORMAL02;
+	//float3 TangW	:NORMAL03;
 	float2	TexTess	:TEXCOORD0;
 };
 
@@ -141,32 +143,28 @@ DomainOut DS(PatchTess patchTess,
 		lerp(quad[2].TexTess, quad[3].TexTess, uv.x),
 		uv.y);
 
+	float CH = dout.PosW.y * gSpacing;
+
 	dout.PosW = mul(float4(dout.PosW, 1.0f), gWorld).xyz;
 
-	float H = 0.0f;// 2.0f * gHeightMap.SampleLevel(samHeightMap, float2(gLevel * (dout.TexTess.x + gOffset.x), gLevel * (dout.TexTess.y + gOffset.y)), 0).x;
+	float H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x + CH;
 
 	float3 N = normalize(dout.PosW - gCentrePos);
-	float3 B = normalize(cross(gTang, N));
-	float3 T = cross(N, B);
+	float3 B = normalize(cross(mul(gTang, gWorldN), N));
+	float3 T = normalize(cross(N, B));
 
-	/*if (H >= 0)
-	{
-		float3 normalT = float3(0.0f, 1.0f, 0.0f);//gNormalMap.SampleLevel(samNormalMap, float2(gLevel * (dout.TexTess.x + gOffset.x), gLevel * (dout.TexTess.y + gOffset.y)), 0).xyz;
+	//float3 B = normalize(cross(N, gTang));
+	//float3 T = cross(B, N);
 
-		float3x3 TBN = float3x3(T, N, B);
+	float3 normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(dout.TexTess.x, dout.TexTess.y), 0).xyz - 1.0f;
 
-		dout.NormalW = mul(normalT, TBN);
-		dout.BinormW = normalize(cross(gTang, dout.NormalW));
-		dout.TangW = cross(dout.NormalW, dout.BinormW);
+	float3x3 TBN = float3x3(T, N, B);
 
-		dout.PosW = (H + gRadius) * N + gCentrePos;
-	}
-	else
-	{
-		dout.PosW = (gRadius) * N + gCentrePos;
-	}*/
-	dout.NormalW = N;
-	dout.PosW = (gRadius)* N + gCentrePos;
+	dout.NormalW = mul(normalT, TBN);
+	//dout.BinormW = normalize(cross(gTang, dout.NormalW));
+	//dout.TangW = cross(dout.NormalW, gBinormW);
+
+	dout.PosW = (H + gRadius) * N + gCentrePos;
 
 	dout.PosV = mul(float4(dout.PosW, 1.0f), gViewProj).xyz;
 	dout.PosH = mul(float4(dout.PosW, 1.0f), gViewProj);
@@ -178,34 +176,17 @@ DomainOut DS(PatchTess patchTess,
 
 float4 PS(DomainOut  pin) : SV_Target
 {
-	float H = 0.0f;// 2.0f * gHeightMap.SampleLevel(samHeightMap, float2(gLevel * (pin.TexTess.x + gOffset.x), gLevel * (pin.TexTess.y + gOffset.y)), 0).x;
 
 	float3 color = float3(1.0f, 1.0f, 1.0f);
 
 	float3 N = pin.NormalW;
 
-	/*if (H < 0.0f)
-	{
-		color = float3(0.2f, 0.35f, 0.9f);
-		N = float3(0.0f, 1.0f, 0.0f);
-	}*/
-
 	float d = 0.5f * AtmosphereCalc(pin.PosV, gFogRange + gFogStart, pin.NormalW);
-
-	/*if (d > gFogStart)
-	{
-		d = clamp((d - gFogStart) / gFogRange, 0.0f, 1.0f);
-
-		color = ((1.0f - d) * color + d * gFogColor);
-	}*/
 
 	color = (0.6f + 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f)) * color / 1.6f;
 
-	//color = 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f);
-
-	//color = float3(1.0f, 0.0f, 0.0f);
-
 	return float4(color, 1.0f);
+	//return float4(N, 1.0f);
 }
 
 technique11 LightTech

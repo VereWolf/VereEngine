@@ -127,19 +127,24 @@ public:
 
 	inline static btVector3 GetCoordForCylinder(btVector3 dir, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
 	{
-		btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ());
+		btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ()).normalize();
 
 		btScalar DY = dir.dot(up);
 		btScalar DXZ = dirXZ.dot(right);
-		btScalar DZ = dir.dot(front);
+		btScalar DZ = dirXZ.dot(front);
 
-		btScalar X = 0.159154943 * acos(DY);
-		btScalar Y = 0.079577472 * acos(DXZ);
+		btScalar X = 0.318309886 * acos(DY);
+		btScalar Y = 0.159154943 * acos(DXZ);
 
 		if (DZ < 0.0)
 		{
 			Y = 1.0 - Y;
 		}
+
+		while (X < 0.0) X += 1.0;
+		while (X >= 1.0) X -= 1.0;
+		while (Y < 0.0) Y += 1.0;
+		while (Y >= 1.0) Y -= 1.0;
 
 		return btVector3(X, Y, 0.0);
 	}

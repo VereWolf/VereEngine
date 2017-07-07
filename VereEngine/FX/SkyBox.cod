@@ -105,7 +105,7 @@ fxgroup
                 //   o1.x <- <VS return value>.PosW.x; o1.y <- <VS return value>.PosW.y; o1.z <- <VS return value>.PosW.z; 
                 //   o0.x <- <VS return value>.PosH.x; o0.y <- <VS return value>.PosH.y; o0.z <- <VS return value>.PosH.z; o0.w <- <VS return value>.PosH.w
                 //
-                #line 33 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\SkyBox.fx"
+                #line 33 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\SkyBox.fx"
                 mov r0.xy, v1.xyxx  // r0.x <- vout.Tex.x; r0.y <- vout.Tex.y
                 dp3 r0.z, v0.xyzx, v0.xyzx
                 rsq r0.z, r0.z
@@ -207,7 +207,7 @@ fxgroup
                 //   v3.x <- pin.Tex.x; v3.y <- pin.Tex.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 45 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\SkyBox.fx"
+                #line 45 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\SkyBox.fx"
                 nop 
                 mov r0.xyz, v2.xyzx
                 mov r1.xyz, cb1[9].xyzx
@@ -215,7 +215,7 @@ fxgroup
                 mov r0.w, cb1[9].w
                 mov r1.w, cb0[1].x
                 
-                #line 176 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\LightHelper.fx"
+                #line 231 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\LightHelper.fx"
                 mov r3.xyz, l(0,-1.000000,0,0)  // r3.x <- bottom.x; r3.y <- bottom.y; r3.z <- bottom.z
                 dp3 r3.x, r0.xyzx, r3.xyzx
                 add r3.x, r3.x, l(0.400000)
@@ -270,7 +270,7 @@ fxgroup
                 mov r1.z, r1.z  // r1.z <- <SkyLight return value>.z
                 mov r1.w, r1.w  // r1.w <- <SkyLight return value>.w
                 
-                #line 45 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\SkyBox.fx"
+                #line 45 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\SkyBox.fx"
                 mov o0.xyzw, r1.xyzw
                 ret 
                 // Approximately 61 instruction slots used

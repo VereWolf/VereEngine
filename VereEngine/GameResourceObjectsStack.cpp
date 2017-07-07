@@ -16,7 +16,7 @@ GameResourceObjectsStack::~GameResourceObjectsStack()
 
 void GameResourceObjectsStack::Init(DX::DeviceResources *resources)
 {
-	idStaticMeshStack = new IDStack();
+	idStaticMeshStack = new IDStack(16);
 
 	m_resources = resources;
 }
@@ -35,7 +35,7 @@ void GameResourceObjectsStack::Render(int index, btTransform transform, btTransf
 
 int GameResourceObjectsStack::CreateStaticMesh(GameResourceObject *object)
 {
-	int id = idStaticMeshStack->GetElement();
+	int id = idStaticMeshStack->TakeElement();
 	if (id >= m_gameObjects.size())
 	{
 		m_gameObjects.resize(m_gameObjects.size() + 32, NULL);

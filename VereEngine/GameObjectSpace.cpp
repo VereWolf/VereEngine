@@ -15,7 +15,7 @@ GameObjectSpace::GameObjectSpace(GameObjectSpace &other)
 
 void GameObjectSpace::Init()
 {
-	m_IDStack = new IDStack;
+	m_IDStack = new IDStack(16);
 };
 
 void GameObjectSpace::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
@@ -32,7 +32,7 @@ void GameObjectSpace::Update()
 
 int GameObjectSpace::CreateGameObject(int id)
 {
-	int id2 = m_IDStack->GetElement();
+	int id2 = m_IDStack->TakeElement();
 	if (id2 >= m_objectIDs.size())
 	{
 		m_objectIDs.resize(m_objectIDs.size() + 32, -1);
