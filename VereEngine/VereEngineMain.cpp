@@ -51,8 +51,6 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	InputLayouts::InitAll(deviceResources.get());
 	RenderStates::InitAll(deviceResources.get());
 
-	//inprovization, start of creation scene in worldspace
-		
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 
 	int idF1 = GameTextRenderDeviceHandle->CreateTextFormat(
@@ -85,9 +83,10 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	int id1a = GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000.0, 7150000.0, 7150000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000.0, __nullptr);
 
 
-	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(00.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
+	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
 
-	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 12, 12);
+	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 4, 4, 13, 1);
+	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
 
 	//GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000, 7150000, 7150000), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000, __nullptr);
 
@@ -97,6 +96,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	int id3a = GameObjectStackHandle->CreateObject(id3, btVector3(34000000.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(1.0, 1.0, 1.0), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000.0, __nullptr);
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(id2a);
 	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
+	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(0.0, 350000.0, 0.0));
 
 	GameObjectSpace *circlePlanetSpace = new GameObjectSpace;
 
@@ -106,8 +106,6 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id4a))->CreateGameObject(id1a);
 	//((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id4a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
 
-	//end of creation scene in worldspace
-		
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 	/*

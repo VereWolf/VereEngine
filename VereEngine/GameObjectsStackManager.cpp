@@ -13,8 +13,8 @@ GameObjectsStackManager::GameObjectsStackManager()
 {
 	GameObjectStackHandle = this;
 
-	idObjectStackReg = new IDStack();
-	idObjectStack = new IDStack();
+	idObjectStackReg = new IDStack(16);
+	idObjectStack = new IDStack(16);
 
 	m_bulletCollisionConfiguration = new btDefaultCollisionConfiguration();
 	m_bulletDispatcher = new btCollisionDispatcher(m_bulletCollisionConfiguration);
@@ -27,8 +27,8 @@ GameObjectsStackManager::GameObjectsStackManager(DX::DeviceResources *resources)
 {
 	GameObjectStackHandle = this;
 
-	idObjectStackReg = new IDStack();
-	idObjectStack = new IDStack();
+	idObjectStackReg = new IDStack(16);
+	idObjectStack = new IDStack(16);
 
 	m_bulletCollisionConfiguration = new btDefaultCollisionConfiguration();
 	m_bulletDispatcher = new btCollisionDispatcher(m_bulletCollisionConfiguration);
@@ -197,7 +197,7 @@ void GameObjectsStackManager::SeatMainCamera(Camera * cam)
 
 int GameObjectsStackManager::CreateObjectToReg(GameObject *object)
 {
-	int id = idObjectStackReg->GetElement();
+	int id = idObjectStackReg->TakeElement();
 
 	object->SetId(id);
 	if (id >= m_gameObjectsReg.size())
@@ -217,7 +217,7 @@ void GameObjectsStackManager::DestroyObjectToRegByID(int id)
 
 int GameObjectsStackManager::CreateObject(int idReg, btVector3 position, btVector3 angle, btVector3 spacing, btScalar mass, btVector3 localInertia, btScalar rangeForFullProcess, btCollisionShape *collisionShape)
 {
-	int id = idObjectStack->GetElement();
+	int id = idObjectStack->TakeElement();
 
 	if (id >= m_gameObjects.size())
 	{
@@ -251,11 +251,6 @@ void  GameObjectsStackManager::DestroyAllObjects()
 		{
 			m_gameObjects[i]->Destroy();
 		}
-	}
-
-	for (int i = 0; i < idObjectStack->m_idMarks.size(); ++i)
-	{
-		idObjectStack->m_idMarks[i].DeleteAllIDElements();
 	}
 
 	Update();

@@ -18,16 +18,18 @@ cbuffer cbPerObject
 {
     float4x4 gWorld;                    // Offset:    0, size:   64
     float4x4 gViewProj;                 // Offset:   64, size:   64
-    float3  gFogColor;                  // Offset:  128, size:   12
-    float   gFogStart;                  // Offset:  140, size:    4
-    float   gFogRange;                  // Offset:  144, size:    4
-    float   gStartOfLOD;                // Offset:  148, size:    4
-    float   gStartOfLODOfTrees;         // Offset:  152, size:    4
-    int2    gCoord;                     // Offset:  160, size:    8
-    float   gSpacing;                   // Offset:  168, size:    4
-    float3  gSunVector;                 // Offset:  176, size:   12
-    float4  gSkyColor;                  // Offset:  192, size:   16
-    float   gLight;                     // Offset:  208, size:    4
+    float   gFarZ;                      // Offset:  128, size:    4
+    float   gFarModifier;               // Offset:  132, size:    4
+    float3  gFogColor;                  // Offset:  144, size:   12
+    float   gFogStart;                  // Offset:  156, size:    4
+    float   gFogRange;                  // Offset:  160, size:    4
+    float   gStartOfLOD;                // Offset:  164, size:    4
+    float   gStartOfLODOfTrees;         // Offset:  168, size:    4
+    int2    gCoord;                     // Offset:  176, size:    8
+    float   gSpacing;                   // Offset:  184, size:    4
+    float3  gSunVector;                 // Offset:  192, size:   12
+    float4  gSkyColor;                  // Offset:  208, size:   16
+    float   gLight;                     // Offset:  224, size:    4
 }
 
 //
@@ -102,7 +104,7 @@ fxgroup
                 //   o1.x <- <VS return value>.TexTess.x; o1.y <- <VS return value>.TexTess.y; 
                 //   o0.x <- <VS return value>.PosL.x; o0.y <- <VS return value>.PosL.y; o0.z <- <VS return value>.PosL.z
                 //
-                #line 73 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainLOD.fx"
+                #line 75 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainLOD.fx"
                 mov r0.xy, v1.xyxx  // r0.x <- vout.TexTess.x; r0.y <- vout.TexTess.y
                 mov r1.xyz, v0.xyzx  // r1.x <- vout.PosL.x; r1.y <- vout.PosL.y; r1.z <- vout.PosL.z
                 mov o0.xyz, r1.xyzx
@@ -183,7 +185,7 @@ fxgroup
                 //   v[3][0].x <- p[3].PosL.x; v[3][0].y <- p[3].PosL.y; v[3][0].z <- p[3].PosL.z; 
                 //   v[3][1].x <- p[3].TexTess.x; v[3][1].y <- p[3].TexTess.y
                 //
-                #line 117 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainLOD.fx"
+                #line 119 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainLOD.fx"
                 mov r0.x, vOutputControlPointID
                 mov r0.yzw, v[r0.x + 0][0].xxyz  // r0.y <- hout.PosL.x; r0.z <- hout.PosL.y; r0.w <- hout.PosL.z
                 mov r1.xy, v[r0.x + 0][1].xyxx  // r1.x <- hout.TexTess.x; r1.y <- hout.TexTess.y
@@ -199,7 +201,7 @@ fxgroup
                 dcl_output_siv o5.x, finalQuadVInsideTessFactor
                 dcl_temps 2
                 
-                #line 90
+                #line 92
                 mov r0.x, l(1.000000)  // r0.x <- pt.EdgeTess[0]
                 mov r0.y, l(1.000000)  // r0.y <- pt.EdgeTess[1]
                 mov r1.x, l(1.000000)  // r1.x <- pt.EdgeTess[2]
@@ -230,31 +232,23 @@ fxgroup
                 //
                 // Buffer Definitions: 
                 //
-                // cbuffer $Globals
-                // {
-                //
-                //   float c;                           // Offset:    0 Size:     4
-                //      = 0x3dcccccd 
-                //   float4 org;                        // Offset:   16 Size:    16 [unused]
-                //      = 0x3f547ae1 0x3f028f5c 0x3e6147ae 0x3f800000 
-                //
-                // }
-                //
                 // cbuffer cbPerObject
                 // {
                 //
                 //   float4x4 gWorld;                   // Offset:    0 Size:    64
                 //   float4x4 gViewProj;                // Offset:   64 Size:    64
-                //   float3 gFogColor;                  // Offset:  128 Size:    12 [unused]
-                //   float gFogStart;                   // Offset:  140 Size:     4 [unused]
-                //   float gFogRange;                   // Offset:  144 Size:     4 [unused]
-                //   float gStartOfLOD;                 // Offset:  148 Size:     4 [unused]
-                //   float gStartOfLODOfTrees;          // Offset:  152 Size:     4 [unused]
-                //   int2 gCoord;                       // Offset:  160 Size:     8
-                //   float gSpacing;                    // Offset:  168 Size:     4
-                //   float3 gSunVector;                 // Offset:  176 Size:    12 [unused]
-                //   float4 gSkyColor;                  // Offset:  192 Size:    16 [unused]
-                //   float gLight;                      // Offset:  208 Size:     4 [unused]
+                //   float gFarZ;                       // Offset:  128 Size:     4
+                //   float gFarModifier;                // Offset:  132 Size:     4
+                //   float3 gFogColor;                  // Offset:  144 Size:    12 [unused]
+                //   float gFogStart;                   // Offset:  156 Size:     4 [unused]
+                //   float gFogRange;                   // Offset:  160 Size:     4 [unused]
+                //   float gStartOfLOD;                 // Offset:  164 Size:     4 [unused]
+                //   float gStartOfLODOfTrees;          // Offset:  168 Size:     4 [unused]
+                //   int2 gCoord;                       // Offset:  176 Size:     8
+                //   float gSpacing;                    // Offset:  184 Size:     4
+                //   float3 gSunVector;                 // Offset:  192 Size:    12 [unused]
+                //   float4 gSkyColor;                  // Offset:  208 Size:    16 [unused]
+                //   float gLight;                      // Offset:  224 Size:     4 [unused]
                 //
                 // }
                 //
@@ -265,8 +259,7 @@ fxgroup
                 // ------------------------------ ---------- ------- ----------- -------------- ------
                 // samHeightMap                      sampler      NA          NA             s0      1 
                 // gHeightMap                        texture  float4          2d             t0      1 
-                // $Globals                          cbuffer      NA          NA            cb0      1 
-                // cbPerObject                       cbuffer      NA          NA            cb1      1 
+                // cbPerObject                       cbuffer      NA          NA            cb0      1 
                 //
                 //
                 //
@@ -306,8 +299,7 @@ fxgroup
                 dcl_input_control_point_count 4
                 dcl_tessellator_domain domain_quad
                 dcl_globalFlags refactoringAllowed | skipOptimization
-                dcl_constantbuffer CB0[1], immediateIndexed
-                dcl_constantbuffer CB1[11], immediateIndexed
+                dcl_constantbuffer CB0[12], immediateIndexed
                 dcl_sampler s0, mode_default
                 dcl_resource_texture2d (float,float,float,float) t0
                 dcl_input vDomain.xy
@@ -338,7 +330,7 @@ fxgroup
                 //   vicp[3][0].x <- quad[3].PosL.x; vicp[3][0].y <- quad[3].PosL.y; vicp[3][0].z <- quad[3].PosL.z; 
                 //   vicp[3][1].x <- quad[3].TexTess.x; vicp[3][1].y <- quad[3].TexTess.y
                 //
-                #line 137 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainLOD.fx"
+                #line 139 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainLOD.fx"
                 mov r0.xyz, -vicp[0][0].xyzx
                 add r0.xyz, r0.xyzx, vicp[1][0].xyzx
                 mul r0.xyz, r0.xyzx, vDomain.xxxx
@@ -352,7 +344,7 @@ fxgroup
                 mul r1.xyz, r1.xyzx, vDomain.yyyy
                 add r0.xyz, r0.xyzx, r1.xyzx  // r0.x <- dout.PosW.x; r0.y <- dout.PosW.y; r0.z <- dout.PosW.z
                 
-                #line 142
+                #line 144
                 mov r1.xy, -vicp[0][1].xyxx
                 add r1.xy, r1.xyxx, vicp[1][1].xyxx
                 mul r1.xy, r1.xyxx, vDomain.xxxx
@@ -366,34 +358,34 @@ fxgroup
                 mul r1.zw, r1.zzzw, vDomain.yyyy
                 add r1.xy, r1.zwzz, r1.xyxx  // r1.x <- dout.TexTess.x; r1.y <- dout.TexTess.y
                 
-                #line 149
+                #line 151
                 mov r0.w, l(1.000000)
-                dp4 r2.x, r0.xyzw, cb1[0].xyzw  // r2.x <- dout.PosW.x
-                dp4 r1.z, r0.xyzw, cb1[1].xyzw  // r1.z <- dout.PosW.y
-                dp4 r2.z, r0.xyzw, cb1[2].xyzw  // r2.z <- dout.PosW.z
+                dp4 r2.x, r0.xyzw, cb0[0].xyzw  // r2.x <- dout.PosW.x
+                dp4 r1.z, r0.xyzw, cb0[1].xyzw  // r1.z <- dout.PosW.y
+                dp4 r2.z, r0.xyzw, cb0[2].xyzw  // r2.z <- dout.PosW.z
                 
-                #line 153
-                itof r0.x, cb1[10].x
+                #line 155
+                itof r0.x, cb0[11].x
                 add r0.x, r0.x, r1.x
-                mul r0.x, r0.x, cb1[10].z
-                itof r0.z, cb1[10].y
+                mul r0.x, r0.x, cb0[11].z
+                itof r0.z, cb0[11].y
                 add r0.z, r0.z, r1.y
-                mul r0.y, r0.z, cb1[10].z
+                mul r0.y, r0.z, cb0[11].z
                 itof r0.z, l(0)
                 sample_l_indexable(texture2d)(float,float,float,float) r0.x, r0.xyxx, t0.xyzw, s0, r0.z
                 mov r0.x, -r0.x
                 add r2.y, r0.x, r1.z  // r2.y <- dout.PosW.y
                 
-                #line 164
+                #line 166
                 mov r2.w, l(1.000000)
-                dp4 r0.x, r2.xyzw, cb1[4].xyzw  // r0.x <- dout.PosH.x
-                dp4 r0.y, r2.xyzw, cb1[5].xyzw  // r0.y <- dout.PosH.y
-                dp4 r0.w, r2.xyzw, cb1[7].xyzw  // r0.w <- dout.PosH.w
-                mul r0.z, r0.w, cb0[0].x
+                dp4 r0.x, r2.xyzw, cb0[4].xyzw  // r0.x <- dout.PosH.x
+                dp4 r0.y, r2.xyzw, cb0[5].xyzw  // r0.y <- dout.PosH.y
+                dp4 r0.w, r2.xyzw, cb0[7].xyzw  // r0.w <- dout.PosH.w
+                mul r0.z, r0.w, cb0[8].y
                 add r0.z, r0.z, l(1.000000)
                 log r0.z, r0.z
                 mul r0.z, r0.z, l(0.693147)
-                mul r1.z, cb0[0].x, l(20000.000000)
+                mul r1.z, cb0[8].x, cb0[8].y
                 add r1.z, r1.z, l(1.000000)
                 log r1.z, r1.z
                 mul r1.z, r1.z, l(0.693147)
@@ -430,16 +422,18 @@ fxgroup
                 //
                 //   float4x4 gWorld;                   // Offset:    0 Size:    64 [unused]
                 //   float4x4 gViewProj;                // Offset:   64 Size:    64 [unused]
-                //   float3 gFogColor;                  // Offset:  128 Size:    12 [unused]
-                //   float gFogStart;                   // Offset:  140 Size:     4
-                //   float gFogRange;                   // Offset:  144 Size:     4
-                //   float gStartOfLOD;                 // Offset:  148 Size:     4 [unused]
-                //   float gStartOfLODOfTrees;          // Offset:  152 Size:     4 [unused]
-                //   int2 gCoord;                       // Offset:  160 Size:     8
-                //   float gSpacing;                    // Offset:  168 Size:     4
-                //   float3 gSunVector;                 // Offset:  176 Size:    12
-                //   float4 gSkyColor;                  // Offset:  192 Size:    16
-                //   float gLight;                      // Offset:  208 Size:     4
+                //   float gFarZ;                       // Offset:  128 Size:     4 [unused]
+                //   float gFarModifier;                // Offset:  132 Size:     4 [unused]
+                //   float3 gFogColor;                  // Offset:  144 Size:    12 [unused]
+                //   float gFogStart;                   // Offset:  156 Size:     4
+                //   float gFogRange;                   // Offset:  160 Size:     4
+                //   float gStartOfLOD;                 // Offset:  164 Size:     4 [unused]
+                //   float gStartOfLODOfTrees;          // Offset:  168 Size:     4 [unused]
+                //   int2 gCoord;                       // Offset:  176 Size:     8
+                //   float gSpacing;                    // Offset:  184 Size:     4
+                //   float3 gSunVector;                 // Offset:  192 Size:    12
+                //   float4 gSkyColor;                  // Offset:  208 Size:    16
+                //   float gLight;                      // Offset:  224 Size:     4
                 //
                 // }
                 //
@@ -473,7 +467,7 @@ fxgroup
                 ps_5_0
                 dcl_globalFlags refactoringAllowed | skipOptimization
                 dcl_constantbuffer CB0[2], immediateIndexed
-                dcl_constantbuffer CB1[14], immediateIndexed
+                dcl_constantbuffer CB1[15], immediateIndexed
                 dcl_sampler s0, mode_default
                 dcl_resource_texture2d (float,float,float,float) t0
                 dcl_input_ps linear v1.xyz
@@ -487,40 +481,40 @@ fxgroup
                 //   v2.x <- pin.TexTess.x; v2.y <- pin.TexTess.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 172 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainLOD.fx"
+                #line 174 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainLOD.fx"
                 mov r0.xyz, l(1.000000,1.000000,1.000000,0)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
                 
-                #line 176
+                #line 178
                 dp2 r0.w, v1.xzxx, v1.xzxx
                 sqrt r0.w, r0.w  // r0.w <- distance
                 
-                #line 192
-                itof r1.x, cb1[10].x
+                #line 194
+                itof r1.x, cb1[11].x
                 add r1.x, r1.x, v2.x
-                mul r1.x, r1.x, cb1[10].z
-                itof r1.z, cb1[10].y
+                mul r1.x, r1.x, cb1[11].z
+                itof r1.z, cb1[11].y
                 add r1.z, r1.z, v2.y
-                mul r1.y, r1.z, cb1[10].z
+                mul r1.y, r1.z, cb1[11].z
                 itof r1.z, l(0)
                 sample_l_indexable(texture2d)(float,float,float,float) r1.xyz, r1.xyxx, t0.xyzw, s0, r1.z
                 mov r2.xyz, l(-0.500000,-0.500000,-0.500000,-0.000000)
                 add r1.xyz, r1.xyzx, r2.xyzx
                 mul r1.xyz, r1.xyzx, l(2.000000, 2.000000, 2.000000, 0.000000)  // r1.x <- N.x; r1.y <- N.y; r1.z <- N.z
                 
-                #line 202
-                lt r1.w, cb1[8].w, r0.w
+                #line 204
+                lt r1.w, cb1[9].w, r0.w
                 if_nz r1.w
                   nop 
                   dp3 r1.w, v1.xyzx, v1.xyzx
                   rsq r1.w, r1.w
                   mul r2.xyz, r1.wwww, v1.xyzx
                   mov r2.xyz, -r2.xyzx
-                  mov r3.xyz, cb1[11].xyzx
-                  mov r4.xyz, cb1[12].xyzx
-                  mov r1.w, cb1[13].x
+                  mov r3.xyz, cb1[12].xyzx
+                  mov r4.xyz, cb1[13].xyzx
+                  mov r1.w, cb1[14].x
                   mov r2.w, cb0[1].x
                 
-                #line 176 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\LightHelper.fx"
+                #line 231 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\LightHelper.fx"
                   mov r5.xyz, l(0,-1.000000,0,0)  // r5.x <- bottom.x; r5.y <- bottom.y; r5.z <- bottom.z
                   dp3 r3.w, r2.xyzx, r5.xyzx
                   add r3.w, r3.w, l(0.400000)
@@ -574,18 +568,18 @@ fxgroup
                   mov r3.y, r3.y  // r3.y <- <SkyLight return value>.y
                   mov r3.z, r3.z  // r3.z <- <SkyLight return value>.z
                 
-                #line 204 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainLOD.fx"
+                #line 206 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainLOD.fx"
                   mov r3.xyz, r3.xyzx  // r3.x <- fogColor.x; r3.y <- fogColor.y; r3.z <- fogColor.z
-                  mov r1.w, -cb1[8].w
+                  mov r1.w, -cb1[9].w
                   add r1.w, r0.w, r1.w
-                  div r1.w, r1.w, cb1[9].x
+                  div r1.w, r1.w, cb1[10].x
                   mov r2.xyz, -r0.xyzx
                   add r2.xyz, r2.xyzx, r3.xyzx
                   mul r2.xyz, r1.wwww, r2.xyzx
                   add r2.xyz, r0.xyzx, r2.xyzx
                   max r2.xyz, r2.xyzx, l(0.000000, 0.000000, 0.000000, 0.000000)
                   min r0.xyz, r2.xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
-                  add r1.w, cb1[8].w, cb1[9].x
+                  add r1.w, cb1[9].w, cb1[10].x
                   lt r0.w, r1.w, r0.w
                   if_nz r0.w
                     lt r0.w, l(-0.050000), l(0.000000)
@@ -594,15 +588,15 @@ fxgroup
                   endif 
                 endif 
                 
-                #line 221
-                mov r2.xyz, cb1[11].xyzx  // r2.x <- L.x; r2.y <- L.y; r2.z <- L.z
+                #line 223
+                mov r2.xyz, cb1[12].xyzx  // r2.x <- L.x; r2.y <- L.y; r2.z <- L.z
                 dp3 r0.w, r1.xyzx, r2.xyzx
                 add r0.w, r0.w, l(0.600000)
                 mul r0.xyz, r0.xyzx, r0.wwww
                 div r0.xyz, r0.xyzx, l(1.600000, 1.600000, 1.600000, 0.000000)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
                 
-                #line 228
-                mul o0.xyz, r0.xyzx, cb1[13].xxxx
+                #line 230
+                mul o0.xyz, r0.xyzx, cb1[14].xxxx
                 mov o0.w, l(1.000000)
                 ret 
                 // Approximately 103 instruction slots used

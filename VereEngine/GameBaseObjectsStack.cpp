@@ -10,12 +10,12 @@ void GameBaseObjectsStack::Init(DX::DeviceResources *resources)
 {
 	m_resources = resources;
 
-	idObjectStack = new IDStack;
+	idObjectStack = new IDStack(16);
 };
 
 int GameBaseObjectsStack::CreateGameObject(GameBaseObject *object)
 {
-	int id = idObjectStack->GetElement();
+	int id = idObjectStack->TakeElement();
 	if (id >= m_gameObjects.size())
 	{
 		m_gameObjects.resize(m_gameObjects.size() + 32, NULL);

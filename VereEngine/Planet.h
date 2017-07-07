@@ -18,7 +18,7 @@ public:
 		float camFarZ, btScalar heightFar, btScalar aspect,
 		float camFarRangeMod, float camModifier);
 
-	void BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel);
+	void BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming);
 
 	GameObject* Clone() { return new TerrainPlanet(*this); }
 	TerrainPlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }

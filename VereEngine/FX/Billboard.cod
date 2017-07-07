@@ -123,7 +123,7 @@ fxgroup
                 //   o1.x <- <VS return value>.SizeW.x; o1.y <- <VS return value>.SizeW.y; o1.z <- <VS return value>.TexTess.x; o1.w <- <VS return value>.TexTess.y; 
                 //   o0.x <- <VS return value>.CenterW.x; o0.y <- <VS return value>.CenterW.y; o0.z <- <VS return value>.CenterW.z
                 //
-                #line 80 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Billboard.fx"
+                #line 80 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Billboard.fx"
                 mov r0.xyz, v0.xyzx
                 mov r0.w, l(1.000000)
                 dp4 r1.x, r0.xyzw, cb0[0].xyzw  // r1.x <- vout.CenterW.x
@@ -224,7 +224,7 @@ fxgroup
                 //   v[0][1].x <- gin[0].SizeW.x; v[0][1].y <- gin[0].SizeW.y; v[0][1].z <- gin[0].TexTess.x; v[0][1].w <- gin[0].TexTess.y; 
                 //   x0 <- v
                 //
-                #line 92 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Billboard.fx"
+                #line 92 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Billboard.fx"
                 mov r0.xyz, l(0,1.000000,0,0)  // r0.x <- up.x; r0.y <- up.y; r0.z <- up.z
                 mov r1.xz, -v[0][0].xxzx  // r1.x <- look.x; r1.z <- look.z
                 mov r1.y, l(0)  // r1.y <- look.y
@@ -464,7 +464,7 @@ fxgroup
                 //   v4.x <- pin.TexTess.x; v4.y <- pin.TexTess.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 133 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Billboard.fx"
+                #line 133 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Billboard.fx"
                 mov r0.xyz, l(0.300000,1.000000,0.300000,0)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
                 dp2 r0.w, v1.xzxx, v1.xzxx
                 sqrt r0.w, r0.w  // r0.w <- distance

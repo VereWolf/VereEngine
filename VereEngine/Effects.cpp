@@ -50,7 +50,7 @@ BaseEffect::BaseEffect(DX::DeviceResources *resources, const std::string& filena
 	Light1Tech = mFX->GetTechniqueByName("LightTech");
 }
 
-void BaseEffect::SetSize()
+void BaseEffect::SetAllSize()
 {
 	m_Technique.resize(m_TechniqueSize);
 	m_TechniqueName.resize(m_TechniqueSize);

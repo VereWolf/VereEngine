@@ -17,23 +17,23 @@ cbuffer cbPerObject
 {
     float4x4 gWorld;                    // Offset:    0, size:   64
     float4x4 gViewProj;                 // Offset:   64, size:   64
-    float4x4 gView;                     // Offset:  128, size:   64
-    float4x4 gProj;                     // Offset:  192, size:   64
-    float   gSpacing;                   // Offset:  256, size:    4
-    float   gRadius;                    // Offset:  260, size:    4
-    float3  gCentrePos;                 // Offset:  272, size:   12
-    float3  gOffset;                    // Offset:  288, size:   12
-    float3  gTang;                      // Offset:  304, size:   12
-    float   gLevel;                     // Offset:  316, size:    4
-    float3  gCenterOfPlanet;            // Offset:  320, size:   12
-    float   gRadiusOfPlanet;            // Offset:  332, size:    4
-    float   gFogStart;                  // Offset:  336, size:    4
-    float   gFogRange;                  // Offset:  340, size:    4
-    float3  gFogColor;                  // Offset:  352, size:   12
+    float   gSpacing;                   // Offset:  128, size:    4
+    float   gRadius;                    // Offset:  132, size:    4
+    float3  gCentrePos;                 // Offset:  144, size:   12
+    float3  gOffset;                    // Offset:  160, size:   12
+    float3  gTang;                      // Offset:  176, size:   12
+    float   gLevel;                     // Offset:  188, size:    4
+    float   gFarZ;                      // Offset:  192, size:    4
+    float   gFarModifier;               // Offset:  196, size:    4
+    float3  gCenterOfPlanet;            // Offset:  208, size:   12
+    float   gRadiusOfPlanet;            // Offset:  220, size:    4
+    float   gFogStart;                  // Offset:  224, size:    4
+    float   gFogRange;                  // Offset:  228, size:    4
+    float3  gFogColor;                  // Offset:  240, size:   12
 }
 
 //
-// 4 local object(s)
+// 2 local object(s)
 //
 SamplerState samHeightMap
 {
@@ -47,8 +47,6 @@ SamplerState samNormalMap
     AddressU = uint(CLAMP /* 3 */);
     AddressV = uint(CLAMP /* 3 */);
 };
-Texture2D gHeightMap;
-Texture2D gNormalMap;
 
 //
 // 1 groups(s)
@@ -97,7 +95,7 @@ fxgroup
                 //   o1.x <- <VS return value>.TexTess.x; o1.y <- <VS return value>.TexTess.y; 
                 //   o0.x <- <VS return value>.PosL.x; o0.y <- <VS return value>.PosL.y; o0.z <- <VS return value>.PosL.z
                 //
-                #line 64 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
+                #line 64 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
                 mov r0.xy, v1.xyxx  // r0.x <- vout.TexTess.x; r0.y <- vout.TexTess.y
                 mov r1.xyz, v0.xyzx  // r1.x <- vout.PosL.x; r1.y <- vout.PosL.y; r1.z <- vout.PosL.z
                 mov o0.xyz, r1.xyzx
@@ -178,7 +176,7 @@ fxgroup
                 //   v[3][0].x <- p[3].PosL.x; v[3][0].y <- p[3].PosL.y; v[3][0].z <- p[3].PosL.z; 
                 //   v[3][1].x <- p[3].TexTess.x; v[3][1].y <- p[3].TexTess.y
                 //
-                #line 110 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
+                #line 110 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
                 mov r0.x, vOutputControlPointID
                 mov r0.yzw, v[r0.x + 0][0].xxyz  // r0.y <- hout.PosL.x; r0.z <- hout.PosL.y; r0.w <- hout.PosL.z
                 mov r1.xy, v[r0.x + 0][1].xyxx  // r1.x <- hout.TexTess.x; r1.y <- hout.TexTess.y
@@ -225,32 +223,24 @@ fxgroup
                 //
                 // Buffer Definitions: 
                 //
-                // cbuffer $Globals
-                // {
-                //
-                //   float c;                           // Offset:    0 Size:     4
-                //      = 0x3dcccccd 
-                //
-                // }
-                //
                 // cbuffer cbPerObject
                 // {
                 //
                 //   float4x4 gWorld;                   // Offset:    0 Size:    64
                 //   float4x4 gViewProj;                // Offset:   64 Size:    64
-                //   float4x4 gView;                    // Offset:  128 Size:    64 [unused]
-                //   float4x4 gProj;                    // Offset:  192 Size:    64 [unused]
-                //   float gSpacing;                    // Offset:  256 Size:     4 [unused]
-                //   float gRadius;                     // Offset:  260 Size:     4
-                //   float3 gCentrePos;                 // Offset:  272 Size:    12
-                //   float3 gOffset;                    // Offset:  288 Size:    12
-                //   float3 gTang;                      // Offset:  304 Size:    12
-                //   float gLevel;                      // Offset:  316 Size:     4
-                //   float3 gCenterOfPlanet;            // Offset:  320 Size:    12 [unused]
-                //   float gRadiusOfPlanet;             // Offset:  332 Size:     4 [unused]
-                //   float gFogStart;                   // Offset:  336 Size:     4 [unused]
-                //   float gFogRange;                   // Offset:  340 Size:     4 [unused]
-                //   float3 gFogColor;                  // Offset:  352 Size:    12 [unused]
+                //   float gSpacing;                    // Offset:  128 Size:     4 [unused]
+                //   float gRadius;                     // Offset:  132 Size:     4
+                //   float3 gCentrePos;                 // Offset:  144 Size:    12
+                //   float3 gOffset;                    // Offset:  160 Size:    12 [unused]
+                //   float3 gTang;                      // Offset:  176 Size:    12 [unused]
+                //   float gLevel;                      // Offset:  188 Size:     4 [unused]
+                //   float gFarZ;                       // Offset:  192 Size:     4
+                //   float gFarModifier;                // Offset:  196 Size:     4
+                //   float3 gCenterOfPlanet;            // Offset:  208 Size:    12 [unused]
+                //   float gRadiusOfPlanet;             // Offset:  220 Size:     4 [unused]
+                //   float gFogStart;                   // Offset:  224 Size:     4 [unused]
+                //   float gFogRange;                   // Offset:  228 Size:     4 [unused]
+                //   float3 gFogColor;                  // Offset:  240 Size:    12 [unused]
                 //
                 // }
                 //
@@ -259,12 +249,7 @@ fxgroup
                 //
                 // Name                                 Type  Format         Dim      HLSL Bind  Count
                 // ------------------------------ ---------- ------- ----------- -------------- ------
-                // samHeightMap                      sampler      NA          NA             s0      1 
-                // samNormalMap                      sampler      NA          NA             s1      1 
-                // gHeightMap                        texture  float4          2d             t0      1 
-                // gNormalMap                        texture  float4          2d             t1      1 
-                // $Globals                          cbuffer      NA          NA            cb0      1 
-                // cbPerObject                       cbuffer      NA          NA            cb1      1 
+                // cbPerObject                       cbuffer      NA          NA            cb0      1 
                 //
                 //
                 //
@@ -296,8 +281,8 @@ fxgroup
                 // POSITION                 1   xyz         1     NONE   float   xyz 
                 // POSITION                 2   xyz         2     NONE   float   xyz 
                 // NORMAL                   1   xyz         3     NONE   float   xyz 
-                // NORMAL                   2   xyz         4     NONE   float   xyz 
-                // NORMAL                   3   xyz         5     NONE   float   xyz 
+                // NORMAL                   2   xyz         4     NONE   float       
+                // NORMAL                   3   xyz         5     NONE   float       
                 // TEXCOORD                 0   xy          6     NONE   float   xy  
                 //
                 // Tessellation Domain   # of control points
@@ -308,12 +293,7 @@ fxgroup
                 dcl_input_control_point_count 4
                 dcl_tessellator_domain domain_quad
                 dcl_globalFlags refactoringAllowed | skipOptimization
-                dcl_constantbuffer CB0[1], immediateIndexed
-                dcl_constantbuffer CB1[20], immediateIndexed
-                dcl_sampler s0, mode_default
-                dcl_sampler s1, mode_default
-                dcl_resource_texture2d (float,float,float,float) t0
-                dcl_resource_texture2d (float,float,float,float) t1
+                dcl_constantbuffer CB0[13], immediateIndexed
                 dcl_input vDomain.xy
                 dcl_input vicp[4][0].xyz
                 dcl_input vicp[4][1].xy
@@ -321,10 +301,8 @@ fxgroup
                 dcl_output o1.xyz
                 dcl_output o2.xyz
                 dcl_output o3.xyz
-                dcl_output o4.xyz
-                dcl_output o5.xyz
                 dcl_output o6.xy
-                dcl_temps 8
+                dcl_temps 5
                 //
                 // Initial variable locations:
                 //   vpc0.x <- patchTess.EdgeTess[0]; 
@@ -334,9 +312,9 @@ fxgroup
                 //   vpc4.x <- patchTess.InsideTess[0]; 
                 //   vpc5.x <- patchTess.InsideTess[1]; 
                 //   vDomain.x <- uv.x; vDomain.y <- uv.y; 
-                //   o6.x <- <DS return value>.TexTess.x; o6.y <- <DS return value>.TexTess.y; 
-                //   o5.x <- <DS return value>.TangW.x; o5.y <- <DS return value>.TangW.y; o5.z <- <DS return value>.TangW.z; 
                 //   o4.x <- <DS return value>.BinormW.x; o4.y <- <DS return value>.BinormW.y; o4.z <- <DS return value>.BinormW.z; 
+                //   o5.x <- <DS return value>.TangW.x; o5.y <- <DS return value>.TangW.y; o5.z <- <DS return value>.TangW.z; 
+                //   o6.x <- <DS return value>.TexTess.x; o6.y <- <DS return value>.TexTess.y; 
                 //   o3.x <- <DS return value>.NormalW.x; o3.y <- <DS return value>.NormalW.y; o3.z <- <DS return value>.NormalW.z; 
                 //   o2.x <- <DS return value>.PosV.x; o2.y <- <DS return value>.PosV.y; o2.z <- <DS return value>.PosV.z; 
                 //   o1.x <- <DS return value>.PosW.x; o1.y <- <DS return value>.PosW.y; o1.z <- <DS return value>.PosW.z; 
@@ -350,7 +328,7 @@ fxgroup
                 //   vicp[3][0].x <- quad[3].PosL.x; vicp[3][0].y <- quad[3].PosL.y; vicp[3][0].z <- quad[3].PosL.z; 
                 //   vicp[3][1].x <- quad[3].TexTess.x; vicp[3][1].y <- quad[3].TexTess.y
                 //
-                #line 134 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
+                #line 134 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
                 mov r0.xyz, -vicp[0][0].xyzx
                 add r0.xyz, r0.xyzx, vicp[1][0].xyzx
                 mul r0.xyz, r0.xyzx, vDomain.xxxx
@@ -380,151 +358,52 @@ fxgroup
                 
                 #line 144
                 mov r0.w, l(1.000000)
-                dp4 r2.x, r0.xyzw, cb1[0].xyzw  // r2.x <- dout.PosW.x
-                dp4 r2.y, r0.xyzw, cb1[1].xyzw  // r2.y <- dout.PosW.y
-                dp4 r2.z, r0.xyzw, cb1[2].xyzw  // r2.z <- dout.PosW.z
-                add r0.x, r1.x, cb1[18].x
-                mul r0.x, r0.x, cb1[19].w
-                add r0.z, r1.y, cb1[18].y
-                mul r0.y, r0.z, cb1[19].w
-                itof r0.z, l(0)
-                sample_l_indexable(texture2d)(float,float,float,float) r0.x, r0.xyxx, t0.xyzw, s0, r0.z
-                mul r0.x, r0.x, l(2.000000)  // r0.x <- H
-                mov r0.yzw, -cb1[17].zzxy
-                add r0.yzw, r0.yyzw, r2.zzxy
-                dp3 r1.z, r0.yzwy, r0.yzwy
-                rsq r1.z, r1.z
-                mul r0.yzw, r0.yyzw, r1.zzzz  // r0.y <- N.z; r0.z <- N.x; r0.w <- N.y
-                mul r3.xyz, r0.zwyz, cb1[19].zxyz
-                mul r4.xyz, r0.yzwy, cb1[19].xyzx
-                mov r4.xyz, -r4.xyzx
-                add r3.xyz, r3.xyzx, r4.xyzx
-                dp3 r1.z, r3.xyzx, r3.xyzx
-                rsq r1.z, r1.z
-                mul r3.xyz, r1.zzzz, r3.xzyx  // r3.x <- B.y; r3.y <- B.x; r3.z <- B.z
-                mul r4.xyz, r0.wyzw, r3.zyxz
-                mul r5.xyz, r0.yzwy, r3.xzyx
-                mov r5.xyz, -r5.xyzx
-                add r4.xyz, r4.xyzx, r5.xyzx  // r4.x <- T.x; r4.y <- T.y; r4.z <- T.z
-                itof r1.z, l(0)
-                ge r1.z, r0.x, r1.z
-                if_nz r1.z
-                  add r1.z, r1.x, cb1[18].x
-                  mul r5.x, r1.z, cb1[19].w
-                  add r1.z, r1.y, cb1[18].y
-                  mul r5.y, r1.z, cb1[19].w
-                  itof r1.z, l(0)
-                  sample_l_indexable(texture2d)(float,float,float,float) r5.xyz, r5.xyxx, t1.xyzw, s1, r1.z  // r5.x <- normalT.x; r5.y <- normalT.y; r5.z <- normalT.z
+                dp4 r2.x, r0.xyzw, cb0[0].xyzw  // r2.x <- dout.PosW.x
+                dp4 r2.y, r0.xyzw, cb0[1].xyzw  // r2.y <- dout.PosW.y
+                dp4 r2.z, r0.xyzw, cb0[2].xyzw  // r2.z <- dout.PosW.z
                 
-                #line 156
-                  mov r6.x, r4.x  // r6.x <- TBN._m00
-                  mov r6.y, r0.z  // r6.y <- TBN._m10
-                  mov r6.z, r3.y  // r6.z <- TBN._m20
-                  mov r7.x, r4.y  // r7.x <- TBN._m01
-                  mov r7.y, r0.w  // r7.y <- TBN._m11
-                  mov r7.z, r3.x  // r7.z <- TBN._m21
-                  mov r3.x, r4.z  // r3.x <- TBN._m02
-                  mov r3.y, r0.y  // r3.y <- TBN._m12
-                  mov r3.z, r3.z  // r3.z <- TBN._m22
-                  dp3 r4.x, r5.xyzx, r6.xyzx  // r4.x <- dout.NormalW.x
-                  dp3 r4.y, r5.xyzx, r7.xyzx  // r4.y <- dout.NormalW.y
-                  dp3 r4.z, r5.xyzx, r3.xyzx  // r4.z <- dout.NormalW.z
-                  mul r0.yzw, r4.zzxy, cb1[19].yyzx
-                  mul r3.xyz, r4.yzxy, cb1[19].zxyz
-                  mov r3.xyz, -r3.xyzx
-                  add r0.yzw, r0.yyzw, r3.xxyz
-                  dp3 r1.z, r0.yzwy, r0.yzwy
-                  rsq r1.z, r1.z
-                  mul r0.yzw, r0.yyzw, r1.zzzz  // r0.y <- dout.BinormW.x; r0.z <- dout.BinormW.y; r0.w <- dout.BinormW.z
-                  mul r3.xyz, r0.wyzw, r4.yzxy
-                  mul r5.xyz, r0.zwyz, r4.zxyz
-                  mov r5.xyz, -r5.xyzx
-                  add r3.xyz, r3.xyzx, r5.xyzx  // r3.x <- dout.TangW.x; r3.y <- dout.TangW.y; r3.z <- dout.TangW.z
-                  add r0.x, r0.x, cb1[16].y
-                  mov r5.xyz, -cb1[17].xyzx
-                  add r5.xyz, r2.xyzx, r5.xyzx
-                  dp3 r1.z, r5.xyzx, r5.xyzx
-                  rsq r1.z, r1.z
-                  mul r5.xyz, r1.zzzz, r5.xyzx
-                  mul r5.xyz, r0.xxxx, r5.xyzx
-                  add r5.xyz, r5.xyzx, cb1[17].xyzx  // r5.x <- dout.PosW.x; r5.y <- dout.PosW.y; r5.z <- dout.PosW.z
-                else   // Prior locations: r2.x <- dout.PosW.x; r2.y <- dout.PosW.y; r2.z <- dout.PosW.z; r0.x <- H; r0.y <- N.z; r0.z <- N.x; r0.w <- N.y; r3.x <- B.y; r3.y <- B.x; r3.z <- B.z; r4.x <- T.x; r4.y <- T.y; r4.z <- T.z
+                #line 148
+                mov r0.xyz, -cb0[9].xyzx
+                add r0.xyz, r0.xyzx, r2.xyzx
+                dp3 r0.w, r0.xyzx, r0.xyzx
+                rsq r0.w, r0.w
+                mul r0.xyz, r0.wwww, r0.xyzx  // r0.x <- N.x; r0.y <- N.y; r0.z <- N.z
                 
-                #line 166
-                  mov r6.xyz, -cb1[17].xyzx
-                  add r2.xyz, r2.xyzx, r6.xyzx
-                  dp3 r0.x, r2.xyzx, r2.xyzx
-                  rsq r0.x, r0.x
-                  mul r2.xyz, r0.xxxx, r2.xyzx
-                  mul r2.xyz, r2.xyzx, cb1[16].yyyy
-                  add r5.xyz, r2.xyzx, cb1[17].xyzx  // r5.x <- dout.PosW.x; r5.y <- dout.PosW.y; r5.z <- dout.PosW.z
-                endif 
-                mov r5.w, l(1.000000)
-                dp4 r2.x, r5.xyzw, cb1[4].xyzw  // r2.x <- dout.PosV.x
-                dp4 r2.y, r5.xyzw, cb1[5].xyzw  // r2.y <- dout.PosV.y
-                dp4 r2.z, r5.xyzw, cb1[6].xyzw  // r2.z <- dout.PosV.z
-                dp4 r6.x, r5.xyzw, cb1[4].xyzw  // r6.x <- dout.PosH.x
-                dp4 r6.y, r5.xyzw, cb1[5].xyzw  // r6.y <- dout.PosH.y
-                dp4 r6.w, r5.xyzw, cb1[7].xyzw  // r6.w <- dout.PosH.w
-                mul r0.x, r6.w, cb0[0].x
-                add r0.x, r0.x, l(1.000000)
-                log r0.x, r0.x
-                mul r0.x, r0.x, l(0.693147)
-                mul r1.z, cb0[0].x, l(999999995904.000000)
+                #line 168
+                mov r0.xyz, r0.xyzx  // r0.x <- dout.NormalW.x; r0.y <- dout.NormalW.y; r0.z <- dout.NormalW.z
+                mul r2.xyz, r0.xyzx, cb0[8].yyyy
+                add r2.xyz, r2.xyzx, cb0[9].xyzx  // r2.x <- dout.PosW.x; r2.y <- dout.PosW.y; r2.z <- dout.PosW.z
+                mov r2.w, l(1.000000)
+                dp4 r3.x, r2.xyzw, cb0[4].xyzw  // r3.x <- dout.PosV.x
+                dp4 r3.y, r2.xyzw, cb0[5].xyzw  // r3.y <- dout.PosV.y
+                dp4 r3.z, r2.xyzw, cb0[6].xyzw  // r3.z <- dout.PosV.z
+                dp4 r4.x, r2.xyzw, cb0[4].xyzw  // r4.x <- dout.PosH.x
+                dp4 r4.y, r2.xyzw, cb0[5].xyzw  // r4.y <- dout.PosH.y
+                dp4 r4.w, r2.xyzw, cb0[7].xyzw  // r4.w <- dout.PosH.w
+                mul r0.w, r4.w, cb0[12].y
+                add r0.w, r0.w, l(1.000000)
+                log r0.w, r0.w
+                mul r0.w, r0.w, l(0.693147)
+                mul r1.z, cb0[12].x, cb0[12].y
                 add r1.z, r1.z, l(1.000000)
                 log r1.z, r1.z
                 mul r1.z, r1.z, l(0.693147)
-                div r0.x, r0.x, r1.z
-                mul r0.x, r6.w, r0.x  // r0.x <- dout.PosH.z
-                mov o0.xyw, r6.xyxw
-                mov o0.z, r0.x
-                mov o1.xyz, r5.xyzx
-                mov o2.xyz, r2.xyzx
-                mov o3.xyz, r4.xyzx
-                mov o4.xyz, r0.yzwy
-                mov o5.xyz, r3.xyzx
+                div r0.w, r0.w, r1.z
+                mul r0.w, r4.w, r0.w  // r0.w <- dout.PosH.z
+                mov o0.xyw, r4.xyxw
+                mov o0.z, r0.w
+                mov o1.xyz, r2.xyzx
+                mov o2.xyz, r3.xyzx
+                mov o3.xyz, r0.xyzx
                 mov o6.xy, r1.xyxx
                 ret 
-                // Approximately 126 instruction slots used
+                // Approximately 60 instruction slots used
                             
             };
             GeometryShader = NULL;
             PixelShader = asm {
                 //
                 // Generated by Microsoft (R) HLSL Shader Compiler 10.0.10011.16384
-                //
-                //
-                // Buffer Definitions: 
-                //
-                // cbuffer cbPerObject
-                // {
-                //
-                //   float4x4 gWorld;                   // Offset:    0 Size:    64 [unused]
-                //   float4x4 gViewProj;                // Offset:   64 Size:    64 [unused]
-                //   float4x4 gView;                    // Offset:  128 Size:    64 [unused]
-                //   float4x4 gProj;                    // Offset:  192 Size:    64 [unused]
-                //   float gSpacing;                    // Offset:  256 Size:     4 [unused]
-                //   float gRadius;                     // Offset:  260 Size:     4 [unused]
-                //   float3 gCentrePos;                 // Offset:  272 Size:    12 [unused]
-                //   float3 gOffset;                    // Offset:  288 Size:    12
-                //   float3 gTang;                      // Offset:  304 Size:    12 [unused]
-                //   float gLevel;                      // Offset:  316 Size:     4
-                //   float3 gCenterOfPlanet;            // Offset:  320 Size:    12 [unused]
-                //   float gRadiusOfPlanet;             // Offset:  332 Size:     4 [unused]
-                //   float gFogStart;                   // Offset:  336 Size:     4 [unused]
-                //   float gFogRange;                   // Offset:  340 Size:     4 [unused]
-                //   float3 gFogColor;                  // Offset:  352 Size:    12 [unused]
-                //
-                // }
-                //
-                //
-                // Resource Bindings:
-                //
-                // Name                                 Type  Format         Dim      HLSL Bind  Count
-                // ------------------------------ ---------- ------- ----------- -------------- ------
-                // samHeightMap                      sampler      NA          NA             s0      1 
-                // gHeightMap                        texture  float4          2d             t0      1 
-                // cbPerObject                       cbuffer      NA          NA            cb0      1 
                 //
                 //
                 //
@@ -538,7 +417,7 @@ fxgroup
                 // NORMAL                   1   xyz         3     NONE   float   xyz 
                 // NORMAL                   2   xyz         4     NONE   float       
                 // NORMAL                   3   xyz         5     NONE   float       
-                // TEXCOORD                 0   xy          6     NONE   float   xy  
+                // TEXCOORD                 0   xy          6     NONE   float       
                 //
                 //
                 // Output signature:
@@ -549,11 +428,7 @@ fxgroup
                 //
                 ps_5_0
                 dcl_globalFlags refactoringAllowed | skipOptimization
-                dcl_constantbuffer CB0[20], immediateIndexed
-                dcl_sampler s0, mode_default
-                dcl_resource_texture2d (float,float,float,float) t0
                 dcl_input_ps linear v3.xyz
-                dcl_input_ps linear v6.xy
                 dcl_output o0.xyzw
                 dcl_temps 2
                 //
@@ -567,34 +442,26 @@ fxgroup
                 //   v6.x <- pin.TexTess.x; v6.y <- pin.TexTess.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 180 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
-                add r0.x, v6.x, cb0[18].x
-                mul r0.x, r0.x, cb0[19].w
-                add r0.z, v6.y, cb0[18].y
-                mul r0.y, r0.z, cb0[19].w
-                itof r0.z, l(0)
-                sample_l_indexable(texture2d)(float,float,float,float) r0.x, r0.xyxx, t0.xyzw, s0, r0.z
-                mul r0.x, r0.x, l(2.000000)  // r0.x <- H
-                mov r0.yzw, l(0,1.000000,1.000000,1.000000)  // r0.y <- color.x; r0.z <- color.y; r0.w <- color.z
+                #line 183 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\TerrainPlanetLOD.fx"
+                mov r0.xyz, l(1.000000,1.000000,1.000000,0)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
                 mov r1.xyz, v3.xyzx  // r1.x <- N.x; r1.y <- N.y; r1.z <- N.z
-                lt r0.x, r0.x, l(0.000000)
-                if_nz r0.x
-                  mov r0.yzw, l(0,0.200000,0.350000,0.900000)
-                  mov r1.xyz, l(0,1.000000,0,0)
-                endif 
                 
-                #line 192
+                #line 193
                 nop 
                 
-                #line 201
-                dp3 r0.x, r1.xzyx, l(0.000000, 0.000000, 1.000000, 0.000000)
-                add r0.x, r0.x, l(0.600000)
-                mul r0.xyz, r0.yzwy, r0.xxxx
+                #line 202
+                dp3 r0.w, r1.xzyx, l(0.000000, 0.000000, 1.000000, 0.000000)
+                add r0.w, r0.w, l(1.000000)
+                mul r0.w, r0.w, l(0.500000)
+                add r0.w, r0.w, l(0.600000)
+                mul r0.xyz, r0.xyzx, r0.wwww
                 div r0.xyz, r0.xyzx, l(1.600000, 1.600000, 1.600000, 0.000000)  // r0.x <- color.x; r0.y <- color.y; r0.z <- color.z
+                
+                #line 208
                 mov o0.xyz, r0.xyzx
                 mov o0.w, l(1.000000)
                 ret 
-                // Approximately 22 instruction slots used
+                // Approximately 12 instruction slots used
                             
             };
         }

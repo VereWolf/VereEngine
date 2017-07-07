@@ -26,12 +26,14 @@
 #include <concrt.h>
 #include <collection.h>
 #include  <Commctrl.h>
+#include  <ppltasks.h>
 
 #include  <Xaudio2.h>
 
 //InitCommonControlsEx(ICC_TAB_CLASSES);
 #include <fstream>
-#include <iostream> 
+#include <iostream>
+#include <string.h>
 using namespace DirectX;
 using namespace std;
 using namespace DirectX;
@@ -54,8 +56,10 @@ using namespace DirectX;
 #include <tchar.h>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <stdio.h>
 #include <limits>
+#include <bitset>
 #include "Resource.h"
 #include "lua.h"
 #include "lauxlib.h"

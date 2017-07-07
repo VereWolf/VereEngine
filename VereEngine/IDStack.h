@@ -3,42 +3,16 @@
 
 struct IDStack
 {
-	struct IDElement
-	{
-		IDElement(int itsID, IDElement *itsNextElem);
-
-		void DeleteAllElements();
-
-		int id;
-		IDElement *nextElem;
-	};
-
-	struct StackOfMark
-	{
-		StackOfMark();
-
-		void DeleteAllIDElements();
-
-		IDElement *firstMark;
-		int markCounter;
-		int occupancyRate;
-	};
-
-	IDStack();
+	IDStack(int level); //range of ID's (0 .. pow(2,level)-1)
 	~IDStack()
 	{
-		for (int i = 0; i < m_idMarks.size(); ++i)
-		{
-			m_idMarks[i].DeleteAllIDElements();
-		}
 	}
 
-	void ReturnElement(int id, bool saveoccupancyRate = false);
-	int GetElement();
+	void ReturnElement(int id);
+	int TakeElement();
 
-	int m_sizeOfStep;
-	std::vector<StackOfMark> m_idMarks;
-	int m_suitableMark;
+	int m_level;
+	std::vector<XMINT4> m_reg;
 };
 
 #endif //ID_STACK

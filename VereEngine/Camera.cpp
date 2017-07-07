@@ -31,10 +31,15 @@ void Camera::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 
 void Camera::Update()
 {
-	btVector3 R = mRight;
+	/*btVector3 R = mRight;
 	btVector3 L = mLook.normalize();
 	btVector3 U = L.cross(R).normalize();
-	R = U.cross(L);
+	R = U.cross(L);*/
+
+	btVector3 U = GetLocalPosition().normalize();
+	btVector3 L = mLook.normalize();
+	btVector3 R = U.cross(L).normalize();
+	U = L.cross(R);
 
 	btMatrix3x3 N;
 

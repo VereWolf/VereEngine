@@ -1,125 +1,127 @@
 #include "pch.h"
 #include "IDStack.h"
 
-IDStack::IDElement::IDElement(int itsID, IDElement *itsNextElem)
-{
-	id = itsID;
-	nextElem = itsNextElem;
-}
 
-void IDStack::IDElement::DeleteAllElements()
+
+IDStack::IDStack(int l)
 {
-	if (this != NULL &&nextElem != NULL)
+	m_level = l;
+
+	int size = 0;
+	int C1 = 0;
+	int C2 = 0;
+
+	for (int i = 0; i < m_level + 1; ++i)
 	{
-		nextElem->DeleteAllElements();
+		size += pow(2, i);
+	}
 
-		delete nextElem;
-		nextElem = NULL;
+	m_reg.resize(size);
+
+	size = 0;
+
+	for (int i = 0; i < m_level + 1; ++i)
+	{
+		int m = pow(2, i);
+
+		C1 = 0;
+		C2 = 0;
+
+		for (int j = 0; j < m; ++j)
+		{
+			m_reg[size + j] = XMINT4(j, 2 * j + size + m, 1 + 2 * j + size + m, 0);
+		}
+
+		size += pow(2, i);
 	}
 }
 
-IDStack::StackOfMark::StackOfMark()
+void IDStack::ReturnElement(int id)
 {
-	firstMark = NULL;
-	markCounter = 0;
-	occupancyRate = 0;
-}
+	std::bitset<sizeof(id) * CHAR_BIT> bs(id);
 
-void IDStack::StackOfMark::DeleteAllIDElements()
-{
-	firstMark->DeleteAllElements();
-	delete firstMark;
-	firstMark = NULL;
-	markCounter = 0;
-	occupancyRate = 0;
-}
+	std::vector<int> buffer(m_level);
 
-IDStack::IDStack()
-{
-	m_sizeOfStep = 32;
-	m_idMarks.resize(1);
-	m_suitableMark = 0;
-}
-
-void IDStack::ReturnElement(int id, bool saveoccupancyRate)
-{
-	int M = id / m_sizeOfStep;
-
-	if (M < m_suitableMark)
+	if (bs[0] == 0)
 	{
-		m_suitableMark = M;
-	}
-
-	if (M > m_idMarks.size())
-	{
-		m_idMarks.resize(M);
-	}
-
-	if (m_idMarks[M].occupancyRate == 0)
-	{
-		IDElement *e = new IDElement(id, NULL);
-		m_idMarks[M].firstMark = e;
+		buffer[0] = m_reg[0].y;
 	}
 	else
 	{
-		IDElement *e = new IDElement(id, m_idMarks[M].firstMark);
-		m_idMarks[M].firstMark = e;
+		buffer[0] = m_reg[0].z;
 	}
 
-	if (saveoccupancyRate == false)
+	for (int i = 1; i < m_level; ++i)
 	{
-		--m_idMarks[M].occupancyRate;
-	}
-
-	/*if (m_idMarks[M].markCounter == m_sizeOfStep)
-	{
-		m_idMarks[M].DeleteAllIDElements();
-	}*/
-
-	int S = m_idMarks.size();
-
-	if (m_idMarks[S - 1].markCounter == 0)
-	{
-		if (S > 0)
+		if (bs[i] == 0)
 		{
-			m_idMarks.resize(S + 1);
+			buffer[i] = m_reg[buffer[i - 1]].y;
+		}
+		else
+		{
+			buffer[i] = m_reg[buffer[i - 1]].z;
 		}
 	}
 
-	return;
+	m_reg[buffer[m_level - 1]].w = 0;
+
+	for (int i = m_level - 2; i >= 0; --i)
+	{
+		if (m_reg[m_reg[buffer[i]].y].w == 1 && m_reg[m_reg[buffer[i]].z].w == 1)
+		{
+			m_reg[buffer[i]].w = 1;
+		}
+		else
+		{
+			m_reg[buffer[i]].w = 0;
+		}
+	}
 }
 
-int IDStack::GetElement()
+int IDStack::TakeElement()
 {
-	if (m_idMarks[m_suitableMark].firstMark == NULL)
+	std::vector<int> buffer(m_level);
+
+	if (m_reg[0].w == 0)
 	{
-		ReturnElement(m_suitableMark * m_sizeOfStep + m_idMarks[m_suitableMark].markCounter, true);
-		++m_idMarks[m_suitableMark].markCounter;
-	}
-
-	int id = m_idMarks[m_suitableMark].firstMark->id;
-	IDElement *e = m_idMarks[m_suitableMark].firstMark;
-	m_idMarks[m_suitableMark].firstMark = e->nextElem;
-	delete e;
-	e = NULL;
-	++m_idMarks[m_suitableMark].occupancyRate;
-
-	if (!(m_idMarks[m_suitableMark].occupancyRate < m_sizeOfStep))
-	{
-		int S = m_idMarks.size();
-
-		for (int i = m_suitableMark; i < S; ++i)
+		if (m_reg[m_reg[0].y].w == 0)
 		{
-			if (m_idMarks[i].occupancyRate < m_sizeOfStep)
+			buffer[0] = m_reg[0].y;
+		}
+		else
+		{
+			buffer[0] = m_reg[0].z;
+		}
+
+		for (int i = 1; i < m_level; ++i)
+		{
+			if (m_reg[m_reg[buffer[i - 1]].y].w == 0)
 			{
-				m_suitableMark = i;
-				return id;
+				buffer[i] = m_reg[buffer[i - 1]].y;
+			}
+			else if(m_reg[m_reg[buffer[i - 1]].z].w == 0)
+			{
+				buffer[i] = m_reg[buffer[i - 1]].z;
 			}
 		}
-		S += 1;
-		m_idMarks.resize(S);
-		m_suitableMark = S;
+
+		m_reg[buffer[m_level - 1]].w = 1;
+
+		for (int i = m_level - 2; i >= 0; --i)
+		{
+			if (m_reg[m_reg[buffer[i]].y].w == 1 && m_reg[m_reg[buffer[i]].z].w == 1)
+			{
+				m_reg[buffer[i]].w = 1;
+			}
+			else
+			{
+				m_reg[buffer[i]].w = 0;
+			}
+		}
+
+
+		return m_reg[buffer[m_level - 1]].x;
 	}
 
-	return id;
+	return -1;
 }

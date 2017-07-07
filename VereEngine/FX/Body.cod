@@ -146,7 +146,7 @@ fxgroup
                 //   o1.x <- <VS return value>.PosW.x; o1.y <- <VS return value>.PosW.y; o1.z <- <VS return value>.PosW.z; 
                 //   o0.x <- <VS return value>.PosH.x; o0.y <- <VS return value>.PosH.y; o0.z <- <VS return value>.PosH.z; o0.w <- <VS return value>.PosH.w
                 //
-                #line 59 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Body.fx"
+                #line 59 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Body.fx"
                 mul r0.xyz, v1.xyzx, cb1[17].xxxx
                 add r0.xyz, r0.xyzx, v0.xyzx  // r0.x <- vin.PosL.x; r0.y <- vin.PosL.y; r0.z <- vin.PosL.z
                 mul r1.xyz, v7.xyzx, cb1[17].xxxx
@@ -250,7 +250,7 @@ fxgroup
                 dcl_constantbuffer CB0[13], immediateIndexed
                 dcl_input_ps linear v3.xyz
                 dcl_output o0.xyzw
-                dcl_temps 11
+                dcl_temps 12
                 //
                 // Initial variable locations:
                 //   v0.x <- pin.PosH.x; v0.y <- pin.PosH.y; v0.z <- pin.PosH.z; v0.w <- pin.PosH.w; 
@@ -260,22 +260,23 @@ fxgroup
                 //   v4.x <- pin.Tex.x; v4.y <- pin.Tex.y; 
                 //   o0.x <- <PS return value>.x; o0.y <- <PS return value>.y; o0.z <- <PS return value>.z; o0.w <- <PS return value>.w
                 //
-                #line 83 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Body.fx"
+                #line 83 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Body.fx"
                 mov r0.xyzw, l(0.400000,0.400000,0.400000,1.000000)  // r0.x <- light.ambient.x; r0.y <- light.ambient.y; r0.z <- light.ambient.z; r0.w <- light.ambient.w
                 mov r1.xyzw, l(0.500000,0.500000,0.500000,1.000000)  // r1.x <- light.diffuse.x; r1.y <- light.diffuse.y; r1.z <- light.diffuse.z; r1.w <- light.diffuse.w
                 mov r2.xyzw, l(0.200000,0.200000,0.200000,1.000000)  // r2.x <- light.specular.x; r2.y <- light.specular.y; r2.z <- light.specular.z; r2.w <- light.specular.w
                 mov r3.xyz, l(0.590451,0.550214,0.590451,0)  // r3.x <- light.direction.x; r3.y <- light.direction.y; r3.z <- light.direction.z
+                mov r3.w, l(1.000000)  // r3.w <- light.power
                 
-                #line 95
+                #line 96
                 mov r4.xyzw, l(0.800000,0.800000,0.800000,1.000000)  // r4.x <- mat.ambient.x; r4.y <- mat.ambient.y; r4.z <- mat.ambient.z; r4.w <- mat.ambient.w
                 
-                #line 98
+                #line 99
                 mov r5.xyzw, l(0.800000,0.800000,0.800000,1.000000)  // r5.x <- mat.diffuse.x; r5.y <- mat.diffuse.y; r5.z <- mat.diffuse.z; r5.w <- mat.diffuse.w
                 
-                #line 106
-                mov r6.xyzw, l(1.000000,1.000000,1.000000,1.000000)  // r6.x <- mat.specular.x; r6.y <- mat.specular.y; r6.z <- mat.specular.z; r6.w <- mat.specular.w
+                #line 107
+                mov r6.xyzw, l(0.800000,0.800000,0.800000,1.000000)  // r6.x <- mat.specular.x; r6.y <- mat.specular.y; r6.z <- mat.specular.z; r6.w <- mat.specular.w
                 
-                #line 120
+                #line 121
                 nop 
                 mov r4.xyzw, r4.xyzw
                 mov r5.xyzw, r5.xyzw
@@ -284,52 +285,56 @@ fxgroup
                 mov r1.xyzw, r1.xyzw
                 mov r2.xyzw, r2.xyzw
                 mov r3.xyz, r3.xyzx
+                mov r3.w, r3.w
                 mov r7.xyz, v3.xyzx
-                dp3 r3.w, cb0[12].xyzx, cb0[12].xyzx
-                rsq r3.w, r3.w
-                mul r8.xyz, r3.wwww, cb0[12].xyzx
+                dp3 r7.w, cb0[12].xyzx, cb0[12].xyzx
+                rsq r7.w, r7.w
+                mul r8.xyz, r7.wwww, cb0[12].xyzx
                 
-                #line 76 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\LightHelper.fx"
+                #line 131 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\LightHelper.fx"
                 mov r9.xyzw, l(0,0,0,0)  // r9.x <- diffuse.x; r9.y <- diffuse.y; r9.z <- diffuse.z; r9.w <- diffuse.w
                 mov r10.xyzw, l(0,0,0,0)  // r10.x <- spec.x; r10.y <- spec.y; r10.z <- spec.z; r10.w <- spec.w
                 mov r3.xyz, -r3.xyzx  // r3.x <- lightVec.x; r3.y <- lightVec.y; r3.z <- lightVec.z
-                mul r0.xyzw, r0.xyzw, r4.xyzw  // r0.x <- ambient.x; r0.y <- ambient.y; r0.z <- ambient.z; r0.w <- ambient.w
-                dp3 r3.w, r3.xyzx, r7.xyzx  // r3.w <- diffuseFactor
-                mul r3.w, r3.w, r3.w
+                mul r11.xyzw, r4.xyzw, r3.wwww
+                mul r0.xyzw, r0.xyzw, r11.xyzw  // r0.x <- ambient.x; r0.y <- ambient.y; r0.z <- ambient.z; r0.w <- ambient.w
+                dp3 r7.w, r3.xyzx, r7.xyzx  // r7.w <- diffuseFactor
+                mul r7.w, r7.w, r7.w
                 
-                #line 88
-                lt r7.w, l(0.000000), r3.w
+                #line 143
+                lt r8.w, l(0.000000), r7.w
                 mov r3.xyz, -r3.xyzx
-                dp3 r8.w, r3.xyzx, r7.xyzx
-                add r8.w, r8.w, r8.w
-                mov r8.w, -r8.w
-                mul r7.xyz, r7.xyzx, r8.wwww
+                dp3 r11.x, r3.xyzx, r7.xyzx
+                add r11.x, r11.x, r11.x
+                mov r11.x, -r11.x
+                mul r7.xyz, r7.xyzx, r11.xxxx
                 add r3.xyz, r3.xyzx, r7.xyzx  // r3.x <- v.x; r3.y <- v.y; r3.z <- v.z
                 dp3 r3.x, r3.xyzx, r8.xyzx
                 max r3.x, r3.x, l(0.000000)
                 mov r3.y, l(1.000000)
                 mul r3.x, r3.x, r3.y  // r3.x <- specFactor
-                mul r5.xyzw, r5.xyzw, r3.wwww
+                mul r3.y, r3.w, r7.w
+                mul r5.xyzw, r5.xyzw, r3.yyyy
                 mul r1.xyzw, r1.xyzw, r5.xyzw  // r1.x <- diffuse.x; r1.y <- diffuse.y; r1.z <- diffuse.z; r1.w <- diffuse.w
+                mul r3.x, r3.x, r3.w
                 mul r3.xyzw, r6.xyzw, r3.xxxx
                 mul r2.xyzw, r2.xyzw, r3.xyzw  // r2.x <- spec.x; r2.y <- spec.y; r2.z <- spec.z; r2.w <- spec.w
-                movc r1.xyzw, r7.wwww, r1.xyzw, r9.xyzw
-                movc r2.xyzw, r7.wwww, r2.xyzw, r10.xyzw
+                movc r1.xyzw, r8.wwww, r1.xyzw, r9.xyzw
+                movc r2.xyzw, r8.wwww, r2.xyzw, r10.xyzw
                 
-                #line 120 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_03_02\VereEngine\VereEngine\FX\Body.fx"
+                #line 121 "C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_05_11\VereEngine\VereEngine\FX\Body.fx"
                 mov r0.xyzw, r0.xyzw  // r0.x <- ambient.x; r0.y <- ambient.y; r0.z <- ambient.z; r0.w <- ambient.w
                 mov r1.xyzw, r1.xyzw  // r1.x <- diffuse.x; r1.y <- diffuse.y; r1.z <- diffuse.z; r1.w <- diffuse.w
                 mov r2.xyzw, r2.xyzw  // r2.x <- spec.x; r2.y <- spec.y; r2.z <- spec.z; r2.w <- spec.w
                 
-                #line 130
+                #line 131
                 mul r1.xyzw, r1.xyzw, r4.xyzw
                 add r0.xyzw, r0.xyzw, r1.xyzw
                 add r0.xyzw, r2.xyzw, r0.xyzw  // r0.x <- ambient.x; r0.y <- ambient.y; r0.z <- ambient.z; r0.w <- ambient.w
                 
-                #line 134
+                #line 135
                 mov o0.xyzw, r0.xyzw
                 ret 
-                // Approximately 50 instruction slots used
+                // Approximately 55 instruction slots used
                             
             };
         }

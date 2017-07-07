@@ -299,13 +299,13 @@
     <ClInclude Include="GameTilePlanetData.h">
       <Filter>RenderDevice</Filter>
     </ClInclude>
-    <ClInclude Include="StreamingDataManager.h">
-      <Filter>StreamingData</Filter>
-    </ClInclude>
     <ClInclude Include="GameStreamingData.h">
       <Filter>StreamingData</Filter>
     </ClInclude>
     <ClInclude Include="GameDataSet.h">
+      <Filter>StreamingData</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamingDataManager.h">
       <Filter>StreamingData</Filter>
     </ClInclude>
   </ItemGroup>
@@ -417,6 +417,9 @@
     </Filter>
     <Filter Include="StreamingData">
       <UniqueIdentifier>{9fa4ecba-3921-4366-97bc-17efef8f3e42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{5e0550c7-6508-4555-aa11-2882e1f8906e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
