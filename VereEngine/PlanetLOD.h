@@ -57,7 +57,7 @@ public:
 	ID3D11ShaderResourceView * m_NormalSRV;
 };
 
-class TerrainPlanetLOD: public GameComponent
+class TerrainPlanetLOD: public GameBaseObject
 {
 public:
 	TerrainPlanetLOD()
@@ -97,9 +97,6 @@ public:
 	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 		float camFarZ, btScalar heightFar, btScalar aspect,
 		float camFarRangeMod, float camModifier);
-
-	bool ComponentProccess();
-
 	void CreateNewLevelOfLoD();
 
 	static bool m_onlyRenderText;

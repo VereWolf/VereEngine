@@ -91,14 +91,12 @@ DirectXPage::DirectXPage() :
 
 	m_main = std::unique_ptr<VereEngineMain>(new VereEngineMain(m_deviceResources));
 	m_main->StartRenderLoop();
-	m_main->StartExpensiveLoop();
 }
 
 DirectXPage::~DirectXPage()
 {
 	// Stop rendering and processing events on destruction.
 	m_main->StopRenderLoop();
-	m_main->StopExpensiveLoop();
 	m_coreInput->Dispatcher->StopProcessEvents();
 }
 
@@ -110,7 +108,6 @@ void DirectXPage::SaveInternalState(IPropertySet^ state)
 
 	// Stop rendering when the app is suspended.
 	m_main->StopRenderLoop();
-	m_main->StopExpensiveLoop();
 
 	// Put code to save app state here.
 }
@@ -122,7 +119,6 @@ void DirectXPage::LoadInternalState(IPropertySet^ state)
 
 	// Start rendering when the app is resumed.
 	m_main->StartRenderLoop();
-	m_main->StartExpensiveLoop();
 }
 
 // Window event handlers.
@@ -133,12 +129,10 @@ void DirectXPage::OnVisibilityChanged(CoreWindow^ sender, VisibilityChangedEvent
 	if (m_windowVisible)
 	{
 		m_main->StartRenderLoop();
-		m_main->StartExpensiveLoop();
 	}
 	else
 	{
 		m_main->StopRenderLoop();
-		m_main->StopExpensiveLoop();
 	}
 }
 

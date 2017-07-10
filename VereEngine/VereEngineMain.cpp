@@ -1,4 +1,19 @@
-﻿
+﻿#include "pch.h"
+#include "VereEngineMain.h"
+#include "DirectXHelper.h"
+#include "RenderState.h"
+#include "Effects.h"
+#include "Vertex.h"
+#include "GenerateMesh.h"
+
+using namespace VereEngine;
+using namespace Windows::Foundation;
+using namespace Windows::System::Threading;
+using namespace Windows::System;
+using namespace Windows::UI::Core;
+using namespace Windows::UI::Xaml;
+using namespace Concurrency;
+
 #include "pch.h"
 #include "VereEngineMain.h"
 #include "DirectXHelper.h"
@@ -25,8 +40,6 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	// TODO: Replace this with your app's content initialization.
 	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get()));
-
-	m_gameComponentsManager = std::unique_ptr<GameComponentsManager>(new GameComponentsManager(m_deviceResources.get()));
 
 	m_gameRenderDevice = std::unique_ptr<RenderDevice>(new RenderDevice(m_deviceResources.get()));
 
@@ -139,37 +152,9 @@ void VereEngineMain::StartRenderLoop()
 	m_renderLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 }
 
-void VereEngineMain::StartExpensiveLoop()
-{
-	// If the expensive loop is already running then do not start another thread.
-	if (m_expensiveLoopWorker != nullptr && m_expensiveLoopWorker->Status == AsyncStatus::Started)
-	{
-		return;
-	}
-
-	// Create a task that will be run on a background thread.
-	auto workItemHandler = ref new WorkItemHandler([this](IAsyncAction ^ action)
-	{
-		// Calculate the updated expensive proccess.
-		while (action->Status == AsyncStatus::Started)
-		{
-			critical_section::scoped_lock lock(m_criticalSection);
-			UpdateExpensive();
-		}
-	});
-
-	// Run task on a dedicated normal priority background thread.
-	m_expensiveLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::Normal, WorkItemOptions::TimeSliced);
-}
-
 void VereEngineMain::StopRenderLoop()
 {
 	m_renderLoopWorker->Cancel();
-}
-
-void VereEngineMain::StopExpensiveLoop()
-{
-	m_expensiveLoopWorker->Cancel();
 }
 
 // Updates the application state once per frame.
@@ -183,12 +168,6 @@ void VereEngineMain::Update()
 		// TODO: Replace this with your app's content update functions.
 		m_gameObjects->Update();
 	});
-}
-
-// Updates the application for expensive proccess.
-void VereEngineMain::UpdateExpensive()
-{
-	m_gameComponentsManager->Update();
 }
 
 // Process all input from the user before updating game state

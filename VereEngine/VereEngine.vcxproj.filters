@@ -98,12 +98,6 @@
     <ClCompile Include="GameObjectsIDRegistr.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
-    <ClCompile Include="GameComponent.cpp">
-      <Filter>ExpensiveProccess</Filter>
-    </ClCompile>
-    <ClCompile Include="GameComponentsManager.cpp">
-      <Filter>ExpensiveProccess</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -314,12 +308,6 @@
     <ClInclude Include="GameObjectsIDRegistr.h">
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
-    <ClInclude Include="GameComponent.h">
-      <Filter>ExpensiveProccess</Filter>
-    </ClInclude>
-    <ClInclude Include="GameComponentsManager.h">
-      <Filter>ExpensiveProccess</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -432,9 +420,6 @@
     </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{5e0550c7-6508-4555-aa11-2882e1f8906e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExpensiveProccess">
-      <UniqueIdentifier>{00f3d7cc-235b-457a-b9ba-77c428ed9dfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
