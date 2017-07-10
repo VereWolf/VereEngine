@@ -248,8 +248,6 @@
     <ClInclude Include="GameBaseObject.h" />
     <ClInclude Include="GameBaseObjectsStack.h" />
     <ClInclude Include="Game2DColorBrush.h" />
-    <ClInclude Include="GameComponent.h" />
-    <ClInclude Include="GameComponentsManager.h" />
     <ClInclude Include="GameDataSet.h" />
     <ClInclude Include="GameDirectionalLight.h" />
     <ClInclude Include="GameEffect.h" />
@@ -321,7 +319,6 @@
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="GameBaseObject.cpp" />
     <ClCompile Include="GameBaseObjectsStack.cpp" />
-    <ClCompile Include="GameComponentsManager.cpp" />
     <ClCompile Include="GameObjectSpace.cpp" />
     <ClCompile Include="GameObjectsProcess.cpp" />
     <ClCompile Include="GameObjectsIDRegistr.cpp" />
@@ -347,7 +344,6 @@
     <ClCompile Include="PlanetLOD.cpp" />
     <ClCompile Include="RenderState.cpp" />
     <ClCompile Include="SkyBox.cpp" />
-    <ClCompile Include="GameComponent.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
