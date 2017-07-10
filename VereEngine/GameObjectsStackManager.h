@@ -8,9 +8,9 @@
 #include "GameObject.h"
 #include "GameObjectsProcess.h"
 #include "GameBaseObjectsStack.h"
-#include "GameObjectsIDStack.h"
+#include "GameObjectsIDRegistr.h"
 #include "StaticMesh.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 #include "GameBaseObject.h"
 #include "Planet.h"
 #include "Camera.h"
@@ -74,8 +74,8 @@ private:
 
 	Camera * m_camera;
 
-	IDStack *idObjectStackReg;
-	IDStack *idObjectStack;
+	IDRegistr *idObjectStackReg;
+	IDRegistr *idObjectStack;
 
 	std::vector<GameObject*> m_gameObjectsReg;
 

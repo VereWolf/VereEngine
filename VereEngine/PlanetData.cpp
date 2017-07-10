@@ -2,7 +2,7 @@
 #include "GameObjectSpace.h"
 #include "Camera.h"
 #include "PlanetData.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 
 TerrainPlanetData::TerrainPlanetData()
 {
@@ -16,7 +16,7 @@ void TerrainPlanetData::Init()
 	btMatrix3x3 M1 = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
 	btMatrix3x3 M2 = btMatrix3x3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 
-	m_planetElementID = new IDStack(10);
+	m_planetElementID = new IDRegistr(10);
 	m_planetElements.resize(pow(2, 10), NULL);
 
 	for (int i = 0; i < 12; ++i)

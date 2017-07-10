@@ -2,7 +2,7 @@
 #define GAME_BASE_OBJECTS_STACK_H
 
 #include "pch.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 #include "GameBaseObject.h"
 
 class GameBaseObjectsStack
@@ -27,7 +27,7 @@ public:
 private:
 	DX::DeviceResources *m_resources;
 
-	IDStack *idObjectStack;
+	IDRegistr *idObjectStack;
 	std::vector<GameBaseObject*> m_gameObjects;
 };
 

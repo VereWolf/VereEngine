@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "GameObject.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 
 class GameObjectSpace : public GameObject
 {
@@ -26,6 +26,6 @@ public:
 	void DeleteGameObject(int id);
 	inline int GetGameObjectID(int id);
 private:
-	IDStack *m_IDStack;
+	IDRegistr *m_IDRegistr;
 	std::vector<int> m_objectIDs;
 };

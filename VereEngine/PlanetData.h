@@ -4,7 +4,7 @@
 #include "pch.h"
 #include "GameObjectSpace.h"
 #include "Camera.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 
 class TerrainPlanetData: public GameObjectSpace
 {
@@ -74,7 +74,7 @@ private:
 
 public:
 	std::vector<GameBaseObject *> m_planetElements;
-	IDStack *m_planetElementID;
+	IDRegistr *m_planetElementID;
 	VereQueue<int> m_planetElementsInProcess;
 };
 

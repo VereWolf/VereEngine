@@ -2,7 +2,7 @@
 #include "DeviceResources.h"
 #include "StaticMesh.h"
 #include "GameObjectsProcess.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 #include "TestObject.h"
 #include "RenderDevice.h"
 #include "Camera.h"
@@ -13,8 +13,8 @@ GameObjectsStackManager::GameObjectsStackManager()
 {
 	GameObjectStackHandle = this;
 
-	idObjectStackReg = new IDStack(16);
-	idObjectStack = new IDStack(16);
+	idObjectStackReg = new IDRegistr(16);
+	idObjectStack = new IDRegistr(16);
 
 	m_bulletCollisionConfiguration = new btDefaultCollisionConfiguration();
 	m_bulletDispatcher = new btCollisionDispatcher(m_bulletCollisionConfiguration);
@@ -27,8 +27,8 @@ GameObjectsStackManager::GameObjectsStackManager(DX::DeviceResources *resources)
 {
 	GameObjectStackHandle = this;
 
-	idObjectStackReg = new IDStack(16);
-	idObjectStack = new IDStack(16);
+	idObjectStackReg = new IDRegistr(16);
+	idObjectStack = new IDRegistr(16);
 
 	m_bulletCollisionConfiguration = new btDefaultCollisionConfiguration();
 	m_bulletDispatcher = new btCollisionDispatcher(m_bulletCollisionConfiguration);

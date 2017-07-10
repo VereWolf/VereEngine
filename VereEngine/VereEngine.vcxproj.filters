@@ -18,9 +18,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectsIDStack.cpp">
-      <Filter>Object%27s Manager</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjectsProcess.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
@@ -31,9 +28,6 @@
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
     <ClCompile Include="GameResourceObjectsStack.cpp">
-      <Filter>Object%27s Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="IDStack.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
     <ClCompile Include="VereEngineMain.cpp">
@@ -98,6 +92,12 @@
     <ClCompile Include="StreamingDataManager.cpp">
       <Filter>StreamingData</Filter>
     </ClCompile>
+    <ClCompile Include="IDRegistr.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectsIDRegistr.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -120,9 +120,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectsIDStack.h">
-      <Filter>Object%27s Manager</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjectsProcess.h">
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
@@ -136,9 +133,6 @@
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
     <ClInclude Include="TestObject.h">
-      <Filter>Object%27s Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="IDStack.h">
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
     <ClInclude Include="LuaBinding.h">
@@ -307,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="StreamingDataManager.h">
       <Filter>StreamingData</Filter>
+    </ClInclude>
+    <ClInclude Include="IDRegistr.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectsIDRegistr.h">
+      <Filter>Object%27s Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
