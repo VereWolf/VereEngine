@@ -89,5 +89,6 @@ void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, 
 	for (int i = 0; i < 6; ++i)
 	{
 		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, NULL, NULL);
+		m_PlanetLOD[i].ComponentProccess();
 	}
 }
