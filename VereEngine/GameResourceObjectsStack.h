@@ -22,7 +22,7 @@ private:
 
 	DX::DeviceResources* m_resources;
 
-	IDStack *idStaticMeshStack;
+	IDRegistr *idStaticMeshStack;
 	std::vector<GameResourceObject*> m_gameObjects;
 };
 

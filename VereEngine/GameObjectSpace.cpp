@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "GameObject.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 #include "GameObjectSpace.h"
 
 GameObjectSpace::GameObjectSpace()
@@ -15,7 +15,7 @@ GameObjectSpace::GameObjectSpace(GameObjectSpace &other)
 
 void GameObjectSpace::Init()
 {
-	m_IDStack = new IDStack(16);
+	m_IDRegistr = new IDRegistr(16);
 };
 
 void GameObjectSpace::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
@@ -32,7 +32,7 @@ void GameObjectSpace::Update()
 
 int GameObjectSpace::CreateGameObject(int id)
 {
-	int id2 = m_IDStack->TakeElement();
+	int id2 = m_IDRegistr->TakeElement();
 	if (id2 >= m_objectIDs.size())
 	{
 		m_objectIDs.resize(m_objectIDs.size() + 32, -1);
@@ -48,7 +48,7 @@ void GameObjectSpace::DeleteGameObject(int id)
 {
 	if (m_objectIDs[id] != NULL)
 	{
-		m_IDStack->ReturnElement(id);
+		m_IDRegistr->ReturnElement(id);
 		m_objectIDs[id] = -1;
 	}
 };

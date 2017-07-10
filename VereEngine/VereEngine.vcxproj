@@ -257,7 +257,7 @@
     <ClInclude Include="GameObjectSpace.h" />
     <ClInclude Include="GameObjectsProcess.h" />
     <ClInclude Include="GameObjectsStackManager.h" />
-    <ClInclude Include="GameObjectsIDStack.h" />
+    <ClInclude Include="GameObjectsIDRegistr.h" />
     <ClInclude Include="GameStreamingData.h" />
     <ClInclude Include="GameTilePlanetData.h" />
     <ClInclude Include="GamePointLight.h" />
@@ -266,7 +266,7 @@
     <ClInclude Include="GameSpotLight.h" />
     <ClInclude Include="GameTexture.h" />
     <ClInclude Include="GameVertex.h" />
-    <ClInclude Include="IDStack.h" />
+    <ClInclude Include="IDRegistr.h" />
     <ClInclude Include="LuaBinding.h" />
     <ClInclude Include="MainEditorPage.xaml.h">
       <DependentUpon>MainEditorPage.xaml</DependentUpon>
@@ -321,10 +321,10 @@
     <ClCompile Include="GameBaseObjectsStack.cpp" />
     <ClCompile Include="GameObjectSpace.cpp" />
     <ClCompile Include="GameObjectsProcess.cpp" />
-    <ClCompile Include="GameObjectsIDStack.cpp" />
+    <ClCompile Include="GameObjectsIDRegistr.cpp" />
     <ClCompile Include="GameResourceObject.cpp" />
     <ClCompile Include="GameResourceObjectsStack.cpp" />
-    <ClCompile Include="IDStack.cpp" />
+    <ClCompile Include="IDRegistr.cpp" />
     <ClCompile Include="LoadVMB.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Effects.cpp" />

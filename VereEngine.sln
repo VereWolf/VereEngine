@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VereEngine", "VereEngine\VereEngine.vcxproj", "{E0520437-0C12-46F6-81CD-2E7CD51A6759}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VereEngine-Tools", "VereEngine-Tools\VereEngine-Tools.vcxproj", "{35186822-0A01-4A2F-B8AE-44B6D7454BA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -33,6 +35,16 @@ Global
 		{E0520437-0C12-46F6-81CD-2E7CD51A6759}.Release|x86.ActiveCfg = Release|Win32
 		{E0520437-0C12-46F6-81CD-2E7CD51A6759}.Release|x86.Build.0 = Release|Win32
 		{E0520437-0C12-46F6-81CD-2E7CD51A6759}.Release|x86.Deploy.0 = Release|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Debug|ARM.ActiveCfg = Debug|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Debug|x64.ActiveCfg = Debug|x64
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Debug|x64.Build.0 = Debug|x64
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Debug|x86.ActiveCfg = Debug|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Debug|x86.Build.0 = Debug|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Release|ARM.ActiveCfg = Release|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Release|x64.ActiveCfg = Release|x64
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Release|x64.Build.0 = Release|x64
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Release|x86.ActiveCfg = Release|Win32
+		{35186822-0A01-4A2F-B8AE-44B6D7454BA5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

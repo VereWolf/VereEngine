@@ -2,7 +2,7 @@
 #include "DeviceResources.h"
 #include "GameResourceObjectsStack.h"
 #include "GameResourceObject.h"
-#include "IDStack.h"
+#include "IDRegistr.h"
 #include "GameObjectsProcess.h"
 
 GameResourceObjectsStack::GameResourceObjectsStack()
@@ -16,7 +16,7 @@ GameResourceObjectsStack::~GameResourceObjectsStack()
 
 void GameResourceObjectsStack::Init(DX::DeviceResources *resources)
 {
-	idStaticMeshStack = new IDStack(16);
+	idStaticMeshStack = new IDRegistr(16);
 
 	m_resources = resources;
 }

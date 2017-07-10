@@ -10,7 +10,7 @@ void GameBaseObjectsStack::Init(DX::DeviceResources *resources)
 {
 	m_resources = resources;
 
-	idObjectStack = new IDStack(16);
+	idObjectStack = new IDRegistr(16);
 };
 
 int GameBaseObjectsStack::CreateGameObject(GameBaseObject *object)
