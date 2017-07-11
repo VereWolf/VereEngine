@@ -65,6 +65,7 @@ public:
 		m_idHeightMap = -1;
 		m_idNormalMap = -1;
 		m_isCreateNewLevelInProcess = false;
+		m_isNewLevel = false;
 	}
 
 	TerrainPlanetLOD(const TerrainPlanetLOD & n)
@@ -72,6 +73,7 @@ public:
 		m_idHeightMap = -1;
 		m_idNormalMap = -1;
 		m_isCreateNewLevelInProcess = false;
+		m_isNewLevel = false;
 	}
 
 	~TerrainPlanetLOD()
@@ -81,16 +83,14 @@ public:
 			delete m_hMap;
 			delete m_nMap;
 		}
-		delete m_heightMap;
-		delete m_normalMap;
+
+		if (m_heightMap != NULL) SafeDelete(m_heightMap);
+		if (m_normalMap != NULL) SafeDelete(m_normalMap);
 
 		if (m_idHeightMap >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMap);
 		if (m_idNormalMap >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMap);
 
 		GameRenderDeviceHandle->DeleteModel(m_modelID);
-
-		m_data->m_planetElementID->ReturnElement(GetId());
-		m_data->m_planetElements[GetId()] = NULL;
 	}
 
 	void Init(TerrainPlanetData * master, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling, VereTextureFloat *hMap, VereTextureBYTE4 *nMap);
@@ -125,11 +125,12 @@ private:
 	btVector3 m_OffsetCube;
 	btVector3 m_Centre;
 
-	std::vector<TerrainPlanetLOD> m_blocks;
+	TerrainPlanetLOD *m_blocks[4];
 
 	TerrainPlanetData *m_data;
 
 	bool m_isCreateNewLevelInProcess;
+	bool m_isNewLevel;
 };
 
 #endif // !TERRAIN_PLANET_LOD_H

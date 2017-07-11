@@ -73,7 +73,7 @@ private:
 	btVector3 m_tang;
 
 public:
-	std::vector<GameBaseObject *> m_planetElements;
+	std::vector<GameComponent*> m_planetElements;
 	IDRegistr *m_planetElementID;
 	VereQueue<int> m_planetElementsInProcess;
 };

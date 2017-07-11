@@ -41,7 +41,25 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 			camFarZ,heightFar, aspect, camFarRangeMod, camModifier);
 	}
 
-	int a = 0;
+	for (int i = 0; i < m_planetElementID->GetRangeOfElement(); ++i)
+	{
+		if (m_planetElements[i] != NULL)
+		{
+			if (m_planetElements[i]->IsDestroy() == true)
+			{
+				if (m_planetElements[i]->GetProccessed() == true)
+				{
+					m_planetElementID->ReturnElement(i);
+					SafeDelete(m_planetElements[i]);
+				}
+			}
+			/*else
+			{
+				((TerrainPlanetLOD*)m_planetElements[i])->Render(camOffset, camView, camProj,
+					camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+			}*/
+		}
+	}
 
 	//GameObjectStackHandle->GetMainCamera()->SetUp((GameObjectStackHandle->GetMainCamera()->GetPosition() - GetLocalPosition()).normalize());
 }

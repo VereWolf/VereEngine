@@ -30,6 +30,9 @@ void TerrainPlanetLOD::Init(TerrainPlanetData * data, int side, int level, XMINT
 		m_hMap = hMap;
 		m_nMap = nMap;
 	}
+
+	m_heightMap = NULL;
+	m_normalMap = NULL;
 	
 	if (GameRenderDeviceHandle->GetModel(data->GetRenderId()))
 	{
@@ -56,32 +59,42 @@ void TerrainPlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX 
 		btScalar distance = (M * m_Centre).length();
 		if (m_isCreateNewLevelInProcess == true)
 		{
-			if (m_blocks.size() == 4 && m_blocks[0].GetProccessed() == false && m_blocks[1].GetProccessed() == false
-				&& m_blocks[2].GetProccessed() == false && m_blocks[3].GetProccessed() == false)
+			if (m_isNewLevel == false && m_blocks[0]->GetProccessed() == true && m_blocks[1]->GetProccessed() == true
+				&& m_blocks[2]->GetProccessed() == true && m_blocks[3]->GetProccessed() == true)
 			{
 				m_isCreateNewLevelInProcess = false;
+				m_isNewLevel = true;
 			}
 		}
 
-		if (m_blocks.size() == 0 && distance < 1.35 * S3 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
+		if (m_isNewLevel == false && distance < 1.35 * S3 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
 		{
 			m_data->m_planetElementsInProcess.GiveElement(GetId());
 		}
-		else if (m_blocks.size() != 0 && distance > 1.4 * S3)
+		else if (m_isNewLevel == true && distance > 1.4 * S3)
 		{
-			m_blocks.resize(0);
+			m_blocks[0]->Destroy();
+			m_blocks[0] = NULL;
+			m_blocks[1]->Destroy();
+			m_blocks[1] = NULL;
+			m_blocks[2]->Destroy();
+			m_blocks[2] = NULL;
+			m_blocks[3]->Destroy();
+			m_blocks[3] = NULL;
+
+			m_isNewLevel = false;
 		}
-
 	}
-	if (m_blocks.size() == 4 && m_isCreateNewLevelInProcess == false)
+
+	if (m_isNewLevel == true)
 	{
-		m_blocks[0].Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
-		m_blocks[1].Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
-		m_blocks[2].Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
-		m_blocks[3].Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		m_blocks[0]->Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		m_blocks[1]->Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		m_blocks[2]->Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		m_blocks[3]->Render(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
 	}
 
-	if (m_blocks.size() == 0 || m_blocks.size() == 4 && m_isCreateNewLevelInProcess == true)
+	if (m_isNewLevel == false)
 	{
 		XMFLOAT4X4 VW;
 		XMStoreFloat4x4(&VW, camView);
@@ -267,12 +280,20 @@ void TerrainPlanetLOD::CreateNewLevelOfLoD()
 	btScalar S2 = m_data->GetScaling().getRow(0).getX();
 	btScalar S3 = S * S2;
 
-	m_blocks.resize(4);
+	TerrainPlanetLOD * pLOD01 = new TerrainPlanetLOD;
+	TerrainPlanetLOD * pLOD02 = new TerrainPlanetLOD;
+	TerrainPlanetLOD * pLOD03 = new TerrainPlanetLOD;
+	TerrainPlanetLOD * pLOD04 = new TerrainPlanetLOD;
 
-	m_blocks[0].SetProccessed(true);
-	m_blocks[1].SetProccessed(true);
-	m_blocks[2].SetProccessed(true);
-	m_blocks[3].SetProccessed(true);
+	m_blocks[0] = pLOD01;
+	m_blocks[1] = pLOD02;
+	m_blocks[2] = pLOD03;
+	m_blocks[3] = pLOD04;
+
+	m_blocks[0]->SetProccessed(true);
+	m_blocks[1]->SetProccessed(true);
+	m_blocks[2]->SetProccessed(true);
+	m_blocks[3]->SetProccessed(true);
 
 	m_isCreateNewLevelInProcess = true;
 
@@ -290,13 +311,13 @@ void TerrainPlanetLOD::CreateNewLevelOfLoD()
 	pos[3].setX(m_position.getX() - 0.25 * S3);
 	pos[3].setZ(m_position.getZ() - 0.25 * S3);
 
-	m_blocks[0].Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y), pos[3], 0.5 * m_scaling, m_hMap, m_nMap);
-	m_blocks[1].Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y + 1), pos[2], 0.5 * m_scaling, m_hMap, m_nMap);
-	m_blocks[2].Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y), pos[1], 0.5 * m_scaling, m_hMap, m_nMap);
-	m_blocks[3].Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y + 1), pos[0], 0.5 * m_scaling, m_hMap, m_nMap);
+	m_blocks[0]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y), pos[3], 0.5 * m_scaling, m_hMap, m_nMap);
+	m_blocks[1]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y + 1), pos[2], 0.5 * m_scaling, m_hMap, m_nMap);
+	m_blocks[2]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y), pos[1], 0.5 * m_scaling, m_hMap, m_nMap);
+	m_blocks[3]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y + 1), pos[0], 0.5 * m_scaling, m_hMap, m_nMap);
 
-	GameComponentsManagerHandle->InsertToProccess(&m_blocks[0]);
-	GameComponentsManagerHandle->InsertToProccess(&m_blocks[1]);
-	GameComponentsManagerHandle->InsertToProccess(&m_blocks[2]);
-	GameComponentsManagerHandle->InsertToProccess(&m_blocks[3]);
+	GameComponentsManagerHandle->InsertToProccess(m_blocks[0]);
+	GameComponentsManagerHandle->InsertToProccess(m_blocks[1]);
+	GameComponentsManagerHandle->InsertToProccess(m_blocks[2]);
+	GameComponentsManagerHandle->InsertToProccess(m_blocks[3]);
 }

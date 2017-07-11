@@ -169,7 +169,7 @@ void VereEngineMain::StopRenderLoop()
 
 void VereEngineMain::StopExpensiveLoop()
 {
-	m_expensiveLoopWorker->Cancel();
+	//m_expensiveLoopWorker->Cancel();
 }
 
 // Updates the application state once per frame.
