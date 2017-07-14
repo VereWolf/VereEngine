@@ -5,5 +5,5 @@
 GameComponent::GameComponent()
 {
 	m_componentID = -1;
-	m_isProccessed = false;
+	m_isProccessed = 0;
 }

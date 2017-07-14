@@ -1,5 +1,4 @@
-#ifndef ATMOSPHERE_DATA_H
-#define ATMOSPHERE_DATA_H
+#pragma once
 
 #include "pch.h"
 
@@ -230,5 +229,3 @@ public:
 	XMFLOAT4X4 m_positionMatrix;
 	XMFLOAT4X4 m_scalingMatrix;
 };*/
-
-#endif // !ATMOSPHERE_DATA_H

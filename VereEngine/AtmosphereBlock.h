@@ -1,5 +1,4 @@
-#ifndef ATMOSPHERE_BLOCK_H
-#define ATMOSPHERE_BLOCK_H
+#pragma once
 
 #include "pch.h"
 #include "AtmosphereData.h"
@@ -165,5 +164,3 @@ private:
 
 	AtmosphereData *m_data;
 };*/
-
-#endif //!ATMOSPHERE_BLOCK_H

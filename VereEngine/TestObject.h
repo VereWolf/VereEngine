@@ -1,4 +1,4 @@
-
+#pragma once
 
 #include "pch.h"
 #include "GameObject.h"
@@ -8,9 +8,6 @@
 //#include "BillboardMesh.h"
 //#include "ClothingMesh.h"
 #include "GenerateMesh.h"
-
-#ifndef TEST_OBJECT
-#define TEST_OBJECT
 
 class TestObject : public GameObject
 {
@@ -355,7 +352,3 @@ private:
 	BillboardMesh mModel;
 	XMFLOAT4 mColor;
 };*/
-
-
-
-#endif //TEST_OBJECT

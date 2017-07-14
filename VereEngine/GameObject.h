@@ -1,6 +1,4 @@
-
-#ifndef GAME_OBJECT
-#define GAME_OBJECT
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -98,5 +96,3 @@ protected:
 	__int64 m_CurrTime;
 
 };
-
-#endif //GAME_OBJECT

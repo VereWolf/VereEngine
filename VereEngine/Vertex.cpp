@@ -10,12 +10,6 @@ const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::SkyBox[2] =
 	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
 
-const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::TerrainBlock[2] =
-{
-	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-};
-
 const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::TerrainLOD[2] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -62,10 +56,10 @@ const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::Billboard[3] =
 #pragma region InputLayouts
 
 ID3D11InputLayout* InputLayouts::SkyBox = 0;
-ID3D11InputLayout* InputLayouts::TerrainBlock = 0;
 ID3D11InputLayout* InputLayouts::TerrainLOD = 0;
-ID3D11InputLayout* InputLayouts::TerrainPlanetLOD = 0;
 ID3D11InputLayout* InputLayouts::Atmosphere = 0;
+ID3D11InputLayout* InputLayouts::Clouds = 0;
+ID3D11InputLayout* InputLayouts::WaterLOD = 0;
 ID3D11InputLayout* InputLayouts::PosNormalTexTan = 0;
 ID3D11InputLayout* InputLayouts::Body = 0;
 ID3D11InputLayout* InputLayouts::Billboard = 0;
@@ -73,22 +67,22 @@ ID3D11InputLayout* InputLayouts::Billboard = 0;
 bool InputLayouts::InitAll(DX::DeviceResources *resources)
 {
 	D3DX11_PASS_DESC passDesc;
-	
+
 	Effects::AtmosphereFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::Atmosphere, 2, passDesc.pIAInputSignature,
+	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainLOD, 2, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &Atmosphere));
+
+	Effects::CloudsFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
+	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainLOD, 2, passDesc.pIAInputSignature,
+		passDesc.IAInputSignatureSize, &Clouds));
+
+	Effects::WaterLODFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
+	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainLOD, 2, passDesc.pIAInputSignature,
+		passDesc.IAInputSignatureSize, &WaterLOD));
 
 	Effects::SkyBoxFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::SkyBox, 2, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &SkyBox));
-
-	Effects::TerrainFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainBlock, 2, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &TerrainBlock));
-
-	Effects::TerrainLODFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainLOD, 2, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &TerrainLOD));
 
 	Effects::PosNormalTexTanFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::PosNormalTexTan, 4, passDesc.pIAInputSignature,
@@ -102,9 +96,9 @@ bool InputLayouts::InitAll(DX::DeviceResources *resources)
 	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::Billboard, 3, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &Billboard));
 
-	Effects::TerrainPlanetLODFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
+	Effects::TerrainLODFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(resources->GetD3DDevice()->CreateInputLayout(InputLayoutDesc::TerrainLOD, 2, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &TerrainPlanetLOD));
+		passDesc.IAInputSignatureSize, &TerrainLOD));
 
 	return true;
 }
@@ -112,9 +106,7 @@ bool InputLayouts::InitAll(DX::DeviceResources *resources)
 void InputLayouts::DestroyAll()
 {
 	ReleaseCOM(SkyBox);
-	ReleaseCOM(TerrainBlock);
 	ReleaseCOM(TerrainLOD);
-	ReleaseCOM(TerrainPlanetLOD);
 	ReleaseCOM(PosNormalTexTan);
 	ReleaseCOM(Body);
 	ReleaseCOM(Billboard);

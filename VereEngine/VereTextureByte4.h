@@ -1,5 +1,4 @@
-#ifndef VERETEXTUE_BYTE4_H
-#define VERETEXTURE_BYTE4_H
+#pragma once
 
 #include "pch.h"
 
@@ -172,5 +171,3 @@ private:
 	int m_height;
 	int m_width;
 };
-
-#endif // VERETEXTURE_BYTE4_H

@@ -1,8 +1,7 @@
+#pragma once
+
 #include "pch.h"
 #include "GameResourceObject.h"
-
-#ifndef GAME_RESOURCE_OBJECTS_STACK
-#define GAME_RESOURCE_OBJECTS_STACK
 
 class GameResourceObjectsStack
 {
@@ -25,5 +24,3 @@ private:
 	IDRegistr *idStaticMeshStack;
 	std::vector<GameResourceObject*> m_gameObjects;
 };
-
-#endif //GAME_RESOURCE_OBJECTS_STACK

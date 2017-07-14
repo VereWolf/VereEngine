@@ -1,5 +1,4 @@
-#ifndef GENERATE_MESH
-#define GENERATE_MESH
+#pragma once
 
 #include "pch.h"
 #include "vertex.h"
@@ -219,5 +218,3 @@ public:
 		}
 	}
 };
-
-#endif

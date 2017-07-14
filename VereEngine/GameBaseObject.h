@@ -1,6 +1,4 @@
-
-#ifndef GAME_BASE_OBJECT
-#define GAME_BASE_OBJECT
+#pragma once
 
 #include "pch.h"
 #include "DeviceResources.h"
@@ -51,6 +49,3 @@ protected:
 
 	bool m_isDestroy;
 };
-
-
-#endif //GAME_BASE_OBJECT

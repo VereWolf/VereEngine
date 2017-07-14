@@ -1,9 +1,7 @@
+#pragma once
+
 #include "pch.h"
 #include "GameBaseObject.h"
-
-#ifndef GAME_RESOURCE_OBJECT
-#define GAME_RESOURCE_OBJECT
-
 
 class GameResourceObject: public GameBaseObject
 {
@@ -21,5 +19,3 @@ private:
 	std::string m_nameFile;
 	std::string m_pathFile;
 };
-
-#endif //GAME_RESOURCE_OBJECT

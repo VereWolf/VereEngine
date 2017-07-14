@@ -1,21 +1,22 @@
-#ifndef TERRAIN_PLANET_DATA_H
-#define TERRAIN_PLANET_DATA_H
+#pragma once
 
 #include "pch.h"
 #include "GameObjectSpace.h"
 #include "Camera.h"
 #include "IDRegistr.h"
 
-class TerrainPlanetData: public GameObjectSpace
+class PlanetData: public GameObjectSpace
 {
 public:
-	TerrainPlanetData();
-	~TerrainPlanetData()
+	PlanetData();
+	~PlanetData()
 	{
 		ReleaseCOM(m_heightSRV);
 		ReleaseCOM(m_normalSRV);
-		ReleaseCOM(m_TerrainLODVB);
-		ReleaseCOM(m_TerrainLODIB);
+		ReleaseCOM(m_LODVB);
+		ReleaseCOM(m_LODIB);
+
+		SafeDelete(m_planetElementID);
 	}
 
 	void Init();
@@ -25,13 +26,14 @@ public:
 
 	int BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount);
 
-	ID3D11Buffer *const *GetTerrainLODVB() { return &m_TerrainLODVB; }
-	ID3D11Buffer *GetTerrainLODIB() { return m_TerrainLODIB; }
+	ID3D11Buffer *const *GetLODVB() { return &m_LODVB; }
+	ID3D11Buffer *GetLODIB() { return m_LODIB; }
 
 	inline float GetRadius() { return m_radius; }
 	inline void SetRadius(float n) { m_radius = n; }
 
 	inline btMatrix3x3 GetBlockAnglMatrix(int side) { return m_blockMatrixs[side]; }
+	int GetNearestSide(bool withOffset);
 	inline btVector3 GetTangent() { return m_tang; }
 	inline int16_t GetMaxLevel() { return m_maxLevel; }
 	inline void SetMaxLevel(int16_t n) { m_maxLevel = n; }
@@ -61,8 +63,8 @@ private:
 	std::string m_posfix[12];
 
 
-	ID3D11Buffer *m_TerrainLODVB;
-	ID3D11Buffer *m_TerrainLODIB;
+	ID3D11Buffer *m_LODVB;
+	ID3D11Buffer *m_LODIB;
 
 	ID3D11ShaderResourceView * m_normalSRV;
 	ID3D11ShaderResourceView * m_heightSRV;
@@ -77,6 +79,4 @@ public:
 	IDRegistr *m_planetElementID;
 	VereQueue<int> m_planetElementsInProcess;
 };
-
-#endif // !TERRAIN_PLANET_DATA_H
 

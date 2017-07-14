@@ -238,6 +238,7 @@
     <ClInclude Include="AtmosphereBlock.h" />
     <ClInclude Include="AtmosphereData.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Clouds.h" />
     <ClInclude Include="Content\ShaderStructures.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXHelper.h" />
@@ -300,6 +301,7 @@
     <ClInclude Include="StreamingDataManager.h" />
     <ClInclude Include="Sun.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TerrainLOD.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="TextRenderDevice.h" />
@@ -313,11 +315,14 @@
     <ClInclude Include="VereTextureFloat.h" />
     <ClInclude Include="VereVector.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="WaterLOD.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.xaml.cpp">
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="Atmosphere.cpp" />
+    <ClCompile Include="Clouds.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="GameBaseObject.cpp" />
     <ClCompile Include="GameBaseObjectsStack.cpp" />
@@ -357,6 +362,7 @@
     </ClCompile>
     <ClCompile Include="RenderDevice.cpp" />
     <ClCompile Include="StreamingDataManager.cpp" />
+    <ClCompile Include="TerrainLOD.cpp" />
     <ClCompile Include="TextRenderDevice.cpp" />
     <ClCompile Include="TreeViewBranch.xaml.cpp">
       <DependentUpon>TreeViewBranch.xaml</DependentUpon>
@@ -364,6 +370,7 @@
     <ClCompile Include="VereEngineMain.cpp" />
     <ClCompile Include="VereVector.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="WaterLOD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VereEngine.rc" />
@@ -404,20 +411,6 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>
-    <CustomBuild Include="FX\TerrainBlock.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="FX\TerrainLOD.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\SkyBox.fx">
@@ -428,7 +421,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\TerrainPlanetLOD.fx">
+    <CustomBuild Include="FX\TerrainLOD.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>

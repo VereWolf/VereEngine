@@ -1,5 +1,4 @@
-#ifndef LOAD_VMS
-#define LOAD_VMS
+#pragma once
 
 #include "pch.h"
 #include "vertex.h"
@@ -112,6 +111,3 @@ public:
 		return true;
 	}
 };
-
-
-#endif//LOAD_VMS

@@ -1,13 +1,10 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#pragma once
 
 #include "stdafx.h"
 #include <limits>
 #include "BaseForTool.h"
 
 using namespace std;
-
-
 
 class WaterErosion :public BaseForTool
 {
@@ -33,5 +30,3 @@ private:
 	float m_originLowerWaterLevel;
 	INT2 m_lowerWaterLvlCoord;
 };
-
-#endif //IMAGE_H

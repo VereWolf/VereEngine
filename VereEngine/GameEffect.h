@@ -1,5 +1,4 @@
-#ifndef GAME_EFFECT_H
-#define GAME_EFFECT_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -17,5 +16,3 @@ public:
 private:
 	BaseEffect* m_gameEffect;
 };
-
-#endif //GAME_EFFECT_H

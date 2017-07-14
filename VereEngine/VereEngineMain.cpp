@@ -55,7 +55,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(10.0, 100.0, 0.0));
 
-	TerrainPlanet *likeE = new TerrainPlanet;
+	Planet *likeE = new Planet;
 
 	int id1 = GameObjectStackHandle->CreateObjectToReg(likeE);
 
@@ -63,7 +63,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2 = GameObjectStackHandle->CreateObjectToReg(likeJ);
 
-	//TerrainPlanet *planet = new TerrainPlanet;
+	//Planet *planet = new Planet;
 
 	//int id2 = GameObjectStackHandle->CreateObjectToReg(planet);
 
@@ -72,8 +72,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
 
-	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 3, 3, 13, 1);
-	//((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 3, 3, 13, 1);
+	//((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
 
 	//GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000, 7150000, 7150000), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000, __nullptr);
 
@@ -82,8 +82,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	int id3 = GameObjectStackHandle->CreateObjectToReg(circleMoonSpace);
 	int id3a = GameObjectStackHandle->CreateObject(id3, btVector3(34000000.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(1.0, 1.0, 1.0), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000.0, __nullptr);
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(id2a);
-	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
-	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(0.0, 350000.0, 0.0));
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
+	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(350000.0, 100.0, 0.0));
 
 	GameObjectSpace *circlePlanetSpace = new GameObjectSpace;
 

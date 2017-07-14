@@ -1,5 +1,4 @@
-#ifndef TERRAIN_PLANET_H
-#define TERRAIN_PLANET_H
+#pragma once
 
 #include "pch.h"
 #include "PlanetLOD.h"
@@ -7,11 +6,11 @@
 #include "PlanetData.h"
 #include "GameObject.h"
 
-class TerrainPlanet: public TerrainPlanetData
+class Planet: public PlanetData
 {
 public:
-	TerrainPlanet();
-	TerrainPlanet(TerrainPlanet & other);
+	Planet();
+	Planet(Planet & other);
 
 	void Init();
 	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
@@ -20,12 +19,10 @@ public:
 
 	void BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming);
 
-	GameObject* Clone() { return new TerrainPlanet(*this); }
-	TerrainPlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }
+	GameObject* Clone() { return new Planet(*this); }
+	PlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }
 private:
-	TerrainPlanetLOD m_PlanetLOD[6];
+	PlanetLOD m_PlanetLOD[6];
 
 };
-
-#endif // !TERRAIN_PLANET_H
 

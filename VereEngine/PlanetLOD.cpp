@@ -1,14 +1,12 @@
 #include "pch.h"
 #include "PlanetLOD.h"
 #include "PlanetData.h"
-#include "GameBaseObject.h"
 #include "GameComponent.h"
-#include "Vertex.h"
-#include "Effects.h"
+#include "RenderDevice.h"
 
-bool TerrainPlanetLOD::m_onlyRenderText = false;
+bool PlanetLOD::m_onlyRenderText = false;
 
-void TerrainPlanetLOD::Init(TerrainPlanetData * data, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling, VereTextureFloat *hMap = NULL, VereTextureBYTE4 *nMap = NULL)
+void PlanetLOD::Init(PlanetData * data, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling, VereTextureFloat *hMap = NULL, VereTextureBYTE4 *nMap = NULL)
 {
 	m_data = data;
 	m_side = side;
@@ -23,6 +21,8 @@ void TerrainPlanetLOD::Init(TerrainPlanetData * data, int side, int level, XMINT
 	float PIRR = 1.0f / ((float)PIR + 2.0f);
 
 	SetId(m_data->m_planetElementID->TakeElement());
+
+	while (GetId() > m_data->m_planetElements.size() && GetId() != -1) m_data->m_planetElements.resize(m_data->m_planetElements.size() + 1024);
 	m_data->m_planetElements[GetId()] = this;
 
 	if (m_level != 0)
@@ -42,7 +42,7 @@ void TerrainPlanetLOD::Init(TerrainPlanetData * data, int side, int level, XMINT
 	}
 }
 
-void TerrainPlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+void PlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
@@ -51,27 +51,40 @@ void TerrainPlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX 
 	btScalar S2 = m_data->GetScaling().getRow(0).getX();
 	btScalar S3 = S * S2;
 
+	btVector3 dir = -(m_data->GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition());
+	dir = m_data->GetWorldTransform().getBasis().inverse() * dir;
+
 	btTransform AM = btTransform(m_data->GetBlockAnglMatrix(m_side), btVector3(0.0, 0.0, 0.0));
 	btTransform GT = m_data->GetWorldTransform();
 	{
 		btTransform M = camOffset * GT;
 
-		btScalar distance = (M * m_Centre).length();
+		//btScalar distance = (M * m_Centre).length();
+		btVector3 coord = PlanetCordinateMat::GetCoordForCube(dir,
+			btTransform(m_data->GetBlockAnglMatrix(m_side))) * (1.0 / S + 1.0) - btVector3(0.5 * S, 0.5 * S, 0.0);
+		
+		btScalar distance = -1.0;
+		if (coord.getZ() == 0.0)
+		{
+			distance = btVector3(coord.getX() - m_coord.x, coord.getY() - m_coord.y, 0.0).length();
+		}
+
 		if (m_isCreateNewLevelInProcess == true)
 		{
-			if (m_isNewLevel == false && m_blocks[0]->GetProccessed() == true && m_blocks[1]->GetProccessed() == true
-				&& m_blocks[2]->GetProccessed() == true && m_blocks[3]->GetProccessed() == true)
+			if (m_isNewLevel == false && m_blocks[0]->GetProccessed() == 2 && m_blocks[1]->GetProccessed() == 2
+				&& m_blocks[2]->GetProccessed() == 2 && m_blocks[3]->GetProccessed() == 2)
 			{
 				m_isCreateNewLevelInProcess = false;
 				m_isNewLevel = true;
 			}
 		}
 
-		if (m_isNewLevel == false && distance < 1.35 * S3 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
+		if (m_isNewLevel == false && distance != -1 && distance < 1.7 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
 		{
 			m_data->m_planetElementsInProcess.GiveElement(GetId());
+			SetProccessed(1);
 		}
-		else if (m_isNewLevel == true && distance > 1.4 * S3)
+		else if (m_isNewLevel == true && (distance > 1.8 || distance == -1))
 		{
 			m_blocks[0]->Destroy();
 			m_blocks[0] = NULL;
@@ -106,60 +119,9 @@ void TerrainPlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX 
 
 		if (VereMath::FrustrumCulling2(m_Centre, m_OffsetCube, camFarZ, heightFar, aspect, Mat))
 		{
-			PlanetRenderMessage message;
-
-			message.m_ModelID = m_modelID;
-			message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
-			message.m_Transform = m_data->GetWorldTransform();
-			message.m_CameraOffset = camOffset;
-			message.m_View = camView;
-			message.m_Proj = camProj;
-			message.m_FarZ = camFarZ;
-			message.m_FarRangeMod = camFarRangeMod;
-			message.m_FarModifier = camModifier;
-			message.m_Position = m_position;
-			message.m_AngleMatrix = AM;
-			message.m_Coord = m_coord;
-			message.m_Spacing1 = S;
-			message.m_Spacing2 = S2;
-			message.m_Radius = m_data->GetRadius();
-			message.m_Level = m_level;
-			message.m_Tangent = m_data->GetTangent();
-
-			if (m_idHeightMap >= 0)
-			{
-				message.m_HeightSRV = GameRenderDeviceHandle->GetTexture(m_idHeightMap);
-			}
-			else
-			{
-				return;
-			}
-			if (m_idNormalMap >= 0)
-			{
-				message.m_NormalSRV = GameRenderDeviceHandle->GetTexture(m_idNormalMap);
-			}
-			else
-			{
-				return;
-			}
-
-			//if (m_side == 0 || m_side == 1 || m_side == 2)
-			{
-				message.m_RasterizeState = RenderStates::SolidRS;
-			}
-			/*else
-			{
-				message.m_RasterizeState = RenderStates::BackRS;
-			}*/
-			//message.m_RasterizeState = RenderStates::WireframeRS;
-
 			if (m_onlyRenderText == false)
 			{
-
-				GameRenderDeviceHandle->Render(&message);
-
-				m_data->GetDeviceResources()->GetD3DDeviceContext()->HSSetShader(0, 0, 0);
-				m_data->GetDeviceResources()->GetD3DDeviceContext()->DSSetShader(0, 0, 0);
+				DrawTerrain(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
 			}
 			else
 			{
@@ -181,9 +143,87 @@ void TerrainPlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX 
 	}
 }
 
-bool TerrainPlanetLOD::ComponentProccess()
+void PlanetLOD::DrawTerrain(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+	float camFarZ, btScalar heightFar, btScalar aspect,
+	float camFarRangeMod, float camModifier)
 {
-	TerrainPlanetData *data = m_data;
+	btMatrix3x3 I = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
+	btScalar S = m_scaling;
+	btScalar S2 = m_data->GetScaling().getRow(0).getX();
+	btScalar S3 = S * S2;
+
+	btTransform AM = btTransform(m_data->GetBlockAnglMatrix(m_side), btVector3(0.0, 0.0, 0.0));
+	btTransform GT = m_data->GetWorldTransform();
+
+
+	TerrainRenderMessage message;
+
+	message.m_ModelID = m_modelID;
+	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
+	message.m_Transform = m_data->GetWorldTransform();
+	message.m_CameraOffset = camOffset;
+	message.m_View = camView;
+	message.m_Proj = camProj;
+	message.m_FarZ = camFarZ;
+	message.m_FarRangeMod = camFarRangeMod;
+	message.m_FarModifier = camModifier;
+	message.m_Position = m_position;
+	message.m_AngleMatrix = AM;
+	message.m_Coord = m_coord;
+	message.m_Spacing1 = S;
+	message.m_Spacing2 = S2;
+	message.m_Radius = m_data->GetRadius();
+	message.m_Level = m_level;
+	message.m_Tangent = m_data->GetTangent();
+
+	if (m_idHeightMap >= 0)
+	{
+		message.m_HeightSRV = GameRenderDeviceHandle->GetTexture(m_idHeightMap);
+	}
+	else
+	{
+		return;
+	}
+	if (m_idNormalMap >= 0)
+	{
+		message.m_NormalSRV = GameRenderDeviceHandle->GetTexture(m_idNormalMap);
+	}
+	else
+	{
+		return;
+	}
+		message.m_RasterizeState = RenderStates::SolidRS;
+
+	GameRenderDeviceHandle->Render(&message);
+
+	m_data->GetDeviceResources()->GetD3DDeviceContext()->HSSetShader(0, 0, 0);
+	m_data->GetDeviceResources()->GetD3DDeviceContext()->DSSetShader(0, 0, 0);
+}
+
+void PlanetLOD::DrawWater(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+	float camFarZ, btScalar heightFar, btScalar aspect,
+	float camFarRangeMod, float camModifier)
+{
+	WaterRenderMessage message;
+}
+
+void PlanetLOD::DrawAtmosphere(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+	float camFarZ, btScalar heightFar, btScalar aspect,
+	float camFarRangeMod, float camModifier)
+{
+	AtmosphereRenderMessage message;
+}
+
+void PlanetLOD::DrawClouds(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+	float camFarZ, btScalar heightFar, btScalar aspect,
+	float camFarRangeMod, float camModifier)
+{
+	CloudsRenderMessage message;
+}
+
+bool PlanetLOD::ComponentProccess()
+{
+	PlanetData *data = m_data;
 	int side = m_side;
 	int level = m_level;
 	XMINT2 coord = m_coord;
@@ -274,26 +314,26 @@ bool TerrainPlanetLOD::ComponentProccess()
 }
 
 
-void TerrainPlanetLOD::CreateNewLevelOfLoD()
+void PlanetLOD::CreateNewLevelOfLoD()
 {
 	btScalar S = m_scaling;
 	btScalar S2 = m_data->GetScaling().getRow(0).getX();
 	btScalar S3 = S * S2;
 
-	TerrainPlanetLOD * pLOD01 = new TerrainPlanetLOD;
-	TerrainPlanetLOD * pLOD02 = new TerrainPlanetLOD;
-	TerrainPlanetLOD * pLOD03 = new TerrainPlanetLOD;
-	TerrainPlanetLOD * pLOD04 = new TerrainPlanetLOD;
+	PlanetLOD * pLOD01 = new PlanetLOD;
+	PlanetLOD * pLOD02 = new PlanetLOD;
+	PlanetLOD * pLOD03 = new PlanetLOD;
+	PlanetLOD * pLOD04 = new PlanetLOD;
 
 	m_blocks[0] = pLOD01;
 	m_blocks[1] = pLOD02;
 	m_blocks[2] = pLOD03;
 	m_blocks[3] = pLOD04;
 
-	m_blocks[0]->SetProccessed(true);
-	m_blocks[1]->SetProccessed(true);
-	m_blocks[2]->SetProccessed(true);
-	m_blocks[3]->SetProccessed(true);
+	m_blocks[0]->SetProccessed(0);
+	m_blocks[1]->SetProccessed(0);
+	m_blocks[2]->SetProccessed(0);
+	m_blocks[3]->SetProccessed(0);
 
 	m_isCreateNewLevelInProcess = true;
 

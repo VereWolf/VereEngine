@@ -1,6 +1,4 @@
-
-#ifndef VEREQUEUE_H
-#define VEREQUEUE_H
+#pragma once
 
 
 template<class T>
@@ -71,5 +69,3 @@ void VereQueue<T>::GiveElement(T E)
 
 	++m_size;
 }
-
-#endif //VEREQUEUE_H

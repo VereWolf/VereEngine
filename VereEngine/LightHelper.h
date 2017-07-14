@@ -1,7 +1,4 @@
-
-
-#ifndef LIGHTHELPER_H
-#define LIGHTHELPER_H
+#pragma once
 
 #include "pch.h"
 
@@ -96,5 +93,3 @@ struct Model
 	UINT idVertex;
 	UINT idInputLayouts;
 };
-
-#endif // LIGHTHELPER_H

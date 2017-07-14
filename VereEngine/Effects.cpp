@@ -168,29 +168,8 @@ SkyBoxEffect::SkyBoxEffect(DX::DeviceResources *resources, const std::string& fi
 }
 #pragma endregion
 
-#pragma region TerrainBlock
-TerrainEffect::TerrainEffect(DX::DeviceResources *resources, const std::string& filename)
-	: WorldEffect(resources, filename)
-{
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	StartOfLOD = mFX->GetVariableByName("gStartOfLOD");
-	Coord = mFX->GetVariableByName("gCoord")->AsVector();
-	Spacing = mFX->GetVariableByName("gSpacing");
-
-	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
-	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
-
-	Light1Tech = mFX->GetTechniqueByName("LightTech");
-}
-#pragma endregion
-
-#pragma region TerrainLOD
-TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::string& filename)
+#pragma region LOD
+LODEffect::LODEffect(DX::DeviceResources *resources, const std::string& filename)
 	: WorldEffect(resources, filename)
 {
 	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
@@ -216,8 +195,8 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 }
 #pragma endregion
 
-#pragma region TerrainPlanetLOD
-TerrainPlanetLODEffect::TerrainPlanetLODEffect(DX::DeviceResources *resources, const std::string& filename)
+#pragma region TerrainLOD
+TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
 	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
@@ -252,7 +231,46 @@ AtmosphereEffect::AtmosphereEffect(DX::DeviceResources *resources, const std::st
 	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
 	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
-	Tang = mFX->GetVariableByName("gTang")->AsVector();
+	Spacing = mFX->GetVariableByName("gSpacing");
+	Radius = mFX->GetVariableByName("gRadius");
+	Level = mFX->GetVariableByName("gLevel");
+
+	Light1Tech = mFX->GetTechniqueByName("LightTech");
+}
+#pragma endregion
+
+#pragma region Clouds
+CloudsEffect::CloudsEffect(DX::DeviceResources *resources, const std::string& filename)
+	: WorldEffect(resources, filename)
+{
+	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
+	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
+	View = mFX->GetVariableByName("gView")->AsMatrix();
+	World = mFX->GetVariableByName("gWorld")->AsMatrix();
+	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
+	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
+	Offset = mFX->GetVariableByName("gOffset")->AsVector();
+	Spacing = mFX->GetVariableByName("gSpacing");
+	Radius = mFX->GetVariableByName("gRadius");
+	Level = mFX->GetVariableByName("gLevel");
+
+	Light1Tech = mFX->GetTechniqueByName("LightTech");
+}
+#pragma endregion
+
+#pragma region WaterLOD
+WaterLODEffect::WaterLODEffect(DX::DeviceResources *resources, const std::string& filename)
+	: WorldEffect(resources, filename)
+{
+	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
+	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
+	View = mFX->GetVariableByName("gView")->AsMatrix();
+	World = mFX->GetVariableByName("gWorld")->AsMatrix();
+	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
+	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
+	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
 	Radius = mFX->GetVariableByName("gRadius");
 	Level = mFX->GetVariableByName("gLevel");
@@ -327,10 +345,10 @@ BillboardEffect::BillboardEffect(DX::DeviceResources *resources, const std::stri
 #pragma region Effects
 
 SkyBoxEffect* Effects::SkyBoxFX = 0;
-TerrainEffect* Effects::TerrainFX = 0;
 TerrainLODEffect* Effects::TerrainLODFX = 0;
-TerrainPlanetLODEffect* Effects::TerrainPlanetLODFX = 0;
 AtmosphereEffect* Effects::AtmosphereFX = 0;
+CloudsEffect* Effects::CloudsFX = 0;
+WaterLODEffect* Effects::WaterLODFX = 0;
 PosNormalTexTanEffect* Effects::PosNormalTexTanFX = 0;
 BodyEffect* Effects::BodyFX = 0;
 BillboardEffect* Effects::BillboardFX = 0;
@@ -338,10 +356,10 @@ BillboardEffect* Effects::BillboardFX = 0;
 void Effects::InitAll(DX::DeviceResources *resources)
 {
 	SkyBoxFX = new SkyBoxEffect(resources, "FX/SkyBox.fxo");
-	TerrainFX = new TerrainEffect(resources, "FX/TerrainBlock.fxo");
 	TerrainLODFX = new TerrainLODEffect(resources, "FX/TerrainLOD.fxo");
-	TerrainPlanetLODFX = new TerrainPlanetLODEffect(resources, "FX/TerrainPlanetLOD.fxo");
 	AtmosphereFX = new AtmosphereEffect(resources, "FX/Atmosphere.fxo");
+	CloudsFX = new CloudsEffect(resources, "FX/Atmosphere.fxo");
+	WaterLODFX = new WaterLODEffect(resources, "FX/Atmosphere.fxo");
 	PosNormalTexTanFX = new PosNormalTexTanEffect(resources, "FX/PosNormalTexTan.fxo");
 	BodyFX = new BodyEffect(resources, "FX/Body.fxo");
 	BillboardFX = new BillboardEffect(resources, "FX/Billboard.fxo");
@@ -350,10 +368,10 @@ void Effects::InitAll(DX::DeviceResources *resources)
 void Effects::DestroyAll()
 {
 	delete SkyBoxFX;
-	delete TerrainFX;
 	delete TerrainLODFX;
-	delete TerrainPlanetLODFX;
 	delete AtmosphereFX;
+	delete CloudsFX;
+	delete WaterLODFX;
 	delete PosNormalTexTanFX;
 	delete BodyFX;
 	delete BillboardFX;

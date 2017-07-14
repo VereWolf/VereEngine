@@ -163,7 +163,7 @@ void GameObjectsStackManager::DrawScene()
 
 	int S = GetGameObjectStackSize();
 
-	TerrainPlanetLOD::m_onlyRenderText = false;
+	PlanetLOD::m_onlyRenderText = false;
 
 	for (int i = 0; i < S; ++i)
 	{
@@ -175,7 +175,7 @@ void GameObjectsStackManager::DrawScene()
 		}
 	}
 
-	/*TerrainPlanetLOD::m_onlyRenderText = true;
+	/*TerrainLOD::m_onlyRenderText = true;
 
 	for (int i = 0; i < S; ++i)
 	{

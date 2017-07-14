@@ -1,5 +1,4 @@
-#ifndef VEREVECTOR_H
-#define VEREVECTOR_H
+#pragma once
 
 #include "pch.h"
 
@@ -44,5 +43,3 @@ public:
 	double y;
 	double z;
 };
-
-#endif //VEREVECTOR_H

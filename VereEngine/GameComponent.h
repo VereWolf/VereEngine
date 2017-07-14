@@ -10,9 +10,9 @@ public:
 	int GetComponentID() { return m_componentID; }
 	void SetComponentID(int id) { m_componentID = id; }
 
-	bool GetProccessed() { return m_isProccessed; }
-	void SetProccessed(bool P) { m_isProccessed = P; }
+	int GetProccessed() { return m_isProccessed; }
+	void SetProccessed(int P) { m_isProccessed = P; }
 private:
 	int m_componentID;
-	bool m_isProccessed;
+	int m_isProccessed;
 };

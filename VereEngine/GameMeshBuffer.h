@@ -1,5 +1,4 @@
-#ifndef GAME_MESH_BUFFER_H
-#define GAME_MESH_BUFFER_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -33,5 +32,3 @@ private:
 	btVector3 m_minV;
 	btVector3 m_maxV;
 };
-
-#endif //GAME_MESH_BUFFER_H

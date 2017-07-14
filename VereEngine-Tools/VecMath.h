@@ -1,7 +1,6 @@
-#include <math.h>
+#pragma once
 
-#ifndef VEC_MATH
-#define VEC_MATH
+#include <math.h>
 
 struct INT2
 {
@@ -58,4 +57,3 @@ public:
 	static float Lerp(float s1, float s2, float i);
 	static float Lerp2D(float s1, float s2, float s3, float s4, float i1, float i2);
 };
-#endif /*VEC_MATH*/

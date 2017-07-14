@@ -62,9 +62,6 @@
     <ClCompile Include="PlanetData.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
-    <ClCompile Include="PlanetLOD.cpp">
-      <Filter>Planet</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjectSpace.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
@@ -103,6 +100,21 @@
     </ClCompile>
     <ClCompile Include="GameComponentsManager.cpp">
       <Filter>ExpensiveProccess</Filter>
+    </ClCompile>
+    <ClCompile Include="Atmosphere.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanetLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Clouds.cpp">
+      <Filter>Planet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +219,6 @@
     <ClInclude Include="VereVector.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Atmosphere.h">
-      <Filter>Atmosphere</Filter>
-    </ClInclude>
     <ClInclude Include="AtmosphereBlock.h">
       <Filter>Atmosphere</Filter>
     </ClInclude>
@@ -290,9 +299,6 @@
     <ClInclude Include="Game2DTextFormat.h">
       <Filter>TextRenderDevice</Filter>
     </ClInclude>
-    <ClInclude Include="PlanetLOD.h">
-      <Filter>Planet</Filter>
-    </ClInclude>
     <ClInclude Include="PlanetCoordinate.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -320,6 +326,21 @@
     <ClInclude Include="GameComponentsManager.h">
       <Filter>ExpensiveProccess</Filter>
     </ClInclude>
+    <ClInclude Include="Atmosphere.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanetLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Clouds.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -343,13 +364,7 @@
     <CustomBuild Include="FX\SkyBox.fx">
       <Filter>FX</Filter>
     </CustomBuild>
-    <CustomBuild Include="FX\TerrainBlock.fx">
-      <Filter>FX</Filter>
-    </CustomBuild>
     <CustomBuild Include="FX\TerrainLOD.fx">
-      <Filter>FX</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FX\TerrainPlanetLOD.fx">
       <Filter>FX</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -5,20 +5,20 @@
 #include "GameObject.h"
 #include "Planet.h"
 
-TerrainPlanet::TerrainPlanet()
+Planet::Planet()
 {
 }
 
-TerrainPlanet::TerrainPlanet(TerrainPlanet & other)
+Planet::Planet(Planet & other)
 {
 
 }
-void TerrainPlanet::Init()
+void Planet::Init()
 {
 	GameObjectSpace::Init();
-	TerrainPlanetData::Init();
+	PlanetData::Init();
 }
-void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
+void Planet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
@@ -28,7 +28,7 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 
 		if (m_planetElements[id])
 		{
-			((TerrainPlanetLOD*)m_planetElements[id])->CreateNewLevelOfLoD();
+			((PlanetLOD*)m_planetElements[id])->CreateNewLevelOfLoD();
 		}
 	}
 	m_resources->GetD3DDeviceContext()->RSSetState(RenderStates::SolidRS);
@@ -47,7 +47,7 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 		{
 			if (m_planetElements[i]->IsDestroy() == true)
 			{
-				if (m_planetElements[i]->GetProccessed() == true)
+				if (m_planetElements[i]->GetProccessed() == 2)
 				{
 					m_planetElementID->ReturnElement(i);
 					SafeDelete(m_planetElements[i]);
@@ -55,7 +55,7 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 			}
 			/*else
 			{
-				((TerrainPlanetLOD*)m_planetElements[i])->Render(camOffset, camView, camProj,
+				((PlanetLOD*)m_planetElements[i])->Render(camOffset, camView, camProj,
 					camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
 			}*/
 		}
@@ -64,7 +64,7 @@ void TerrainPlanet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX cam
 	//GameObjectStackHandle->GetMainCamera()->SetUp((GameObjectStackHandle->GetMainCamera()->GetPosition() - GetLocalPosition()).normalize());
 }
 
-void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming)
+void Planet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming)
 {
 	SetNumPointInRowInCell(cellSize);
 	SetMaxLevel(maxLevel);
@@ -81,7 +81,7 @@ void TerrainPlanet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, 
 	model->idMeshBuffer = BuildLODBuffers(m_resources, model->sizeOfVertex, model->faceCount);
 	model->faceCount /= 4;
 	model->faceStart = 0;
-	model->idEffect = GameRenderDeviceHandle->CreateEffect(Effects::TerrainPlanetLODFX);
+	model->idEffect = GameRenderDeviceHandle->CreateEffect(Effects::TerrainLODFX);
 	model->idVertex = GameRenderDeviceHandle->CreateVertex(&terrainLOD);
 	model->idInputLayouts = GameRenderDeviceHandle->CreateInputLayouts(model->idVertex, model->idEffect);
 	model->topology = D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;

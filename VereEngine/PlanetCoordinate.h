@@ -85,36 +85,43 @@ public:
 
 	inline static btVector3 GetCoordForCube(btVector3 dir, btTransform sideMatrix, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
 	{
-		btVector3 U = sideMatrix * up;
-		btVector3 R = sideMatrix * right;
-		btVector3 F = sideMatrix * front;
+		btVector3 U = up;
+		btVector3 R = right;
+		btVector3 F = front;
+
+		dir = (sideMatrix.inverse() * dir).normalize();
+
+		if (dir.getY() <= 0.0)
+		{
+			return btVector3(0.0, 0.0, -1.0);
+		}
 
 		btVector3 UR = btVector3(dir.getX(), dir.getY(), 0.0).normalize();
 		btVector3 UF = btVector3(0.0, dir.getY(), dir.getZ()).normalize();
 
-		btScalar X = (UR / U.dot(UR) - U).length();
-		btScalar Y = (UF / U.dot(UF) - U).length();
+		btScalar X = U.dot(UR);
+		btScalar Y = U.dot(UF);
 
 		btScalar DR = dir.dot(R);
 
 		if (DR < 0.0)
 		{
-			X = 0.5 - 0.5 * X;
+			X = (0.5 - pow(1.0 - pow(X, 2.0), 0.5) * 0.70710678);
 		}
 		else
 		{
-			X = 0.5 + 0.5 * X;
+			X = (0.5 + pow(1.0 - pow(X, 2.0), 0.5) * 0.70710678);
 		}
 
 		btScalar DF = dir.dot(F);
 
 		if (DF < 0.0)
 		{
-			Y = 0.5 - 0.5 * Y;
+			Y = (0.5 - pow(1.0 - pow(Y, 2.0), 0.5) * 0.70710678);
 		}
 		else
 		{
-			Y = 0.5 + 0.5 * Y;
+			Y = (0.5 + pow(1.0 - pow(Y, 2.0), 0.5) * 0.70710678);
 		}
 
 		return btVector3(X, Y, 0.0);

@@ -1,6 +1,4 @@
-
-#ifndef RENDERSTATES_H
-#define RENDERSTATES_H
+#pragma once
 
 #include "DeviceResources.h"
 #include "pch.h"
@@ -24,5 +22,3 @@ public:
 	static ID3D11DepthStencilState * DrawReflectionDDS;
 	static ID3D11DepthStencilState * NoDoubleBlendDDS;
 };
-
-#endif // RENDERSTATES_H

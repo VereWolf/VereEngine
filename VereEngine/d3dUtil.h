@@ -1,5 +1,4 @@
-#ifndef _D3DUTIL_H_
-#define _D3DUTIL_H_
+#pragma once
 
 typedef unsigned short int USING;
 
@@ -34,6 +33,4 @@ if (FAILED(hr))													 \
 
 #define ReleaseCOM(x) { if(x){ x->Release(); x = 0; } }
 
-#define SafeDelete(x) { delete x; x = 0; }
-
-#endif
+#define SafeDelete(x) {if(x != 0) delete x; x = 0; }

@@ -19,7 +19,7 @@ void GameComponentsManager::Update()
 	m_gameComponentReg->ReturnElement(id);
 
 	m_gameComponents[id]->ComponentProccess();
-	m_gameComponents[id]->SetProccessed(true);
+	m_gameComponents[id]->SetProccessed(2);
 	m_gameComponents[id] = NULL;
 }
 
@@ -30,7 +30,7 @@ bool GameComponentsManager::InsertToProccess(GameComponent * C)
 	if (id < 0) return false;
 
 	C->SetComponentID(id);
-	C->SetProccessed(false);
+	//C->SetProccessed(0);
 
 	m_gameComponents[id] = C;
 	m_proccessQueue.GiveElement(id);

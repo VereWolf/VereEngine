@@ -1,5 +1,4 @@
-#ifndef VEREMATH_H
-#define VEREMATH_H
+#pragma once
 
 #include "pch.h"
 
@@ -361,5 +360,3 @@ struct VereMath
 		return false;
 	}
 };
-
-#endif

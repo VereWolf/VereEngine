@@ -1,6 +1,4 @@
-
-#ifndef EFFECTS_H
-#define EFFECTS_H
+#pragma once
 
 #include "EnviromentHelper.h"
 #include "DeviceResources.h"
@@ -185,7 +183,7 @@ public:
 };
 #pragma endregion
 
-#pragma region TerrainBlock
+#pragma region Block
 class SkyBoxEffect : public WorldEffect
 {
 public:
@@ -204,50 +202,12 @@ public:
 
 #pragma endregion
 
-#pragma region TerrainBlock
-class TerrainEffect : public WorldEffect
+#pragma region LOD
+class LODEffect : public WorldEffect
 {
 public:
-	TerrainEffect(DX::DeviceResources *resources, const std::string& filename);
-	~TerrainEffect() {};
-
-	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetProj(CXMMATRIX &M) { Proj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetView(CXMMATRIX &M) { View->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(XMFLOAT3 &V) { EyePosW->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
-	void SetStartOfLOD(const float& v) { StartOfLOD->SetRawValue(&v, 0, sizeof(float)); }
-	void SetCoord(const XMINT2& v) { Coord->SetRawValue(&v, 0, sizeof(XMINT2)); }
-	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
-	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
-	void SetNormalMap(ID3D11ShaderResourceView* tex) { NormalMap->SetResource(tex); }
-
-
-	ID3DX11EffectTechnique* Light1Tech;
-
-	ID3DX11EffectMatrixVariable* ViewProj;
-	ID3DX11EffectMatrixVariable* WorldViewProj;
-	ID3DX11EffectMatrixVariable* Proj;
-	ID3DX11EffectMatrixVariable* View;
-	ID3DX11EffectMatrixVariable* World;
-	ID3DX11EffectVectorVariable* EyePosW;
-	ID3DX11EffectVariable* StartOfLOD;
-	ID3DX11EffectVectorVariable* Coord;
-	ID3DX11EffectVariable* Spacing;
-
-	ID3DX11EffectShaderResourceVariable* HeightMap;
-	ID3DX11EffectShaderResourceVariable* NormalMap;
-};
-
-#pragma endregion
-
-#pragma region TerrainLOD
-class TerrainLODEffect : public WorldEffect
-{
-public:
-	TerrainLODEffect(DX::DeviceResources *resources, const std::string& filename);
-	~TerrainLODEffect() {};
+	LODEffect(DX::DeviceResources *resources, const std::string& filename);
+	~LODEffect() {};
 
 	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
@@ -292,12 +252,12 @@ public:
 
 #pragma endregion
 
-#pragma region TerrainPlanetLOD
-class TerrainPlanetLODEffect : public BaseEffect
+#pragma region TerrainLOD
+class TerrainLODEffect : public BaseEffect
 {
 public:
-	TerrainPlanetLODEffect(DX::DeviceResources *resources, const std::string& filename);
-	~TerrainPlanetLODEffect() {};
+	TerrainLODEffect(DX::DeviceResources *resources, const std::string& filename);
+	~TerrainLODEffect() {};
 
 	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
@@ -337,7 +297,7 @@ public:
 #pragma endregion
 
 #pragma region Atmosphere
-class AtmosphereEffect : public WorldEffect
+class AtmosphereEffect : public BaseEffect
 {
 public:
 	AtmosphereEffect(DX::DeviceResources *resources, const std::string& filename);
@@ -350,8 +310,7 @@ public:
 	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetEyePosW(XMFLOAT3 &V) { EyePosW->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
 	void SetCentrePos(XMFLOAT3 &V) { CentrePos->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
-	void SetOffset(XMFLOAT3 &V) { Offset->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
-	void SetTang(XMFLOAT3 &V) { Tang->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
+	void SetOffset(XMFLOAT2 &V) { Offset->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
 	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
 	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
@@ -366,7 +325,76 @@ public:
 	ID3DX11EffectVectorVariable* EyePosW;
 	ID3DX11EffectVectorVariable* CentrePos;
 	ID3DX11EffectVectorVariable* Offset;
-	ID3DX11EffectVectorVariable* Tang;
+	ID3DX11EffectVariable* Spacing;
+	ID3DX11EffectVariable* Radius;
+	ID3DX11EffectVariable* Level;
+};
+
+#pragma endregion
+
+#pragma region Clouds
+class CloudsEffect : public BaseEffect
+{
+public:
+	CloudsEffect(DX::DeviceResources *resources, const std::string& filename);
+	~CloudsEffect() {};
+
+	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetProj(CXMMATRIX &M) { Proj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetView(CXMMATRIX &M) { View->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(XMFLOAT3 &V) { EyePosW->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
+	void SetCentrePos(XMFLOAT3 &V) { CentrePos->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
+	void SetOffset(XMFLOAT2 &V) { Offset->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
+	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
+	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
+	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
+
+	ID3DX11EffectTechnique* Light1Tech;
+
+	ID3DX11EffectMatrixVariable* ViewProj;
+	ID3DX11EffectMatrixVariable* WorldViewProj;
+	ID3DX11EffectMatrixVariable* Proj;
+	ID3DX11EffectMatrixVariable* View;
+	ID3DX11EffectMatrixVariable* World;
+	ID3DX11EffectVectorVariable* EyePosW;
+	ID3DX11EffectVectorVariable* CentrePos;
+	ID3DX11EffectVectorVariable* Offset;
+	ID3DX11EffectVariable* Spacing;
+	ID3DX11EffectVariable* Radius;
+	ID3DX11EffectVariable* Level;
+};
+
+#pragma region WaterLOD
+class WaterLODEffect : public BaseEffect
+{
+public:
+	WaterLODEffect(DX::DeviceResources *resources, const std::string& filename);
+	~WaterLODEffect() {};
+
+	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetProj(CXMMATRIX &M) { Proj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetView(CXMMATRIX &M) { View->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(XMFLOAT3 &V) { EyePosW->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
+	void SetCentrePos(XMFLOAT3 &V) { CentrePos->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
+	void SetOffset(XMFLOAT2 &V) { Offset->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
+	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
+	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
+	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
+
+	ID3DX11EffectTechnique* Light1Tech;
+
+	ID3DX11EffectMatrixVariable* ViewProj;
+	ID3DX11EffectMatrixVariable* WorldViewProj;
+	ID3DX11EffectMatrixVariable* Proj;
+	ID3DX11EffectMatrixVariable* View;
+	ID3DX11EffectMatrixVariable* World;
+	ID3DX11EffectVectorVariable* EyePosW;
+	ID3DX11EffectVectorVariable* CentrePos;
+	ID3DX11EffectVectorVariable* Offset;
 	ID3DX11EffectVariable* Spacing;
 	ID3DX11EffectVariable* Radius;
 	ID3DX11EffectVariable* Level;
@@ -495,14 +523,12 @@ public:
 	static void DestroyAll();
 
 	static SkyBoxEffect* SkyBoxFX;
-	static TerrainEffect* TerrainFX;
 	static TerrainLODEffect* TerrainLODFX;
-	static TerrainPlanetLODEffect* TerrainPlanetLODFX;
 	static AtmosphereEffect* AtmosphereFX;
+	static CloudsEffect* CloudsFX;
+	static WaterLODEffect* WaterLODFX;
 	static PosNormalTexTanEffect* PosNormalTexTanFX;
 	static BodyEffect* BodyFX;
 	static BillboardEffect* BillboardFX;
 };
 #pragma endregion
-
-#endif // EFFECTS_H

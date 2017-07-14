@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "pch.h"
 #include "GameObject.h"
@@ -92,5 +91,3 @@ private:
 
 	bool mMainCamera;
 };
-
-#endif // CAMERA_H

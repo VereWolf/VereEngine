@@ -4,11 +4,12 @@
 #include "PlanetData.h"
 #include "IDRegistr.h"
 
-TerrainPlanetData::TerrainPlanetData()
+PlanetData::PlanetData()
 {
+	m_planetElementID = NULL;
 }
 
-void TerrainPlanetData::Init()
+void PlanetData::Init()
 {
 	SetLocalPosition(btVector3(0.0, 0.0, 0.0));
 	SetLocalAngle(btVector3(0.0, 0.0, 0.0));
@@ -16,7 +17,8 @@ void TerrainPlanetData::Init()
 	btMatrix3x3 M1 = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
 	btMatrix3x3 M2 = btMatrix3x3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 
-	m_planetElementID = new IDRegistr(10);
+	IDRegistr *IDR = new IDRegistr(10);
+	m_planetElementID = IDR;
 	m_planetElements.resize(pow(2, 10), NULL);
 
 	for (int i = 0; i < 12; ++i)
@@ -113,7 +115,7 @@ void TerrainPlanetData::Init()
 	SetRadius(GetScaling().getRow(0).getX());
 }
 
-int TerrainPlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount)
+int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount)
 {
 	int32_t PIC = GetNumPointInRowInCell();
 	float W = 1.0f / GetNumPointInRowInCell();
@@ -166,7 +168,7 @@ int TerrainPlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &siz
 	return GameRenderDeviceHandle->CreateMeshBuffer(&vertices[0], sizeOfVertex, verticesCount, &indices);
 }
 
-void TerrainPlanetData::GenerateCoord(float height, float width, float level)
+void PlanetData::GenerateCoord(float height, float width, float level)
 {
 	int PL = pow(2, level);
 	btScalar ofs = 1.0 / PL;
@@ -230,4 +232,66 @@ void TerrainPlanetData::GenerateCoord(float height, float width, float level)
 			}
 		}
 	}
+}
+
+int PlanetData::GetNearestSide(bool withOffset)
+{
+	int O = 0;
+	if (withOffset) O = 6;
+
+	btVector3 V = (GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition()).normalize();
+
+	btVector3 V6[] = { m_blockMatrixs[O + 0] * btVector3(0.0,1.0,0.0),m_blockMatrixs[O + 1] * btVector3(0.0,1.0,0.0),m_blockMatrixs[O + 2] * btVector3(0.0,1.0,0.0),
+		m_blockMatrixs[O + 3] * btVector3(0.0,1.0,0.0) ,m_blockMatrixs[O + 4] * btVector3(0.0,1.0,0.0) ,m_blockMatrixs[O + 5] * btVector3(0.0,1.0,0.0) };
+
+	int S3[] = { 0,0,0 };
+
+	if (V.dot(V6[0]) > V.dot(V6[3]))
+	{
+		S3[0] = 0;
+	}
+	else
+	{
+		S3[0] = 3;
+	}
+
+	if (V.dot(V6[1]) > V.dot(V6[4]))
+	{
+		S3[1] = 1;
+	}
+	else
+	{
+		S3[1] = 4;
+	}
+
+	if (V.dot(V6[2]) > V.dot(V6[5]))
+	{
+		S3[2] = 2;
+	}
+	else
+	{
+		S3[2] = 5;
+	}
+
+	int S = 0;
+
+	if (V.dot(V6[S3[0]]) > V.dot(V6[S3[1]]) && V.dot(V6[S3[0]]) > V.dot(V6[S3[2]]))
+	{
+		S = S3[0];
+	}
+	else if (V.dot(V6[S3[1]]) > V.dot(V6[S3[2]]) && V.dot(V6[S3[1]]) > V.dot(V6[S3[0]]))
+	{
+		S = S3[1];
+	}
+	else
+	{
+		S = S3[2];
+	}
+
+	if (withOffset)
+	{
+		return S + 6;
+	}
+
+	return S;
 }
