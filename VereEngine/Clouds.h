@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-class CloudsRenderMessage : public RenderMesage
+class CloudsRenderMessage : public RenderMessage
 {
 public:
 	void Use();

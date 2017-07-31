@@ -22,6 +22,11 @@ void PlanetLOD::Init(PlanetData * data, int side, int level, XMINT2 coord, btVec
 
 	SetId(m_data->m_planetElementID->TakeElement());
 
+	if (GetId() < 0)
+	{
+		return;
+	}
+
 	while (GetId() > m_data->m_planetElements.size() && GetId() != -1) m_data->m_planetElements.resize(m_data->m_planetElements.size() + 1024);
 	m_data->m_planetElements[GetId()] = this;
 
@@ -33,7 +38,7 @@ void PlanetLOD::Init(PlanetData * data, int side, int level, XMINT2 coord, btVec
 
 	m_heightMap = NULL;
 	m_normalMap = NULL;
-	
+
 	if (GameRenderDeviceHandle->GetModel(data->GetRenderId()))
 	{
 		Model *model = new Model;
@@ -46,6 +51,11 @@ void PlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
+	if (GetId() < 0)
+	{
+		return;
+	}
+
 	btMatrix3x3 I = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
 	btScalar S = m_scaling;
 	btScalar S2 = m_data->GetScaling().getRow(0).getX();
@@ -59,7 +69,7 @@ void PlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj
 	{
 		btTransform M = camOffset * GT;
 
-		//btScalar distance = (M * m_Centre).length();
+		//btScalar distance = (M * m_CentreT).length();
 		btVector3 coord = PlanetCordinateMat::GetCoordForCube(dir,
 			btTransform(m_data->GetBlockAnglMatrix(m_side))) * (1.0 / S + 1.0) - btVector3(0.5 * S, 0.5 * S, 0.0);
 		
@@ -115,31 +125,30 @@ void PlanetLOD::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj
 		btTransform meshCentre = camOffset * GT;
 		btTransform Mat = VW2 * meshCentre/* * Mat*/;
 
-		btVector3 Vecd = Mat * m_Centre;
+		btVector3 Vecd = Mat * m_CentreT;
 
-		if (VereMath::FrustrumCulling2(m_Centre, m_OffsetCube, camFarZ, heightFar, aspect, Mat))
+		if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, camFarZ, heightFar, aspect, Mat))
 		{
-			if (m_onlyRenderText == false)
-			{
-				DrawTerrain(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
-			}
-			else
-			{
-
-				std::wstring text = L"Cull: " + std::to_wstring(Vecd.getX()) + L" " + std::to_wstring(Vecd.getY()) + L" " + std::to_wstring(Vecd.getZ());
-
-				TextMessage textMessage;
-				textMessage.colorBrushID = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Blue));
-				textMessage.textFormatID = 0;
-				textMessage.textLayoutID = GameTextRenderDeviceHandle->CreateTextLayout(text, 0, 900.0f, 50.0f);
-				textMessage.position = XMFLOAT2(0.0f, GameTextRenderDeviceHandle->GetOffset());
-				GameTextRenderDeviceHandle->Render(&textMessage);
-				GameTextRenderDeviceHandle->DeleteColorBrush(textMessage.colorBrushID);
-				GameTextRenderDeviceHandle->DeleteTextLayout(textMessage.textLayoutID);
-
-				GameTextRenderDeviceHandle->NextStepOfOffset(0.015);
-			}
+			DrawTerrain(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
 		}
+
+		if (VereMath::FrustrumCulling2(m_CentreW, m_OffsetCubeW, camFarZ, heightFar, aspect, Mat))
+		{
+			DrawWater(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		}
+
+		if (VereMath::FrustrumCulling2(m_CentreA, m_OffsetCubeA, camFarZ, heightFar, aspect, Mat))
+		{
+			DrawAtmosphere(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		}
+
+		if (VereMath::FrustrumCulling2(m_CentreC, m_OffsetCubeC, camFarZ, heightFar, aspect, Mat))
+		{
+			DrawClouds(camOffset, camView, camProj, camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
+		}
+
+		m_data->GetDeviceResources()->GetD3DDeviceContext()->HSSetShader(0, 0, 0);
+		m_data->GetDeviceResources()->GetD3DDeviceContext()->DSSetShader(0, 0, 0);
 	}
 }
 
@@ -158,7 +167,7 @@ void PlanetLOD::DrawTerrain(btTransform camOffset, XMMATRIX camView, XMMATRIX ca
 
 	TerrainRenderMessage message;
 
-	message.m_ModelID = m_modelID;
+	message.m_ModelID = m_data->GetRenderId();
 	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
 	message.m_Transform = m_data->GetWorldTransform();
 	message.m_CameraOffset = camOffset;
@@ -172,7 +181,7 @@ void PlanetLOD::DrawTerrain(btTransform camOffset, XMMATRIX camView, XMMATRIX ca
 	message.m_Coord = m_coord;
 	message.m_Spacing1 = S;
 	message.m_Spacing2 = S2;
-	message.m_Radius = m_data->GetRadius();
+	message.m_Radius = m_data->GetRadiusOfTerrain();
 	message.m_Level = m_level;
 	message.m_Tangent = m_data->GetTangent();
 
@@ -192,33 +201,131 @@ void PlanetLOD::DrawTerrain(btTransform camOffset, XMMATRIX camView, XMMATRIX ca
 	{
 		return;
 	}
-		message.m_RasterizeState = RenderStates::SolidRS;
+	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	message.m_RasterizeState = RenderStates::SolidRS;
+	message.m_BlendState = RenderStates::NoBlendBS;
 
 	GameRenderDeviceHandle->Render(&message);
-
-	m_data->GetDeviceResources()->GetD3DDeviceContext()->HSSetShader(0, 0, 0);
-	m_data->GetDeviceResources()->GetD3DDeviceContext()->DSSetShader(0, 0, 0);
 }
 
 void PlanetLOD::DrawWater(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
+	btMatrix3x3 I = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
+	btScalar S = m_scaling;
+	btScalar S2 = m_data->GetScaling().getRow(0).getX();
+	btScalar S3 = S * S2;
+
+	btTransform AM = btTransform(m_data->GetBlockAnglMatrix(m_side), btVector3(0.0, 0.0, 0.0));
+	btTransform GT = m_data->GetWorldTransform();
+
+
 	WaterRenderMessage message;
+
+	message.m_ModelID = m_data->GetRenderIdWater();
+	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
+	message.m_Transform = m_data->GetWorldTransform();
+	message.m_CameraOffset = camOffset;
+	message.m_View = camView;
+	message.m_Proj = camProj;
+	message.m_FarZ = camFarZ;
+	message.m_FarRangeMod = camFarRangeMod;
+	message.m_FarModifier = camModifier;
+	message.m_Position = m_position;
+	message.m_AngleMatrix = AM;
+	message.m_Coord = m_coord;
+	message.m_Spacing1 = S;
+	message.m_Spacing2 = S2;
+	message.m_Radius = m_data->GetRadiusOfWater();
+	message.m_Level = m_level;
+	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	message.m_RasterizeState = RenderStates::NoCullRS;
+	message.m_BlendState = RenderStates::NoBlendBS;
+
+	GameRenderDeviceHandle->BindRenderTarget(m_data->GetWaterTargetMapRTV(), m_data->GetWaterDeepMapDSV());
+	GameRenderDeviceHandle->Render(&message);
+	GameRenderDeviceHandle->BindMainRenderTarget();
 }
 
 void PlanetLOD::DrawAtmosphere(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
+	btMatrix3x3 I = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
+	btScalar S = m_scaling;
+	btScalar S2 = m_data->GetScaling().getRow(0).getX();
+	btScalar S3 = S * S2;
+
+	btTransform AM = btTransform(m_data->GetBlockAnglMatrix(m_side), btVector3(0.0, 0.0, 0.0));
+	btTransform GT = m_data->GetWorldTransform();
+
+
 	AtmosphereRenderMessage message;
+
+	message.m_ModelID = m_data->GetRenderIdAtmosphere();
+	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
+	message.m_Transform = m_data->GetWorldTransform();
+	message.m_CameraOffset = camOffset;
+	message.m_View = camView;
+	message.m_Proj = camProj;
+	message.m_FarZ = camFarZ;
+	message.m_FarRangeMod = camFarRangeMod;
+	message.m_FarModifier = camModifier;
+	message.m_Position = m_position;
+	message.m_AngleMatrix = AM;
+	message.m_Coord = m_coord;
+	message.m_Spacing1 = S;
+	message.m_Spacing2 = S2;
+	message.m_Radius = m_data->GetRadiusOfAtmosphere();
+	message.m_Level = m_level;
+	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	message.m_RasterizeState = RenderStates::NoCullRS;
+	message.m_BlendState = RenderStates::NoBlendBS;
+
+	GameRenderDeviceHandle->BindRenderTarget(m_data->GetAtmosphereTargetMapRTV(), m_data->GetAtmosphereDeepMapDSV());
+	GameRenderDeviceHandle->Render(&message);
+	GameRenderDeviceHandle->BindMainRenderTarget();
 }
 
 void PlanetLOD::DrawClouds(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 	float camFarZ, btScalar heightFar, btScalar aspect,
 	float camFarRangeMod, float camModifier)
 {
+	btMatrix3x3 I = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
+	btScalar S = m_scaling;
+	btScalar S2 = m_data->GetScaling().getRow(0).getX();
+	btScalar S3 = S * S2;
+
+	btTransform AM = btTransform(m_data->GetBlockAnglMatrix(m_side), btVector3(0.0, 0.0, 0.0));
+	btTransform GT = m_data->GetWorldTransform();
+
+
 	CloudsRenderMessage message;
+
+	message.m_ModelID = m_data->GetRenderIdClouds();
+	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
+	message.m_Transform = m_data->GetWorldTransform();
+	message.m_CameraOffset = camOffset;
+	message.m_View = camView;
+	message.m_Proj = camProj;
+	message.m_FarZ = camFarZ;
+	message.m_FarRangeMod = camFarRangeMod;
+	message.m_FarModifier = camModifier;
+	message.m_Position = m_position;
+	message.m_AngleMatrix = AM;
+	message.m_Coord = m_coord;
+	message.m_Spacing1 = S;
+	message.m_Spacing2 = S2;
+	message.m_Radius = m_data->GetRadiusOfClouds();
+	message.m_Level = m_level;
+	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	message.m_RasterizeState = RenderStates::NoCullRS;
+	message.m_BlendState = RenderStates::NoBlendBS;
+
+	GameRenderDeviceHandle->BindRenderTarget(m_data->GetCloudsTargetMapRTV(), m_data->GetCloudsDeepMapDSV());
+	GameRenderDeviceHandle->Render(&message);
+	GameRenderDeviceHandle->BindMainRenderTarget();
 }
 
 bool PlanetLOD::ComponentProccess()
@@ -240,8 +347,14 @@ bool PlanetLOD::ComponentProccess()
 
 	float NMIN = std::numeric_limits<btScalar>::lowest();
 	float NMAX = -1 * NMIN;
-	btVector3 Max = btVector3(NMIN, NMIN, NMIN);
-	btVector3 Min = btVector3(NMAX, NMAX, NMAX);
+	btVector3 MaxT = btVector3(NMIN, NMIN, NMIN);
+	btVector3 MinT = btVector3(NMAX, NMAX, NMAX);
+	btVector3 MaxW = btVector3(NMIN, NMIN, NMIN);
+	btVector3 MinW = btVector3(NMAX, NMAX, NMAX);
+	btVector3 MaxA = btVector3(NMIN, NMIN, NMIN);
+	btVector3 MinA = btVector3(NMAX, NMAX, NMAX);
+	btVector3 MaxC = btVector3(NMIN, NMIN, NMIN);
+	btVector3 MinC = btVector3(NMAX, NMAX, NMAX);
 
 	if (level == 0)
 	{
@@ -250,10 +363,6 @@ bool PlanetLOD::ComponentProccess()
 
 		int L = 512 + 2 * 512 / m_data->GetNumPointInRowInCell();
 		int MS = pow(L, 2);
-		int a;
-		//string posfix = m_data->GetPosFix(side);
-		//posfix.resize(m_data->GetPosFix(side)->Length());
-		//for (int i = 0; i < m_data->GetPosFix(side)->Length(); ++i)wctomb_s(&a, &posfix[i], sizeof(char), *(m_data->GetPosFix(side)->Begin() + i));
 
 		int idH = GameStreamingDataHandle->LoadData("height_" + m_data->GetPosFix(side) + ".raw");
 		void *Vd = GameStreamingDataHandle->GetStreamingData(idH);
@@ -296,16 +405,46 @@ bool PlanetLOD::ComponentProccess()
 			V.setX(((btScalar)coord.x + D * x) * scaling - 0.5);
 			V.setY(0.0);
 			V.setZ(((btScalar)coord.y + D * y) * scaling - 0.5);
-			V = ((mesh * V).normalize()) * (S + m_heightMap->GetVariable((x + 1) * PIRR, (y + 1) * PIRR));
 
-			Max = VereMath::MaxVector(Max, V);
-			Min = VereMath::MinVector(Min, V);
+			btVector3 VT, VW, VA, VC;
+			VT = V;
+			VT = ((mesh * V).normalize()) * (S + m_heightMap->GetVariable((x + 1) * PIRR, (y + 1) * PIRR));
+			VW = V;
+			VW = ((mesh * V).normalize()) * (S + m_heightMap->GetVariable((x + 1) * PIRR, (y + 1) * PIRR));
+			VA = V;
+			VA= ((mesh * V).normalize()) * (S + m_heightMap->GetVariable((x + 1) * PIRR, (y + 1) * PIRR));
+			VC = V;
+			VC = ((mesh * V).normalize()) * (S + m_heightMap->GetVariable((x + 1) * PIRR, (y + 1) * PIRR));
+
+			MaxT = VereMath::MaxVector(MaxT, VT);
+			MinT = VereMath::MinVector(MinT, VT);
+
+			MaxW = VereMath::MaxVector(MaxW, VW);
+			MinW = VereMath::MinVector(MinW, VW);
+
+			MaxA = VereMath::MaxVector(MaxA, VA);
+			MinA = VereMath::MinVector(MinA, VA);
+
+			MaxC = VereMath::MaxVector(MaxC, VC);
+			MinC = VereMath::MinVector(MinC, VC);
 		}
 	}
 
-	btVector3 offset = 0.5 * (Max - Min);
-	m_OffsetCube = offset;
-	m_Centre = Min + offset;
+	btVector3 offsetT = 0.5 * (MaxT - MinT);
+	m_OffsetCubeT = offsetT;
+	m_CentreT = MinT + offsetT;
+
+	btVector3 offsetW = 0.5 * (MaxW - MinW);
+	m_OffsetCubeW = offsetW;
+	m_CentreW = MinW + offsetW;
+
+	btVector3 offsetA = 0.5 * (MaxA - MinA);
+	m_OffsetCubeA = offsetA;
+	m_CentreA = MinA + offsetA;
+
+	btVector3 offsetC = 0.5 * (MaxC - MinC);
+	m_OffsetCubeC = offsetC;
+	m_CentreC = MinC + offsetC;
 
 	m_idHeightMap = GameRenderDeviceHandle->CreateTexture(m_heightMap->GetTexture(), m_heightMap->GetHeight(), m_heightMap->GetWidth(), DXGI_FORMAT_R32_FLOAT, 1);
 	m_idNormalMap = GameRenderDeviceHandle->CreateTexture(m_normalMap->GetTexture(), m_normalMap->GetHeight(), m_normalMap->GetWidth(), DXGI_FORMAT_R8G8B8A8_UNORM, 1);

@@ -85,9 +85,14 @@ private:
 	int m_idHeightMap;
 	int m_idNormalMap;
 
-	//btVector3 m_CubeBox[8];
-	btVector3 m_OffsetCube;
-	btVector3 m_Centre;
+	btVector3 m_OffsetCubeT;
+	btVector3 m_CentreT;
+	btVector3 m_OffsetCubeW;
+	btVector3 m_CentreW;
+	btVector3 m_OffsetCubeA;
+	btVector3 m_CentreA;
+	btVector3 m_OffsetCubeC;
+	btVector3 m_CentreC;
 
 	PlanetLOD *m_blocks[4];
 

@@ -112,7 +112,358 @@ void PlanetData::Init()
 		}
 	}
 
-	SetRadius(GetScaling().getRow(0).getX());
+	SetRadiusOfTerrain(GetScaling().getRow(0).getX());
+	SetRadiusOfWater(GetRadiusOfTerrain());
+	SetRadiusOfAtmosphere(GetRadiusOfTerrain() + 35000.0f);
+	SetRadiusOfClouds(GetRadiusOfTerrain() + 1500.0f);
+
+	m_Height = GameRenderDeviceHandle->GetMainViewPort()->Height;
+	m_Width = GameRenderDeviceHandle->GetMainViewPort()->Width;
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_AtmosphereDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_AtmosphereDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_CloudsDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_CloudsDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_WaterDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_WaterDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_PlanetDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_PlanetDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_CoordDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_CoordDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_AtmosphereTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_AtmosphereTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_CloudsTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_CloudsTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_WaterTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_WaterTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_PlanetTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_PlanetTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_CoordTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_CoordTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
 }
 
 int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount)

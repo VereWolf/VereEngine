@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-class TerrainRenderMessage : public RenderMesage
+class TerrainRenderMessage : public RenderMessage
 {
 public:
 	void Use();

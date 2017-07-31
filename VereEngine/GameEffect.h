@@ -10,9 +10,9 @@ public:
 	GameEffect() {}
 	~GameEffect() { ReleaseEffect(); }
 
-	void SetEffect(BaseEffect* T) { m_gameEffect = T; }
-	BaseEffect* GetEffect() { return m_gameEffect; }
+	void SetEffect(Effect* T) { m_gameEffect = T; }
+	Effect* GetEffect() { return m_gameEffect; }
 	inline void ReleaseEffect() { SafeDelete(m_gameEffect); }
 private:
-	BaseEffect* m_gameEffect;
+	Effect* m_gameEffect;
 };

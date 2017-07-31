@@ -73,6 +73,13 @@ struct Fog
 struct Material
 {
 	Material() { ZeroMemory(this, sizeof(this)); }
+	Material(Material &m)
+	{
+		Ambient = m.Ambient;
+		Diffuse = m.Diffuse;
+		Specular = m.Specular;
+		Reflect = m.Reflect;
+	}
 
 	XMFLOAT4 Ambient;
 	XMFLOAT4 Diffuse;
@@ -82,6 +89,23 @@ struct Material
 
 struct Model
 {
+	Model()
+	{
+
+	}
+	Model(Model &m)
+	{
+		material = m.material;
+		faceStart = m.faceStart;
+		faceCount = m.faceCount;
+		sizeOfVertex = m.sizeOfVertex;
+		topology = m.topology;
+		idMeshBuffer = m.idMeshBuffer;
+		idEffect = m.idEffect;
+		idVertex = m.idVertex;
+		idInputLayouts = m.idInputLayouts;
+	}
+
 	Material material;
 	UINT faceStart;
 	UINT faceCount;

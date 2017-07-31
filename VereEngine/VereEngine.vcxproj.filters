@@ -367,6 +367,18 @@
     <CustomBuild Include="FX\TerrainLOD.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="FX\WaterLOD.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\Clouds.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\RenderToScreen.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\QuadScreenWCA.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -439,9 +451,6 @@
     <Filter Include="TextRenderDevice">
       <UniqueIdentifier>{bbef4d64-23ea-493e-adb8-7253b3484b36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderDevice">
-      <UniqueIdentifier>{957b3035-b0d1-4741-be7f-5ecf321809e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="StreamingData">
       <UniqueIdentifier>{9fa4ecba-3921-4366-97bc-17efef8f3e42}</UniqueIdentifier>
     </Filter>
@@ -451,10 +460,18 @@
     <Filter Include="ExpensiveProccess">
       <UniqueIdentifier>{00f3d7cc-235b-457a-b9ba-77c428ed9dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderDevice">
+      <UniqueIdentifier>{957b3035-b0d1-4741-be7f-5ecf321809e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VereEngine.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FX\QuadScreenWithCoord.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

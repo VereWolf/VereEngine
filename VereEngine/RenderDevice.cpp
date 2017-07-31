@@ -12,14 +12,62 @@
 #include "GameSpotLight.h"
 #include "RenderDevice.h"
 
+
+void RenderMessage::Use()
+{
+	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
+
+	/*btVector3 dirNorm = m_Transform.getOrigin();
+	if (dirNorm.getX() != 0.0 && dirNorm.getY() != 0.0 && dirNorm.getZ() != 0.0)
+	{
+	dirNorm = dirNorm.normalize();
+	}
+	XMFLOAT3 dir = XMFLOAT3(dirNorm.getX(), dirNorm.getY(), dirNorm.getZ());*/
+
+	XMMATRIX mesh = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(m_CameraOffset * m_Transform * m_Scaling));
+	XMMATRIX viewProj = m_View * m_Proj;
+	btTransform transformN = m_Transform;
+	transformN.getOrigin().setZero();
+
+	XMMATRIX meshN = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(transformN.inverse()));
+
+	((BaseEffect*)m_BaseEffect)->SetEyePosW(EyePos);
+	((BaseEffect*)m_BaseEffect)->SetMaterial(*m_Material);
+	((BaseEffect*)m_BaseEffect)->SetViewProj(viewProj);
+	((BaseEffect*)m_BaseEffect)->SetWorld(mesh);
+	((BaseEffect*)m_BaseEffect)->SetWorldN(meshN);
+	((BaseEffect*)m_BaseEffect)->SetFarZ(m_FarZ);
+	((BaseEffect*)m_BaseEffect)->SetFarRangeMod(m_FarRangeMod);
+	((BaseEffect*)m_BaseEffect)->SetFarModifier(m_FarModifier);
+}
+
+void RenderToScreenMessage::Use()
+{
+	((RenderToScreen*)m_BaseEffect)->SetView(m_View);
+	((RenderToScreen*)m_BaseEffect)->SetTargetMap(m_TargetSRV);
+	((RenderToScreen*)m_BaseEffect)->SetDepthMap(m_DepthSRV);
+}
+
 RenderDevice::RenderDevice()
 {
 	GameRenderDeviceHandle = this;
+	m_mainViewPort.TopLeftX = 0.0f;
+	m_mainViewPort.TopLeftY = 0.0f;
+	m_mainViewPort.Height = 965.0f;
+	m_mainViewPort.Width = 1920.0f;
+	m_mainViewPort.MinDepth = 0.0f;
+	m_mainViewPort.MaxDepth = 1.0f;
 }
 
 RenderDevice::RenderDevice(DX::DeviceResources *resources)
 {
 	GameRenderDeviceHandle = this;
+	m_mainViewPort.TopLeftX = 0.0f;
+	m_mainViewPort.TopLeftY = 0.0f;
+	m_mainViewPort.Height = 965.0f;
+	m_mainViewPort.Width = 1920.0f;
+	m_mainViewPort.MinDepth = 0.0f;
+	m_mainViewPort.MaxDepth = 1.0f;
 
 	Init(resources);
 }
@@ -40,20 +88,132 @@ void RenderDevice::Init(DX::DeviceResources *resources)
 	GetRenderAssetsStacks()->m_gameMeshBuffers.Init(resources);
 	GetRenderAssetsStacks()->m_gameModels.Init(resources);
 	GetRenderAssetsStacks()->m_gameTextures.Init(resources);
+	
+	GenerateDeepOfSphere(256);
+	
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_mainViewPort.Width;
+		texDesc.Height = m_mainViewPort.Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_MainDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_MainDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_mainViewPort.Width;
+		texDesc.Height = m_mainViewPort.Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_MainTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_MainTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	CreateQuadScreen();
+
+	{
+		std::vector<D3D11_INPUT_ELEMENT_DESC> *renderToScreen = new std::vector<D3D11_INPUT_ELEMENT_DESC>(2);
+		renderToScreen->at(0) = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		renderToScreen->at(1) = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+
+		Model *modelRTS = new Model;
+		modelRTS->idMeshBuffer = GameRenderDeviceHandle->GetQuadScreenID();
+		modelRTS->sizeOfVertex = sizeof(Vertex::TerrainLOD);
+		modelRTS->faceCount = 2;
+		modelRTS->faceStart = 0;
+		modelRTS->idEffect = GameRenderDeviceHandle->CreateEffect(Effects::RenderToScreenFX);
+		modelRTS->idVertex = GameRenderDeviceHandle->CreateVertex(renderToScreen);
+		modelRTS->idInputLayouts = GameRenderDeviceHandle->CreateInputLayouts(modelRTS->idVertex, modelRTS->idEffect);
+		modelRTS->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;;
+		modelRTS->material.Ambient.x = 1.0f;
+		modelRTS->material.Ambient.y = 1.0f;
+		modelRTS->material.Ambient.z = 1.0f;
+		modelRTS->material.Ambient.w = 1.0f;
+		modelRTS->material.Diffuse.x = 1.0f;
+		modelRTS->material.Diffuse.y = 1.0f;
+		modelRTS->material.Diffuse.z = 1.0f;
+		modelRTS->material.Diffuse.w = 1.0f;
+		modelRTS->material.Specular.x = 0.0f;
+		modelRTS->material.Specular.y = 0.0f;
+		modelRTS->material.Specular.z = 0.0f;
+		modelRTS->material.Specular.w = 0.0f;
+		modelRTS->material.Reflect.x = 0.0f;
+		modelRTS->material.Reflect.y = 0.0f;
+		modelRTS->material.Reflect.z = 0.0f;
+		modelRTS->material.Reflect.w = 0.0f;
+
+		m_RenderIdRTS = GameRenderDeviceHandle->CreateModel(modelRTS);
+	}
 }
 
-void RenderDevice::Render(RenderMesage *message)
+void RenderDevice::Render(RenderMessage *message)
 {
-
+	m_resources->GetD3DDeviceContext()->RSSetViewports(1, message->m_ViewPort);
 	m_resources->GetD3DDeviceContext()->RSSetState(message->m_RasterizeState);
+
+	float blendFactor[] = { 0.0f,0.0f,0.0f,0.0f };
+
+	m_resources->GetD3DDeviceContext()->OMSetBlendState(message->m_BlendState, blendFactor, 0xffffffff);
 
 	Model *model = GetModel(message->m_ModelID);
 	if (model == NULL) return;
 	ID3D11Buffer *VB = GetVerticesBuffer(model->idMeshBuffer);
 	ID3D11Buffer *IB = GetIndicesBuffer(model->idMeshBuffer);
 	ID3D11InputLayout *IL = GetInputLayouts(model->idInputLayouts);
-	BaseEffect *BE = GetEffect(model->idEffect);
+	Effect *BE = GetEffect(model->idEffect);
 	GameVertex *V = GetVertex(model->idVertex);
+	std::vector<D3D11_INPUT_ELEMENT_DESC> *IED = V->GetVertex();
 	UINT stride = model->sizeOfVertex;
 
 	message->m_Material = &model->material;
@@ -94,7 +254,37 @@ void RenderDevice::Render(RenderMesage *message)
 	}
 }
 
-ID3D11Buffer *RenderDevice::BuildVerticesBuffer(void *vertices, UINT size)
+void RenderDevice::RenderToScreen()
+{
+
+	XMMATRIX world(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
+	RenderToScreenMessage message;
+
+	message.m_ModelID = m_RenderIdRTS;
+	message.m_TargetSRV = GetMainTargetMapSRV();
+	message.m_DepthSRV = GetMainDeepMapSRV();
+	message.m_View = world;
+	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	message.m_RasterizeState = RenderStates::NoCullRS;
+	message.m_BlendState = RenderStates::TransparentBS;
+
+	BindRenderTarget(m_resources->GetBackBufferRenderTargetView(), m_resources->GetDepthStencilView());
+
+	GameRenderDeviceHandle->Render(&message);
+}
+
+void RenderDevice::ClearMainRenderTarget()
+{
+	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(m_MainTargetMapRTV, DirectX::Colors::Black);
+	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(m_MainDeepMapDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
+
+ID3D11Buffer *RenderDevice::BuildVerticesBuffer(void *vertices, UINT size, UINT stride)
 {
 	ID3D11Buffer *VB;
 
@@ -105,7 +295,7 @@ ID3D11Buffer *RenderDevice::BuildVerticesBuffer(void *vertices, UINT size)
 	vertexBuffer.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBuffer.CPUAccessFlags = 0;
 	vertexBuffer.MiscFlags = 0;
-	vertexBuffer.StructureByteStride = 0;
+	vertexBuffer.StructureByteStride = stride;
 
 	D3D11_SUBRESOURCE_DATA vinitData;
 	vinitData.pSysMem = vertices;
@@ -207,6 +397,96 @@ ID3D11ShaderResourceView *RenderDevice::BuildTexture(void *map, UINT height, UIN
 	return(textureSRV);
 }
 
+void RenderDevice::BindMainRenderTarget()
+{
+	ID3D11RenderTargetView *const targets[1] = { m_MainTargetMapRTV };
+	m_resources->GetD3DDeviceContext()->OMSetRenderTargets(1, targets, m_MainDeepMapDSV);
+}
+
+void RenderDevice::BindRenderTarget(ID3D11RenderTargetView *target, ID3D11DepthStencilView *depthStencil)
+{
+	ID3D11RenderTargetView *const targets[1] = { target };
+	m_resources->GetD3DDeviceContext()->OMSetRenderTargets(1, targets, depthStencil);
+}
+
+void RenderDevice::CopyShaderResourceView(ID3D11ShaderResourceView *dest, ID3D11ShaderResourceView *src)
+{
+	ID3D11Resource* targetMapSrc = 0;
+	ID3D11Texture2D* targetMap = 0;
+
+	src->GetResource(&targetMapSrc);
+
+	D3D11_TEXTURE2D_DESC texDesc;
+
+	((ID3D11Texture2D*)targetMapSrc)->GetDesc(&texDesc);
+
+	m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+	m_resources->GetD3DDeviceContext()->CopyResource(targetMap, targetMapSrc);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	src->GetDesc(&srvDesc);
+	m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &dest);
+
+	ReleaseCOM(targetMapSrc);
+	ReleaseCOM(targetMap);
+}
+
+void RenderDevice::CreateQuadScreen()
+{
+	std::vector<Vertex::TerrainLOD> quadV(4);
+	std::vector<UINT> quadI(6);
+
+	quadV[0].Pos = XMFLOAT3(-1.0f, -1.0f, 0.0f);
+	quadV[0].TexTess = XMFLOAT2(0.0f, 1.0f);
+	quadV[1].Pos = XMFLOAT3(-1.0f, 1.0f, 0.0f);
+	quadV[1].TexTess = XMFLOAT2(0.0f, 0.0f);
+	quadV[2].Pos = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	quadV[2].TexTess = XMFLOAT2(1.0f, 0.0f);
+	quadV[3].Pos = XMFLOAT3(1.0f, -1.0f, 0.0f);
+	quadV[3].TexTess = XMFLOAT2(1.0f, 1.0f);
+
+	quadI[0] = 0;
+	quadI[1] = 1;
+	quadI[2] = 2;
+
+	quadI[3] = 0;
+	quadI[4] = 2;
+	quadI[5] = 3;
+
+	m_quadScreenID = CreateMeshBuffer(&quadV[0], sizeof(Vertex::TerrainLOD), 4, &quadI);
+}
+
+void RenderDevice::GenerateDeepOfSphere(int size)
+{
+	std::vector<float> deep(pow(size, 2));
+
+	float maxR = size / 2;
+	float S = 1.0f / (size - 1.0f);
+
+	for (int j = 0; j < size; ++j)
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			float x = 2.0f * (i * S - 0.5f);
+			float y = 2.0f * (j * S - 0.5f);
+
+			float r = pow(pow(x, 2.0f) + pow(y, 2.0f), 0.5f);
+
+			if (r > 1.0f)
+			{
+				deep[j * size + i] = -1.0f;
+			}
+			else
+			{
+				deep[j * size + i] = BUFFERUNIT * pow(1.0f - pow(x, 2.0f) - pow(y, 2.0f), 0.5f);
+			}
+		}
+	}
+
+	m_deepOfCircleID = CreateTexture(&deep[0], size, size, DXGI_FORMAT_R32_FLOAT, 1);
+}
+
 int RenderDevice::CreateModel(Model * model)
 {
 	GameModel *gameModel = new GameModel;
@@ -264,7 +544,7 @@ ID3D11ShaderResourceView* RenderDevice::GetTexture(int id)
 int RenderDevice::CreateInputLayouts(int idVertices, int idEffect)
 {
 	ElementsVertex *gameVertices = ((GameVertex*)m_renderAssetsStacks.m_gameVertices.GetGameObject(idVertices))->GetVertex();
-	BaseEffect *baseEffect = ((GameEffect*)m_renderAssetsStacks.m_gameEffects.GetGameObject(idVertices))->GetEffect();
+	Effect *baseEffect = ((GameEffect*)m_renderAssetsStacks.m_gameEffects.GetGameObject(idVertices))->GetEffect();
 
 	ID3D11InputLayout* inputLayouts = 0;
 
@@ -310,7 +590,7 @@ GameVertex* RenderDevice::GetVertex(int id)
 	return ((GameVertex*)m_renderAssetsStacks.m_gameVertices.GetGameObject(id));
 }
 
-int RenderDevice::CreateEffect(BaseEffect *effect)
+int RenderDevice::CreateEffect(Effect *effect)
 {
 	GameEffect *gameEffect = new GameEffect;
 	gameEffect->PreInit(m_resources);
@@ -324,7 +604,7 @@ void RenderDevice::DeleteEffect(int id)
 	m_renderAssetsStacks.m_gameEffects.DeleteGameObject(id);
 }
 
-BaseEffect* RenderDevice::GetEffect(int id)
+Effect* RenderDevice::GetEffect(int id)
 {
 	return ((GameEffect*)m_renderAssetsStacks.m_gameEffects.GetGameObject(id))->GetEffect();
 }
@@ -332,7 +612,7 @@ BaseEffect* RenderDevice::GetEffect(int id)
 int RenderDevice::CreateMeshBuffer(void *vertices, UINT vertexSize, UINT numElements, std::vector<UINT> *indices)
 {
 	UINT S = vertexSize * numElements;
-	ID3D11Buffer * VB = BuildVerticesBuffer(vertices, S);
+	ID3D11Buffer * VB = BuildVerticesBuffer(vertices, S, vertexSize);
 	if (!VB)
 	{
 		return -1;

@@ -1,0 +1,3 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(370,5): warning MSB8021: The value 'MultiByte' of the variable 'CharacterSet' is incompatible with the value 'true' of the variable 'WindowsAppContainer'.
+  VereEngine.vcxproj -> C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_07_10\VereEngine\x64\Debug\VereEngine\VereEngine.exe
+  VereEngine.vcxproj -> C:\Users\VereWolf\Documents\VereEngine\VereEngine_Build_2017_07_10\VereEngine\x64\Debug\VereEngine\VereEngine.pdb (Partial PDB)

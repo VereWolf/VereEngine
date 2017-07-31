@@ -18,7 +18,10 @@ void GameComponentsManager::Update()
 
 	m_gameComponentReg->ReturnElement(id);
 
-	m_gameComponents[id]->ComponentProccess();
+	if (!m_gameComponents[id]->IsDestroy())
+	{
+		m_gameComponents[id]->ComponentProccess();
+	}
 	m_gameComponents[id]->SetProccessed(2);
 	m_gameComponents[id] = NULL;
 }

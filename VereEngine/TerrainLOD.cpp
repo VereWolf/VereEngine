@@ -31,7 +31,6 @@ void TerrainRenderMessage::Use()
 	((TerrainLODEffect*)m_BaseEffect)->SetFarRangeMod(m_FarRangeMod);
 	((TerrainLODEffect*)m_BaseEffect)->SetFarModifier(m_FarModifier);
 	((TerrainLODEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3(meshCentre.getOrigin()));
-	((TerrainLODEffect*)m_BaseEffect)->SetRadiusOfPlanet(1.2f * m_Radius);
 	((TerrainLODEffect*)m_BaseEffect)->SetFogStart(500.0f);
 	((TerrainLODEffect*)m_BaseEffect)->SetFogRange(10000.0f);
 	((TerrainLODEffect*)m_BaseEffect)->SetFogColor(XMFLOAT3(0.1f, 0.3f, 0.9f));

@@ -34,7 +34,7 @@ public:
 
 		int idMB = GameRenderDeviceHandle->CreateMeshBuffer(&vertices[0], size, vertices.size(), &indices);
 
-		BaseEffect *baseEffect = new BaseEffect(m_resources, "FX/PosNormalTexTan.fxo");
+		Effect *baseEffect = new BaseEffect(m_resources, "FX/PosNormalTexTan.fxo");
 		int idE = GameRenderDeviceHandle->CreateEffect(baseEffect);
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vertex =
@@ -74,7 +74,7 @@ public:
 		float camFarRangeMod, float camModifier)
 	{
 		btVector3 S = btVector3(GetScaling().getRow(0).getX(), GetScaling().getRow(1).getY(), GetScaling().getRow(2).getZ());
-		RenderMesage message;
+		RenderMessage message;
 		message.m_ModelID = m_RenderId;
 		message.m_Scaling = btTransform(btMatrix3x3(-S.getX(), 0.0, 0.0, 0.0, -S.getY(), 0.0, 0.0, 0.0, -S.getZ()), btVector3(0.0, 0.0, 0.0));
 		message.m_Transform = GetWorldTransform();
@@ -84,7 +84,9 @@ public:
 		message.m_FarZ = camFarZ;
 		message.m_FarRangeMod = camFarRangeMod;
 		message.m_FarModifier = camModifier;
+		message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
 		message.m_RasterizeState = RenderStates::SolidRS;
+		message.m_BlendState = RenderStates::NoBlendBS;
 		GameRenderDeviceHandle->Render(&message);
 	}
 

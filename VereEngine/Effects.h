@@ -40,6 +40,9 @@ private:
 
 protected:
 	ID3DX11Effect* mFX;
+
+public:
+	ID3DX11EffectTechnique* Light1Tech;
 };
 #pragma endregion
 
@@ -64,8 +67,6 @@ public:
 	void SetFogStart(const float& v) { FogStart->SetRawValue(&v, 0, sizeof(float)); }
 	void SetFogRange(const float& v) { FogRange->SetRawValue(&v, 0, sizeof(float)); }
 	void SetCenterOfPlanet(const XMFLOAT3& v) { CenterOfPlanet->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetRadiusOfPlanet(const float& v) { RadiusOfPlanet->SetRawValue(&v, 0, sizeof(float)); }
-	void SetRadiusOfAtmosphere(const float& v) { RadiusOfPlanet->SetRawValue(&v, 0, sizeof(float)); }
 	void SetSkyColor(const XMFLOAT4& v) { SkyColor->SetRawValue(&v, 0, sizeof(XMFLOAT4)); }
 	void SetMaterial(const Material& m) { Mat->SetRawValue(&m, 0, sizeof(Material)); }
 
@@ -88,9 +89,6 @@ public:
 	void BindMatrix(UINT index, LPCSTR name);
 	void BindShaderResource(UINT index, LPCSTR name);
 
-
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
 	ID3DX11EffectMatrixVariable* Proj;
@@ -105,7 +103,7 @@ public:
 	ID3DX11EffectVariable* FogStart;
 	ID3DX11EffectVariable* FogRange;
 	ID3DX11EffectVectorVariable* CenterOfPlanet;
-	ID3DX11EffectVariable* RadiusOfPlanet;
+	ID3DX11EffectVariable* RadiusOfTerrain;
 	ID3DX11EffectVariable* RadiusOfAtmosphere;
 	ID3DX11EffectVectorVariable* SkyColor;
 	ID3DX11EffectVariable* Mat;
@@ -134,6 +132,22 @@ public:
 };
 #pragma endregion
 
+#pragma region RenderToScreen
+class RenderToScreen : public BaseEffect
+{
+public:
+	RenderToScreen(DX::DeviceResources *resources, const std::string& filename);
+	~RenderToScreen() {};
+
+	void SetTargetMap(ID3D11ShaderResourceView* hMap) { TargetMap->SetResource(hMap); }
+	void SetDepthMap(ID3D11ShaderResourceView* hMap) { DepthMap->SetResource(hMap); }
+
+	ID3DX11EffectShaderResourceVariable* TargetMap;
+	ID3DX11EffectShaderResourceVariable* DepthMap;
+};
+
+#pragma endregion
+
 #pragma region WorldEffect
 class WorldEffect : public Effect
 {
@@ -159,9 +173,6 @@ public:
 	void SetMaterial(const Material& m) { Mat->SetRawValue(&m, 0, sizeof(Material)); }
 	//void SetSunVector(const XMFLOAT3& v) { SunVector->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
 	//void SetLight(const float& v) { Light->SetRawValue(&v, 0, sizeof(float)); }
-
-
-	ID3DX11EffectTechnique* Light1Tech;
 
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
@@ -193,61 +204,8 @@ public:
 	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
 
-
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* World;
-};
-
-#pragma endregion
-
-#pragma region LOD
-class LODEffect : public WorldEffect
-{
-public:
-	LODEffect(DX::DeviceResources *resources, const std::string& filename);
-	~LODEffect() {};
-
-	void SetViewProj(CXMMATRIX &M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldViewProj(CXMMATRIX &M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetProj(CXMMATRIX &M) { Proj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetView(CXMMATRIX &M) { View->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX &M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(XMFLOAT3 &V) { EyePosW->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
-	void SetStartOfLOD(const float& v) { StartOfLOD->SetRawValue(&v, 0, sizeof(float)); }
-	void SetStartOfLODOfTrees(const float& v) { StartOfLODOfTrees->SetRawValue(&v, 0, sizeof(float)); }
-	void SetCoord(const XMINT2& v) { Coord->SetRawValue(&v, 0, sizeof(XMINT2)); }
-	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
-	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
-	void SetNormalMap(ID3D11ShaderResourceView* tex) { NormalMap->SetResource(tex); }
-	void SetTreesMap(ID3D11ShaderResourceView* tex) { TreesMap->SetResource(tex); }
-	void SetHeightTile_1(ID3D11ShaderResourceView* tex) { HeightTile_1->SetResource(tex); }
-	void SetHeightTile_2(ID3D11ShaderResourceView* tex) { HeightTile_2->SetResource(tex); }
-	void SetNormalTile_1(ID3D11ShaderResourceView* tex) { NormalTile_1->SetResource(tex); }
-	void SetNormalTile_2(ID3D11ShaderResourceView* tex) { NormalTile_2->SetResource(tex); }
-
-
-	ID3DX11EffectTechnique* Light1Tech;
-
-	ID3DX11EffectMatrixVariable* ViewProj;
-	ID3DX11EffectMatrixVariable* WorldViewProj;
-	ID3DX11EffectMatrixVariable* Proj;
-	ID3DX11EffectMatrixVariable* View;
-	ID3DX11EffectMatrixVariable* World;
-	ID3DX11EffectVectorVariable* EyePosW;
-	ID3DX11EffectVariable* StartOfLOD;
-	ID3DX11EffectVariable* StartOfLODOfTrees;
-	ID3DX11EffectVectorVariable* Coord;
-	ID3DX11EffectVariable* Spacing;
-
-	ID3DX11EffectShaderResourceVariable* HeightMap;
-	ID3DX11EffectShaderResourceVariable* NormalMap;
-	ID3DX11EffectShaderResourceVariable* TreesMap;
-	ID3DX11EffectShaderResourceVariable* HeightTile_1;
-	ID3DX11EffectShaderResourceVariable* HeightTile_2;
-	ID3DX11EffectShaderResourceVariable* NormalTile_1;
-	ID3DX11EffectShaderResourceVariable* NormalTile_2;
 };
 
 #pragma endregion
@@ -274,8 +232,6 @@ public:
 
 	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
 	void SetNormalMap(ID3D11ShaderResourceView* tex) { NormalMap->SetResource(tex); }
-
-	ID3DX11EffectTechnique* Light1Tech;
 
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
@@ -315,8 +271,6 @@ public:
 	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
 
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
 	ID3DX11EffectMatrixVariable* Proj;
@@ -351,8 +305,6 @@ public:
 	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
 
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
 	ID3DX11EffectMatrixVariable* Proj;
@@ -385,8 +337,6 @@ public:
 	void SetRadius(const float& v) { Radius->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
 
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* WorldViewProj;
 	ID3DX11EffectMatrixVariable* Proj;
@@ -398,6 +348,69 @@ public:
 	ID3DX11EffectVariable* Spacing;
 	ID3DX11EffectVariable* Radius;
 	ID3DX11EffectVariable* Level;
+};
+
+#pragma endregion
+
+#pragma region QuadScreenWCA
+class QuadScreenWCA : public BaseEffect
+{
+public:
+	QuadScreenWCA(DX::DeviceResources *resources, const std::string& filename);
+	~QuadScreenWCA() {};
+
+	void SetMainDepthMap(ID3D11ShaderResourceView* hMap) { MainDepthMap->SetResource(hMap); }
+	void SetMainTargetMap(ID3D11ShaderResourceView* hMap) { MainTargetMap->SetResource(hMap); }
+	void SetCoordDepthMap(ID3D11ShaderResourceView* hMap) { CoordDepthMap->SetResource(hMap); }
+	void SetCoordTargetMap(ID3D11ShaderResourceView* hMap) { CoordTargetMap->SetResource(hMap); }
+	void SetWaterDepthMap(ID3D11ShaderResourceView* hMap) { WaterDepthMap->SetResource(hMap); }
+	void SetWaterTargetMap(ID3D11ShaderResourceView* hMap) { WaterTargetMap->SetResource(hMap); }
+	void SetCloudsDepthMap(ID3D11ShaderResourceView* hMap) { CloudsDepthMap->SetResource(hMap); }
+	void SetCloudsTargetMap(ID3D11ShaderResourceView* hMap) { CloudsTargetMap->SetResource(hMap); }
+	void SetAtmosphereDepthMap(ID3D11ShaderResourceView* hMap) { AtmosphereDepthMap->SetResource(hMap); }
+	void SetAtmosphereTargetMap(ID3D11ShaderResourceView* hMap) { AtmosphereTargetMap->SetResource(hMap); }
+	void SetSphereDepthPatternMap(ID3D11ShaderResourceView* hMap) { SphereDepthPatternMap->SetResource(hMap); }
+	void SetDepth(const float& V) { Depth->SetRawValue(&V, 0, sizeof(float)); }
+	void SetSize(const float& V) { Size->SetRawValue(&V, 0, sizeof(float)); }
+	void SetWaterRatio(const float& V) { WaterRatio->SetRawValue(&V, 0, sizeof(float)); }
+	void SetCloudsRatio(const float& V) { CloudsRatio->SetRawValue(&V, 0, sizeof(float)); }
+
+	ID3DX11EffectShaderResourceVariable* MainDepthMap;
+	ID3DX11EffectShaderResourceVariable* MainTargetMap;
+	ID3DX11EffectShaderResourceVariable* CoordDepthMap;
+	ID3DX11EffectShaderResourceVariable* CoordTargetMap;
+
+	ID3DX11EffectShaderResourceVariable* WaterDepthMap;
+	ID3DX11EffectShaderResourceVariable* WaterTargetMap;
+	ID3DX11EffectShaderResourceVariable* CloudsDepthMap;
+	ID3DX11EffectShaderResourceVariable* CloudsTargetMap;
+	ID3DX11EffectShaderResourceVariable* AtmosphereDepthMap;
+	ID3DX11EffectShaderResourceVariable* AtmosphereTargetMap;
+
+	ID3DX11EffectShaderResourceVariable* SphereDepthPatternMap;
+
+	ID3DX11EffectVariable* Depth;
+	ID3DX11EffectVariable* Size;
+	ID3DX11EffectVariable* WaterRatio;
+	ID3DX11EffectVariable* CloudsRatio;
+};
+
+#pragma endregion
+
+#pragma region QuadScreenWithCoord
+class QuadScreenWithCoord : public BaseEffect
+{
+public:
+	QuadScreenWithCoord(DX::DeviceResources *resources, const std::string& filename);
+	~QuadScreenWithCoord() {};
+
+	void SetWorld(CXMMATRIX M) { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetViewProj(CXMMATRIX M) { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetSize(const float& V) { Size->SetRawValue(&V, 0, sizeof(float)); }
+
+	ID3DX11EffectMatrixVariable* World;
+	ID3DX11EffectMatrixVariable* ViewProj;
+	ID3DX11EffectVariable* Size;
 };
 
 #pragma endregion
@@ -422,8 +435,6 @@ public:
 	void SetIsDiffuseMap(const bool & isDiffuseM)				{ isDiffuseMap->SetRawValue(&isDiffuseM, 0, sizeof(bool)); }
 	void SetIsSpecularMap(const bool & isSpecularM)				{ isNormalMap->SetRawValue(&isSpecularM, 0, sizeof(bool)); }
 	void SetIsNormalMap(const bool & isNormalM)					{ isNormalMap->SetRawValue(&isNormalM, 0, sizeof(bool)); }
-
-	ID3DX11EffectTechnique* Light1Tech;
 
 	ID3DX11EffectMatrixVariable* World;
 	ID3DX11EffectMatrixVariable* WorldN;
@@ -459,8 +470,6 @@ public:
 	void SetMaterial(const Material& mat)						{ Mat->SetRawValue(&mat, 0, sizeof(Material)); }
 	void SetTS(const float & tS)								{ TS->SetRawValue(&tS, 0, sizeof(float)); }
 
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* World;
 	ID3DX11EffectMatrixVariable* WorldN;
 	ID3DX11EffectMatrixVariable* ViewProj;
@@ -493,8 +502,6 @@ public:
 	void SetNormalTile_1(ID3D11ShaderResourceView* tex)			{ NormalTile_1->SetResource(tex); }
 	void SetNormalTile_2(ID3D11ShaderResourceView* tex)			{ NormalTile_2->SetResource(tex); }
 
-	ID3DX11EffectTechnique* Light1Tech;
-
 	ID3DX11EffectMatrixVariable* World;
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectVectorVariable* EyePosW;
@@ -522,11 +529,14 @@ public:
 
 	static void DestroyAll();
 
+	static RenderToScreen* RenderToScreenFX;
 	static SkyBoxEffect* SkyBoxFX;
 	static TerrainLODEffect* TerrainLODFX;
 	static AtmosphereEffect* AtmosphereFX;
 	static CloudsEffect* CloudsFX;
 	static WaterLODEffect* WaterLODFX;
+	static QuadScreenWCA* QuadScreenWCAFX;
+	static QuadScreenWithCoord* QuadScreenWithCoordFX;
 	static PosNormalTexTanEffect* PosNormalTexTanFX;
 	static BodyEffect* BodyFX;
 	static BillboardEffect* BillboardFX;

@@ -26,7 +26,7 @@ public:
 		SetPosition(XMDOUBLE3(0.0, 0.0, 0.0));
 		SetAngle(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		SetScaling(270000);
-		SetRadius(GetScaling() / 2.0f);
+		SetRadiusOfTerrain(GetScaling() / 2.0f);
 		SetNumPointsInRow(8);
 		SetMaxLevel(6);
 		SetMaxRenderLevel(5);
@@ -199,7 +199,7 @@ public:
 	void SetScaling(double n) { m_scaling = n; }
 
 	float GetRadius() { return m_radius; }
-	void SetRadius(float n) { m_radius = n; }
+	void SetRadiusOfTerrain(float n) { m_radius = n; }
 
 	int16_t GetMaxLevel() { return m_maxLevel; }
 	void SetMaxLevel(int16_t n) { m_maxLevel = n; }

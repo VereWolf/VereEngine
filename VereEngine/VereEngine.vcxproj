@@ -467,6 +467,29 @@
     </Page>
     <Page Include="TreeViewBranch.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\Clouds.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="FX\WaterLOD.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\QuadScreenWCA.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\RenderToScreen.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\QuadScreenWithCoord.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />

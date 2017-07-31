@@ -41,6 +41,7 @@ public:
 	float GetFovY();
 	float GetFovX();
 	float GetFarModifier();
+	float GetFarChange();
 
 	float GetNearWindowWidth();
 	float GetNearWindowHeight();

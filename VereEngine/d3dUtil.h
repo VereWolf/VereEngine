@@ -2,6 +2,8 @@
 
 typedef unsigned short int USING;
 
+#define BUFFERUNIT 0.00000005960464478
+
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef HR
 #define HR(x)													 \

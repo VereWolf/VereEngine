@@ -15,13 +15,11 @@ cbuffer cbPerObject
 	float gRadius;
 	float3 gCentrePos;
 	float3 gOffset;
-	float3 gBinorm;
 	float3 gTang;
 	float gLevel;
 	float gFarZ;
 	float gFarModifier;
 	float3 gCenterOfPlanet;
-	float gRadiusOfPlanet;
 	float gFogStart;
 	float gFogRange;
 	float3 gFogColor;
@@ -121,8 +119,6 @@ struct DomainOut
 	float3 PosW     :POSITION01;
 	float3 PosV     :POSITION02;
 	float3 NormalW	:NORMAL01;
-	//float3 BinormW	:NORMAL02;
-	//float3 TangW	:NORMAL03;
 	float2	TexTess	:TEXCOORD0;
 };
 
@@ -153,16 +149,11 @@ DomainOut DS(PatchTess patchTess,
 	float3 B = normalize(cross(mul(gTang, gWorldN), N));
 	float3 T = normalize(cross(N, B));
 
-	//float3 B = normalize(cross(N, gTang));
-	//float3 T = cross(B, N);
-
 	float3 normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(dout.TexTess.x, dout.TexTess.y), 0).xyz - 1.0f;
 
 	float3x3 TBN = float3x3(T, N, B);
 
 	dout.NormalW = mul(normalT, TBN);
-	//dout.BinormW = normalize(cross(gTang, dout.NormalW));
-	//dout.TangW = cross(dout.NormalW, gBinormW);
 
 	dout.PosW = (H + gRadius) * N + gCentrePos;
 
@@ -177,7 +168,7 @@ DomainOut DS(PatchTess patchTess,
 float4 PS(DomainOut  pin) : SV_Target
 {
 
-	float3 color = float3(1.0f, 1.0f, 1.0f);
+	float3 color = float3(pin.TexTess.x, pin.TexTess.y, 1.0f);
 
 	float3 N = pin.NormalW;
 
@@ -186,7 +177,6 @@ float4 PS(DomainOut  pin) : SV_Target
 	color = (0.6f + 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f)) * color / 1.6f;
 
 	return float4(color, 1.0f);
-	//return float4(N, 1.0f);
 }
 
 technique11 LightTech

@@ -4,7 +4,7 @@
 
 #include "pch.h"
 
-class WaterRenderMessage : public RenderMesage
+class WaterRenderMessage : public RenderMessage
 {
 public:
 	void Use();

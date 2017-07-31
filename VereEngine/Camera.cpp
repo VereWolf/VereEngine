@@ -158,6 +158,11 @@ float Camera::GetFarWindowHeight()
 	return mFarWindowHeight;
 }
 
+float Camera::GetFarChange()
+{
+	return 0.5f * (mFarWindowHeight - mNearWindowHeight) / (mFarZ - mNearZ);
+}
+
 void Camera::SetLens(float fovY, float aspect, float zn, float zf, float mod)
 {
 	mFovY = fovY;

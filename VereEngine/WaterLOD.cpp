@@ -26,7 +26,6 @@ void WaterRenderMessage::Use()
 	((WaterLODEffect*)m_BaseEffect)->SetFarRangeMod(m_FarRangeMod);
 	((WaterLODEffect*)m_BaseEffect)->SetFarModifier(m_FarModifier);
 	((WaterLODEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3(meshCentre.getOrigin()));
-	((WaterLODEffect*)m_BaseEffect)->SetRadiusOfPlanet(1.2f * m_Radius);
 	((WaterLODEffect*)m_BaseEffect)->SetFogStart(500.0f);
 	((WaterLODEffect*)m_BaseEffect)->SetFogRange(10000.0f);
 	((WaterLODEffect*)m_BaseEffect)->SetFogColor(XMFLOAT3(0.1f, 0.3f, 0.9f));

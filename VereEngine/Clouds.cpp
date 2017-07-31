@@ -26,7 +26,6 @@ void CloudsRenderMessage::Use()
 	((CloudsEffect*)m_BaseEffect)->SetFarRangeMod(m_FarRangeMod);
 	((CloudsEffect*)m_BaseEffect)->SetFarModifier(m_FarModifier);
 	((CloudsEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3(meshCentre.getOrigin()));
-	((CloudsEffect*)m_BaseEffect)->SetRadiusOfPlanet(1.2f * m_Radius);
 	((CloudsEffect*)m_BaseEffect)->SetFogStart(500.0f);
 	((CloudsEffect*)m_BaseEffect)->SetFogRange(10000.0f);
 	((CloudsEffect*)m_BaseEffect)->SetFogColor(XMFLOAT3(0.1f, 0.3f, 0.9f));

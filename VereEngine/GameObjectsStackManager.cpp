@@ -161,6 +161,9 @@ void GameObjectsStackManager::DrawScene()
 {
 	GameTextRenderDeviceHandle->SetOffset(0.0f);
 
+	GameRenderDeviceHandle->BindMainRenderTarget();
+	GameRenderDeviceHandle->ClearMainRenderTarget();
+
 	int S = GetGameObjectStackSize();
 
 	PlanetLOD::m_onlyRenderText = false;
@@ -174,6 +177,8 @@ void GameObjectsStackManager::DrawScene()
 				GetMainCamera()->GetFarRangeMod(), GetMainCamera()->GetFarModifier());
 		}
 	}
+
+	GameRenderDeviceHandle->RenderToScreen();
 
 	/*TerrainLOD::m_onlyRenderText = true;
 

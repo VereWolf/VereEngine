@@ -19,6 +19,9 @@ using namespace Concurrency;
 VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
 	m_deviceResources(deviceResources), m_pointerLocation(0.0f, 0.0f)
 {
+	Effects::InitAll(deviceResources.get());
+	InputLayouts::InitAll(deviceResources.get());
+	RenderStates::InitAll(deviceResources.get());
 
 	// Register to be notified if the Device is lost or recreated
 	m_deviceResources->RegisterDeviceNotify(this);
@@ -33,10 +36,6 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	m_gameTextRenderDevice = std::unique_ptr<TextRenderDevice>(new TextRenderDevice(m_deviceResources.get()));
 
 	m_gameObjects = std::unique_ptr<GameObjectsStackManager>(new GameObjectsStackManager(m_deviceResources.get()));
-
-	Effects::InitAll(deviceResources.get());
-	InputLayouts::InitAll(deviceResources.get());
-	RenderStates::InitAll(deviceResources.get());
 
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 

@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-class AtmosphereRenderMessage : public RenderMesage
+class AtmosphereRenderMessage : public RenderMessage
 {
 public:
 	void Use();

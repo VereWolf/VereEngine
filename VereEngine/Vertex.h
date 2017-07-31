@@ -22,7 +22,7 @@ namespace Vertex
 		XMFLOAT3 Position;
 		XMFLOAT3 Tangent;
 		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
+		XMFLOAT2 TexTess;
 	};
 
 	struct Body
@@ -52,6 +52,7 @@ class InputLayoutDesc
 public:
 	static const D3D11_INPUT_ELEMENT_DESC SkyBox[2];
 	static const D3D11_INPUT_ELEMENT_DESC TerrainLOD[2];
+	static const D3D11_INPUT_ELEMENT_DESC Atmosphere[2];
 	static const D3D11_INPUT_ELEMENT_DESC PosNormalTexTan[4];
 	static const D3D11_INPUT_ELEMENT_DESC Body[10];
 	static const D3D11_INPUT_ELEMENT_DESC Billboard[3];
