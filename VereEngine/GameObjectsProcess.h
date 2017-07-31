@@ -1,5 +1,4 @@
-#ifndef GAME_OBJECTS_PROCESS_H
-#define GAME_OBJECTS_PROCESS_H
+#pragma once
 
 #include "pch.h"
 
@@ -17,6 +16,3 @@ private:
 	int m_maxProcessObjects;
 	int m_curentProcessObjects;
 };
-
-
-#endif GAME_OBJECTS_PROCESS_H

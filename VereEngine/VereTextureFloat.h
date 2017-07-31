@@ -1,5 +1,4 @@
-#ifndef VERETEXTUE_FLOAT_H
-#define VERETEXTURE_FLOAT_H
+#pragma once
 
 #include "pch.h"
 
@@ -122,5 +121,3 @@ private:
 	int m_height;
 	int m_width;
 };
-
-#endif // VERETEXTURE_FLOAT_H

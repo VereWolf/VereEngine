@@ -3,6 +3,7 @@
 #include "StepTimer.h"
 #include "DeviceResources.h"
 #include "StreamingDataManager.h"
+#include "GameComponentsManager.h"
 #include "RenderDevice.h"
 #include "TextRenderDevice.h"
 #include "GameObjectsStackManager.h"
@@ -18,7 +19,9 @@ namespace VereEngine
 		void CreateWindowSizeDependentResources();
 		void TrackingUpdate(XMFLOAT2 position) { m_pointerLocation = position; }
 		void StartRenderLoop();
+		void StartExpensiveLoop();
 		void StopRenderLoop();
+		void StopExpensiveLoop();
 		Concurrency::critical_section& GetCriticalSection() { return m_criticalSection; }
 
 		// IDeviceNotify
@@ -28,6 +31,7 @@ namespace VereEngine
 	private:
 		void ProcessInput();
 		void Update();
+		void UpdateExpensive();
 		bool Render();
 
 		// Cached pointer to device resources.
@@ -35,11 +39,13 @@ namespace VereEngine
 
 		// TODO: Replace with your own content renderers.
 		std::shared_ptr<StreamingDataManager> m_gameStreamingData;
+		std::shared_ptr<GameComponentsManager> m_gameComponentsManager;
 		std::shared_ptr<RenderDevice> m_gameRenderDevice;
 		std::shared_ptr<TextRenderDevice> m_gameTextRenderDevice;
 		std::shared_ptr<GameObjectsStackManager> m_gameObjects;
 
 		Windows::Foundation::IAsyncAction^ m_renderLoopWorker;
+		Windows::Foundation::IAsyncAction^ m_expensiveLoopWorker;
 		Concurrency::critical_section m_criticalSection;
 
 		// Rendering loop timer.

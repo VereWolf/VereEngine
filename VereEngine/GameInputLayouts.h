@@ -1,5 +1,4 @@
-#ifndef GAME_IPUT_LAYOUTS_H
-#define GAME_IPUT_LAYOUTS_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -18,5 +17,3 @@ public:
 private:
 	ID3D11InputLayout* m_gameInputLayouts;
 };
-
-#endif //GAME_IPUT_LAYOUTS_H

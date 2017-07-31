@@ -1,5 +1,4 @@
-#ifndef GAME_OBJECTS_STACK_H
-#define GAME_OBJECTS_STACK_H
+#pragma once
 
 #include "pch.h"
 #include "IDRegistr.h"
@@ -30,5 +29,3 @@ private:
 	IDRegistr *idObjectStack;
 	std::vector<int> m_gameObjects;
 };
-
-#endif //GAME_OBJECTS_STACK_H

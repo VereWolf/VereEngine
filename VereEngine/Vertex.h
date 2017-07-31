@@ -1,5 +1,4 @@
-#ifndef VERTEX_H
-#define VERTEX_H
+#pragma once
 
 //#include "d3dUtil.h"
 
@@ -12,22 +11,10 @@ namespace Vertex
 		XMFLOAT2 Tex;
 	};
 
-	struct TerrainBlock
-	{
-		XMFLOAT3 Pos;
-		XMFLOAT2 TexTess;
-	};
-
 	struct TerrainLOD
 	{
 		XMFLOAT3 Pos;
 		XMFLOAT2 TexTess;
-	};
-
-	struct Atmosphere
-	{
-		XMFLOAT3 Pos;
-		XMFLOAT3 TexTess;
 	};
 
 	struct PosNormalTexTan
@@ -35,7 +22,7 @@ namespace Vertex
 		XMFLOAT3 Position;
 		XMFLOAT3 Tangent;
 		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
+		XMFLOAT2 TexTess;
 	};
 
 	struct Body
@@ -64,7 +51,6 @@ class InputLayoutDesc
 {
 public:
 	static const D3D11_INPUT_ELEMENT_DESC SkyBox[2];
-	static const D3D11_INPUT_ELEMENT_DESC TerrainBlock[2];
 	static const D3D11_INPUT_ELEMENT_DESC TerrainLOD[2];
 	static const D3D11_INPUT_ELEMENT_DESC Atmosphere[2];
 	static const D3D11_INPUT_ELEMENT_DESC PosNormalTexTan[4];
@@ -79,13 +65,11 @@ public:
 	static void DestroyAll();
 
 	static ID3D11InputLayout* SkyBox;
-	static ID3D11InputLayout* TerrainBlock;
 	static ID3D11InputLayout* TerrainLOD;
-	static ID3D11InputLayout* TerrainPlanetLOD;
 	static ID3D11InputLayout* Atmosphere;
+	static ID3D11InputLayout* Clouds;
+	static ID3D11InputLayout* WaterLOD;
 	static ID3D11InputLayout* PosNormalTexTan;
 	static ID3D11InputLayout* Body;
 	static ID3D11InputLayout* Billboard;
 };
-
-#endif // VERTEX_H

@@ -1,5 +1,4 @@
-#ifndef SUN_H
-#define SUN_H
+#pragma once
 
 #include "pch.h"
 
@@ -89,5 +88,3 @@ private:
 
 	XMFLOAT3 m_baseVector;
 };*/
-
-#endif //SUN_H

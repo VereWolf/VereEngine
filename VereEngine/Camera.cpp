@@ -23,9 +23,7 @@ void Camera::Init()
 	SetLens(0.5f*PI, 1.78f, 0.2f, 1000000000.0f, 0.0001f);
 }
 
-void Camera::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-	float camFarZ, btScalar heightFar, btScalar aspect,
-	float camFarRangeMod, float camModifier)
+void Camera::Render()
 {
 }
 
@@ -156,6 +154,11 @@ float Camera::GetFarWindowWidth()
 float Camera::GetFarWindowHeight()
 {
 	return mFarWindowHeight;
+}
+
+float Camera::GetFarChange()
+{
+	return 0.5f * (mFarWindowHeight - mNearWindowHeight) / (mFarZ - mNearZ);
 }
 
 void Camera::SetLens(float fovY, float aspect, float zn, float zf, float mod)

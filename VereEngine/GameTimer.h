@@ -1,15 +1,6 @@
-#ifndef GAMETIMER_H
-#define GAMETIMER_H
+#pragma once
 
-#define GAME_TIMER_DLL_EXPORTS
-#ifdef GAME_TIMER_DLL_EXPORTS
-#define GAME_TIMER_API __declspec( dllexport ) 
-
-#else
-#define GAME_TIMER_API __declspec( dllimport )
-#endif
-
-class GAME_TIMER_API GameTimer
+class GameTimer
 {
 public:
 	GameTimer();
@@ -36,5 +27,3 @@ private:
 
 	bool mStopped;
 };
-
-#endif //GAMETIMER_H

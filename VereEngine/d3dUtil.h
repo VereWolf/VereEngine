@@ -1,7 +1,8 @@
-#ifndef _D3DUTIL_H_
-#define _D3DUTIL_H_
+#pragma once
 
 typedef unsigned short int USING;
+
+#define BUFFERUNIT 0.00000005960464478
 
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef HR
@@ -34,6 +35,4 @@ if (FAILED(hr))													 \
 
 #define ReleaseCOM(x) { if(x){ x->Release(); x = 0; } }
 
-#define SafeDelete(x) { delete x; x = 0; }
-
-#endif
+#define SafeDelete(x) {if(x != 0) delete x; x = 0; }

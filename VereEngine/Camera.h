@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "pch.h"
 #include "GameObject.h"
@@ -14,9 +13,7 @@ public:
 	}
 
 	void Init();
-	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-		float camFarZ, btScalar heightFar, btScalar aspect,
-		float camFarRangeMod, float camModifier);
+	void Render();
 	void Update();
 
 	GameObject* Clone() { return new Camera(*this); }
@@ -42,6 +39,7 @@ public:
 	float GetFovY();
 	float GetFovX();
 	float GetFarModifier();
+	float GetFarChange();
 
 	float GetNearWindowWidth();
 	float GetNearWindowHeight();
@@ -92,5 +90,3 @@ private:
 
 	bool mMainCamera;
 };
-
-#endif // CAMERA_H

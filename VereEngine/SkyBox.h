@@ -1,6 +1,4 @@
-
-#ifndef CUBE_BOX
-#define CUBE_BOX
+#pragma once
 
 #include "pch.h"
 #include "Vertex.h"
@@ -28,6 +26,4 @@ private:
 
 	Sun m_sun;
 };*/
-
-#endif //CUBE_BOX
 

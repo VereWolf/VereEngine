@@ -1,5 +1,4 @@
-#ifndef STATIC_MESH
-#define STATIC_MESH
+#pragma once
 
 #include "Vertex.h"
 #include "LoadVMB.h"
@@ -47,5 +46,3 @@ private:
 	std::vector<Vertex::PosNormalTexTan> mVertices;
 	std::vector<UINT> mIndices;
 };
-
-#endif //STATIC_MESH

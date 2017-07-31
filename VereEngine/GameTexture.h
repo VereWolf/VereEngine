@@ -1,5 +1,4 @@
-#ifndef GAME_TEXTURE_H
-#define GAME_TEXTURE_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -16,5 +15,3 @@ public:
 private:
 	ID3D11ShaderResourceView* m_gameTextureSRV;
 };
-
-#endif //GAME_TEXTURE_H

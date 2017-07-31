@@ -1,5 +1,4 @@
-#ifndef LOAD_VMB
-#define LOAD_VMB
+#pragma once
 
 #include "LightHelper.h"
 #include "Vertex.h"
@@ -34,6 +33,3 @@ private:
 	std::vector<Vertex::Body> mBaseVertex;
 	std::vector<std::vector<VertexOfTransformation>> mTransformations;
 };
-
-
-#endif //LOAD_VMB

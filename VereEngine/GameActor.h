@@ -1,6 +1,5 @@
-/*#ifndef GAME_ACTOR_H
-#define GAME_ACTOR_H
-
+#pragma once
+/*
 #include "pch.h"
 #include "GameObject.h"
 #include "GameObjectsStackManager.h"
@@ -89,6 +88,4 @@ private:
 	XMDOUBLE3 m_up;
 	XMDOUBLE3 m_right;
 	XMDOUBLE3 m_top;
-};
-
-#endif //GAME_ACTOR_H*/
+};*/

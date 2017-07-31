@@ -18,9 +18,7 @@ void GameObjectSpace::Init()
 	m_IDRegistr = new IDRegistr(16);
 };
 
-void GameObjectSpace::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-	float camFarZ, btScalar heightFar, btScalar aspect,
-	float camFarRangeMod, float camModifier)
+void GameObjectSpace::Render()
 {
 }
 

@@ -1,5 +1,4 @@
-#ifndef GENERATE_MESH
-#define GENERATE_MESH
+#pragma once
 
 #include "pch.h"
 #include "vertex.h"
@@ -136,8 +135,8 @@ public:
 
 					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).Position = points[2];
 
-					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).Tex.x = (float)x / (float)(numVertexInRow - 1);
-					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).Tex.y = (float)y / (float)(numVertexInRow - 1);
+					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).TexTess.x = (float)x / (float)(numVertexInRow - 1);
+					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).TexTess.y = (float)y / (float)(numVertexInRow - 1);
 
 					vertices.at(i * pow(numVertexInRow, 2.0f) + y * numVertexInRow + x).Normal = normal;
 					
@@ -219,5 +218,3 @@ public:
 		}
 	}
 };
-
-#endif

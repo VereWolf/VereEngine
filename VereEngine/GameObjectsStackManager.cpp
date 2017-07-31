@@ -161,21 +161,28 @@ void GameObjectsStackManager::DrawScene()
 {
 	GameTextRenderDeviceHandle->SetOffset(0.0f);
 
+	GameRenderDeviceHandle->BindMainRenderTarget();
+	GameRenderDeviceHandle->ClearMainRenderTarget();
+
 	int S = GetGameObjectStackSize();
 
-	TerrainPlanetLOD::m_onlyRenderText = false;
+	PlanetLOD::m_onlyRenderText = false;
+	RenderMessage::m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	RenderMessage::m_CameraOffset = GetMainCamera()->btOffset();
+	RenderMessage::m_View = GetMainCamera()->View();
+	RenderMessage::m_Proj = GetMainCamera()->Proj();
 
 	for (int i = 0; i < S; ++i)
 	{
 		if (GetGameObjectByID(i) != NULL && GetGameObjectByID(i)->GetRenderId() >= 0)
 		{
-			GetGameObjectByID(i)->Render(GetMainCamera()->btOffset(), GetMainCamera()->View(), GetMainCamera()->Proj(),
-				GetMainCamera()->GetFarZ(), GetMainCamera()->GetFarWindowHeight(), GetMainCamera()->GetAspect(),
-				GetMainCamera()->GetFarRangeMod(), GetMainCamera()->GetFarModifier());
+			GetGameObjectByID(i)->Render();
 		}
 	}
 
-	/*TerrainPlanetLOD::m_onlyRenderText = true;
+	GameRenderDeviceHandle->RenderToScreen();
+
+	/*TerrainLOD::m_onlyRenderText = true;
 
 	for (int i = 0; i < S; ++i)
 	{

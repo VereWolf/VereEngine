@@ -1,19 +1,4 @@
-﻿#include "pch.h"
-#include "VereEngineMain.h"
-#include "DirectXHelper.h"
-#include "RenderState.h"
-#include "Effects.h"
-#include "Vertex.h"
-#include "GenerateMesh.h"
-
-using namespace VereEngine;
-using namespace Windows::Foundation;
-using namespace Windows::System::Threading;
-using namespace Windows::System;
-using namespace Windows::UI::Core;
-using namespace Windows::UI::Xaml;
-using namespace Concurrency;
-
+﻿
 #include "pch.h"
 #include "VereEngineMain.h"
 #include "DirectXHelper.h"
@@ -34,6 +19,9 @@ using namespace Concurrency;
 VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
 	m_deviceResources(deviceResources), m_pointerLocation(0.0f, 0.0f)
 {
+	Effects::InitAll(deviceResources.get());
+	InputLayouts::InitAll(deviceResources.get());
+	RenderStates::InitAll(deviceResources.get());
 
 	// Register to be notified if the Device is lost or recreated
 	m_deviceResources->RegisterDeviceNotify(this);
@@ -41,15 +29,13 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	// TODO: Replace this with your app's content initialization.
 	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get()));
 
-	m_gameRenderDevice = std::unique_ptr<RenderDevice>(new RenderDevice(m_deviceResources.get()));
+	m_gameComponentsManager = std::unique_ptr<GameComponentsManager>(new GameComponentsManager(m_deviceResources.get()));
+
+	m_gameRenderDevice = std::unique_ptr<RenderDevice>(new RenderDevice(m_deviceResources.get(), 100000000000.0f, 1.0f, 0.1f));
 
 	m_gameTextRenderDevice = std::unique_ptr<TextRenderDevice>(new TextRenderDevice(m_deviceResources.get()));
 
 	m_gameObjects = std::unique_ptr<GameObjectsStackManager>(new GameObjectsStackManager(m_deviceResources.get()));
-
-	Effects::InitAll(deviceResources.get());
-	InputLayouts::InitAll(deviceResources.get());
-	RenderStates::InitAll(deviceResources.get());
 
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 
@@ -68,7 +54,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(10.0, 100.0, 0.0));
 
-	TerrainPlanet *likeE = new TerrainPlanet;
+	Planet *likeE = new Planet;
 
 	int id1 = GameObjectStackHandle->CreateObjectToReg(likeE);
 
@@ -76,7 +62,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2 = GameObjectStackHandle->CreateObjectToReg(likeJ);
 
-	//TerrainPlanet *planet = new TerrainPlanet;
+	//Planet *planet = new Planet;
 
 	//int id2 = GameObjectStackHandle->CreateObjectToReg(planet);
 
@@ -85,8 +71,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
 
-	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 3, 3, 13, 1);
-	//((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 3, 3, 13, 1, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f);
+	//((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
 
 	//GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000, 7150000, 7150000), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000, __nullptr);
 
@@ -95,8 +81,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	int id3 = GameObjectStackHandle->CreateObjectToReg(circleMoonSpace);
 	int id3a = GameObjectStackHandle->CreateObject(id3, btVector3(34000000.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(1.0, 1.0, 1.0), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000.0, __nullptr);
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(id2a);
-	((TerrainPlanet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
-	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(0.0, 350000.0, 0.0));
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
+	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(350000.0, 100.0, 0.0));
 
 	GameObjectSpace *circlePlanetSpace = new GameObjectSpace;
 
@@ -152,9 +138,37 @@ void VereEngineMain::StartRenderLoop()
 	m_renderLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 }
 
+void VereEngineMain::StartExpensiveLoop()
+{
+	// If the expensive loop is already running then do not start another thread.
+	if (m_expensiveLoopWorker != nullptr && m_expensiveLoopWorker->Status == AsyncStatus::Started)
+	{
+		return;
+	}
+
+	// Create a task that will be run on a background thread.
+	auto workItemHandler = ref new WorkItemHandler([this](IAsyncAction ^ action)
+	{
+		// Calculate the updated expensive proccess.
+		while (action->Status == AsyncStatus::Started)
+		{
+			critical_section::scoped_lock lock(m_criticalSection);
+			UpdateExpensive();
+		}
+	});
+
+	// Run task on a dedicated normal priority background thread.
+	m_expensiveLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::Normal, WorkItemOptions::TimeSliced);
+}
+
 void VereEngineMain::StopRenderLoop()
 {
 	m_renderLoopWorker->Cancel();
+}
+
+void VereEngineMain::StopExpensiveLoop()
+{
+	m_expensiveLoopWorker->Cancel();
 }
 
 // Updates the application state once per frame.
@@ -168,6 +182,12 @@ void VereEngineMain::Update()
 		// TODO: Replace this with your app's content update functions.
 		m_gameObjects->Update();
 	});
+}
+
+// Updates the application for expensive proccess.
+void VereEngineMain::UpdateExpensive()
+{
+	m_gameComponentsManager->Update();
 }
 
 // Process all input from the user before updating game state

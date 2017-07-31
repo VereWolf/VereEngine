@@ -1,5 +1,4 @@
-#ifndef GAME_EFFECT_H
-#define GAME_EFFECT_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -11,11 +10,9 @@ public:
 	GameEffect() {}
 	~GameEffect() { ReleaseEffect(); }
 
-	void SetEffect(BaseEffect* T) { m_gameEffect = T; }
-	BaseEffect* GetEffect() { return m_gameEffect; }
+	void SetEffect(Effect* T) { m_gameEffect = T; }
+	Effect* GetEffect() { return m_gameEffect; }
 	inline void ReleaseEffect() { SafeDelete(m_gameEffect); }
 private:
-	BaseEffect* m_gameEffect;
+	Effect* m_gameEffect;
 };
-
-#endif //GAME_EFFECT_H

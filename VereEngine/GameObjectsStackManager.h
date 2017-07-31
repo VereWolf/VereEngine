@@ -1,7 +1,6 @@
 /*Create by Michal Cizek and it is stack for working with different objects*/
 
-#ifndef GAME_OBJECT_STACK_MANAGER
-#define GAME_OBJECT_STACK_MANAGER
+#pragma once
 
 #include "pch.h"
 #include "DeviceResources.h"
@@ -103,5 +102,3 @@ private:
 };
 
 __declspec(selectany) GameObjectsStackManager *GameObjectStackHandle = 0;
-
-#endif //GAME_OBJECT_STACK_MANAGER
