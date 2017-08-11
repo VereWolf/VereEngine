@@ -480,7 +480,7 @@ int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVert
 		{
 			if (i == 0 || i == PIC + 1 || j == 0 || j == PIC + 1)
 			{
-				vertices[j * (PIC + 2) + i].Pos.y = -0.2f;
+				vertices[j * (PIC + 2) + i].Pos.y = -0.02f;
 			}
 			else
 			{
@@ -534,54 +534,30 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 	btVector3 V2 = btVector3(0.0, 0.0, 0.0);
 	std::vector<float> map(2 * (height + 2 * HE2) * (width + 2 * WE2));
 
-	//for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
-		int i = 2;
-		for (int m = 0; m < PL; ++m)
+		for (int y = 0; y < ((int)height + 2 * HE2); y += 1)
 		{
-			for (int n = 0; n < PL; ++n)
+			for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
 			{
-				H = -0.5 - HE1 + ofs;
-				for (int y = 0; y < ((int)height + 2 * HE2); y += 1)
-				{
-					W = -0.5 - WE1 + ofs;
-					for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
-					{
-						V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
-						map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
-						map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
-						W += WI;
-					}
-					H += HI;
-				}
-				int id = GameStreamingDataHandle->CreateStreamingData(&map.at(0), sizeof(float) * map.size());
-
-				//Platform::String ^str;
-
-				stringstream str;
-
-				/*if (level == 0)
-				{
-					str = "coord_" + m_posfix[i] + ".txt";
-				}
-				else
-				{
-					str = "coord_" + m_posfix[i] + "_" + level + "_" + n + "_" + m + ".txt";
-				}*/
-				
-				if (level == 0)
-				{
-					str << "coord_" << GetPosFix(i) << ".txt";
-				}
-				else
-				{
-					str << "coord_" << GetPosFix(i) << "_" << to_string((int)level) << "_" + to_string(n) << "_" + to_string(m) << ".txt";
-				}
-
-				GameStreamingDataHandle->SaveData(str.str(), id);
-				GameStreamingDataHandle->DeleteStreamingData(id);
+				H = ((float)(y - HE2)) / height;
+				W = ((float)(x - WE2)) / width;
+				V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
+				map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
+				map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
 			}
 		}
+		int id = GameStreamingDataHandle->CreateStreamingData(&map.at(0), sizeof(float) * map.size());
+
+		stringstream str;
+
+		if (level == 0)
+		{
+			str << "coord_" << GetPosFix(i) << ".txt";
+		}
+
+		GameStreamingDataHandle->SaveData(str.str(), id);
+		GameStreamingDataHandle->DeleteStreamingData(id);
 	}
 }
 

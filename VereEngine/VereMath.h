@@ -12,7 +12,7 @@ struct VereMath
 		return XMFLOAT3X3(
 			m.getRow(0).getX(), m.getRow(1).getX(), m.getRow(2).getX(),
 			m.getRow(0).getY(), m.getRow(1).getY(), m.getRow(2).getY(),
-			m.getRow(0).getZ(), m.getRow(21).getZ(), m.getRow(2).getZ());
+			m.getRow(0).getZ(), m.getRow(1).getZ(), m.getRow(2).getZ());
 	}
 	inline static XMFLOAT4X4 ConvertToXMFLOAT4X4(btTransform t)
 	{

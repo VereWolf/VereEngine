@@ -70,6 +70,7 @@ public:
 	void SetFogWStart(const float& v) { FogWStart->SetRawValue(&v, 0, sizeof(float)); }
 	void SetFogWRange(const float& v) { FogWRange->SetRawValue(&v, 0, sizeof(float)); }
 	void SetCenterOfPlanet(const XMFLOAT3& v) { CenterOfPlanet->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetDirectOfPlanet(const XMFLOAT3& v) { DirectOfPlanet->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
 	void SetSkyColor(const XMFLOAT4& v) { SkyColor->SetRawValue(&v, 0, sizeof(XMFLOAT4)); }
 	void SetRadiusOfTerrain(const float& v) { RadiusOfTerrain->SetRawValue(&v, 0, sizeof(float)); }
 	void SetRadiusOfWater(const float& v) { RadiusOfWater->SetRawValue(&v, 0, sizeof(float)); }
@@ -113,6 +114,7 @@ public:
 	ID3DX11EffectVariable* FogWStart;
 	ID3DX11EffectVariable* FogWRange;
 	ID3DX11EffectVectorVariable* CenterOfPlanet;
+	ID3DX11EffectVectorVariable* DirectOfPlanet;
 	ID3DX11EffectVariable* RadiusOfTerrain;
 	ID3DX11EffectVariable* RadiusOfWater;
 	ID3DX11EffectVariable* RadiusOfClouds;
@@ -185,6 +187,9 @@ public:
 	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
 
+	void SetInverseSide(CXMMATRIX &M) { InverseSide->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetSide(const float& v) { Side->SetRawValue(&v, 0, sizeof(float)); }
+
 	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
 	void SetNormalMap(ID3D11ShaderResourceView* tex) { NormalMap->SetResource(tex); }
 
@@ -193,6 +198,9 @@ public:
 	ID3DX11EffectVectorVariable* Tang;
 	ID3DX11EffectVariable* Spacing;
 	ID3DX11EffectVariable* Level;
+
+	ID3DX11EffectMatrixVariable* InverseSide;
+	ID3DX11EffectVariable* Side;
 
 	ID3DX11EffectShaderResourceVariable* HeightMap;
 	ID3DX11EffectShaderResourceVariable* NormalMap;

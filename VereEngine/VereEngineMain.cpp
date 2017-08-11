@@ -31,7 +31,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	m_gameComponentsManager = std::unique_ptr<GameComponentsManager>(new GameComponentsManager(m_deviceResources.get()));
 
-	m_gameRenderDevice = std::unique_ptr<RenderDevice>(new RenderDevice(m_deviceResources.get(), 100000000000.0f, 1.0f, 0.1f));
+	m_gameRenderDevice = std::unique_ptr<RenderDevice>(new RenderDevice(m_deviceResources.get(), 1.0f));
 
 	m_gameTextRenderDevice = std::unique_ptr<TextRenderDevice>(new TextRenderDevice(m_deviceResources.get()));
 
@@ -71,8 +71,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
 
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 3, 3, 13, 1, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f);
-	//((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 4);
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 4, 4, 13, 1, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f);
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 0);
 
 	//GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000, 7150000, 7150000), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000, __nullptr);
 

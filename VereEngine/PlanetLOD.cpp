@@ -67,11 +67,11 @@ void PlanetLOD::Render()
 	{
 		btTransform M = RenderMessage::m_CameraOffset * GT;
 
-		//btScalar distance = (M * m_CentreT).length();
-		btVector3 coord = PlanetCordinateMat::GetCoordForCube(dir,
-			btTransform(m_data->GetBlockAnglMatrix(m_side))) * (1.0 / S + 1.0) - btVector3(0.5 * S, 0.5 * S, 0.0);
-		
-		btScalar distance = -1.0;
+		btVector3 coord = (PlanetCordinateMat::GetCoordForCube(dir,
+			btTransform(m_data->GetBlockAnglMatrix(m_side))) + btVector3(0.5, 0.5, 0.0)) / S;
+
+		btScalar distance = -1.0f;
+
 		if (coord.getZ() == 0.0)
 		{
 			distance = btVector3(coord.getX() - m_coord.x, coord.getY() - m_coord.y, 0.0).length();
@@ -87,12 +87,12 @@ void PlanetLOD::Render()
 			}
 		}
 
-		if (m_isNewLevel == false && distance != -1 && distance < 1.7 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
+		if (m_isNewLevel == false && distance >= 0.0 && distance < 1.5 && m_level < m_data->GetMaxLevel() && m_isCreateNewLevelInProcess == false)
 		{
 			m_data->m_planetElementsInProcess.GiveElement(GetId());
 			SetProccessed(1);
 		}
-		else if (m_isNewLevel == true && (distance > 1.8 || distance == -1))
+		else if (m_isNewLevel == true && (distance > 1.55 || distance == -1))
 		{
 			m_blocks[0]->Destroy();
 			m_blocks[0] = NULL;
@@ -125,22 +125,22 @@ void PlanetLOD::Render()
 
 		btVector3 Vecd = Mat * m_CentreT;
 
-		//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, heightFar, aspect, Mat))
+		if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 		{
 			DrawTerrain();
 		}
 
-		//if (VereMath::FrustrumCulling2(m_CentreW, m_OffsetCubeW, RenderMessage::m_FarZ, heightFar, aspect, Mat))
+		if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 		{
 			DrawWater();
 		}
 
-		//if (VereMath::FrustrumCulling2(m_CentreA, m_OffsetCubeA, RenderMessage::m_FarZ, heightFar, aspect, Mat))
+		if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 		{
 			DrawAtmosphere();
 		}
 
-		//if (VereMath::FrustrumCulling2(m_CentreC, m_OffsetCubeC, RenderMessage::m_FarZ, heightFar, aspect, Mat))
+		if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 		{
 			DrawClouds();
 		}
@@ -168,12 +168,16 @@ void PlanetLOD::DrawTerrain()
 	message.m_Scaling = btTransform(btMatrix3x3(S2, 0.0, 0.0, 0.0, S2, 0.0, 0.0, 0.0, S2), btVector3(0.0, 0.0, 0.0));
 	message.m_Transform = m_data->GetWorldTransform();
 	message.m_Position = m_position;
+	message.m_Coord = m_coord;
 	message.m_AngleMatrix = AM;
 	message.m_Coord = m_coord;
 	message.m_Spacing1 = S;
 	message.m_Spacing2 = S2;
 	message.m_Level = m_level;
 	message.m_Tangent = m_data->GetTangent();
+	
+	message.m_InverseSide = m_data->GetBlockAnglMatrix(m_side).inverse();
+	message.m_Side = m_side;
 
 	if (m_idHeightMap >= 0)
 	{

@@ -21,6 +21,14 @@ float CalcFog(float3 centerOfPlanet, float3 posOfObject, float3 posOfCamera, flo
 	{
 		return (1.0f - abs(dot(normalize(O), -normalize(centerOfPlanet))));
 	}
+	else if (LC > 0.95f * radiusOfAtmosphere)
+	{
+		float r1 = (1.0f - abs(dot(normalize(O), -normalize(centerOfPlanet))));
+		float r2 = ((0.5f * (LO + LC)) * RR) * (L * RR);
+		float i = 20.0f * (LC * RR - 0.95);
+
+		return (i * r1 + (1.0f - i) * r2);
+	}
 
 	return ((0.5f * (LO + LC)) * RR) * (L * RR);
 }

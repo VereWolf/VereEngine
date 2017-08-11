@@ -58,6 +58,7 @@ BaseEffect::BaseEffect(DX::DeviceResources *resources, const std::string& filena
 	FogWStart = mFX->GetVariableByName("gFogWStart");
 	FogWRange = mFX->GetVariableByName("gFogWRange");
 	CenterOfPlanet = mFX->GetVariableByName("gCenterOfPlanet")->AsVector();
+	DirectOfPlanet = mFX->GetVariableByName("gDirectOfPlanet")->AsVector();
 	RadiusOfTerrain = mFX->GetVariableByName("gRadiusOfTerrain");
 	RadiusOfWater = mFX->GetVariableByName("gRadiusOfWater");
 	RadiusOfClouds = mFX->GetVariableByName("gRadiusOfClouds");
@@ -168,6 +169,10 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 	Tang = mFX->GetVariableByName("gTang")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
 	Level = mFX->GetVariableByName("gLevel");
+	Side = mFX->GetVariableByName("gSide");
+
+	InverseSide = mFX->GetVariableByName("gInverseSide")->AsMatrix();
+	Side = mFX->GetVariableByName("gSide");
 
 	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
 	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();

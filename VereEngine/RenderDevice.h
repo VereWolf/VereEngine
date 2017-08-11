@@ -43,6 +43,8 @@ public:
 	static float m_FarZ;
 	static float m_FarRangeMod;
 	static float m_FarModifier;
+	static float m_HeightFar;
+	static float m_Aspect;
 	ID3D11RasterizerState* m_RasterizeState;
 	ID3D11BlendState * m_BlendState;
 	static D3D11_VIEWPORT * m_ViewPort;
@@ -61,7 +63,7 @@ class RenderDevice
 {
 public:
 	RenderDevice();
-	RenderDevice(DX::DeviceResources *resources, float farZ, float farRangeMod, float farModifier);
+	RenderDevice(DX::DeviceResources *resources, float farRangeMod);
 	~RenderDevice();
 	void Init(DX::DeviceResources *resources);
 

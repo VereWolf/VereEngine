@@ -16,7 +16,7 @@ void TerrainRenderMessage::Use()
 	mesh = meshCentre * mesh;
 
 	btTransform meshN = btTransform(btMatrix3x3(S * S2, 0.0, 0.0, 0.0, S * S2, 0.0, 0.0, 0.0, S * S2), m_Position + btVector3(0.0, 0.5 * S2, 0.0));
-	meshN = btTransform(m_Transform.getBasis()) * btTransform(m_AngleMatrix) * meshN;
+	meshN = btTransform(m_Transform.getBasis()) * meshN;
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
@@ -25,7 +25,11 @@ void TerrainRenderMessage::Use()
 	((TerrainLODEffect*)m_BaseEffect)->SetSpacing(((float)S2));
 	((TerrainLODEffect*)m_BaseEffect)->SetLevel(1.0f / pow(2, m_Level));
 	((TerrainLODEffect*)m_BaseEffect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((TerrainLODEffect*)m_BaseEffect)->SetTang(XMFLOAT3(m_Tangent.getX(), m_Tangent.getY(), m_Tangent.getZ()));
+
+	((TerrainLODEffect*)m_BaseEffect)->SetInverseSide(XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(m_InverseSide)));
+	((TerrainLODEffect*)m_BaseEffect)->SetSide(m_Side);
+
 	((TerrainLODEffect*)m_BaseEffect)->SetHeightMap(m_HeightSRV);
 	((TerrainLODEffect*)m_BaseEffect)->SetNormalMap(m_NormalSRV);
-	((TerrainLODEffect*)m_BaseEffect)->SetTang(XMFLOAT3(m_Tangent.getX(), m_Tangent.getY(), m_Tangent.getZ()));
 }

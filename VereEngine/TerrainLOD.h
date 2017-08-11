@@ -15,6 +15,9 @@ public:
 	float m_Level;
 	btVector3 m_Tangent;
 
+	btMatrix3x3 m_InverseSide;
+	float m_Side;
+
 	ID3D11ShaderResourceView * m_HeightSRV;
 	ID3D11ShaderResourceView * m_NormalSRV;
 };

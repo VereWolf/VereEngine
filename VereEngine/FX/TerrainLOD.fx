@@ -1,5 +1,6 @@
 #include "LightHelper.fx"
 #include "AtmosphereHelper.fx"
+#include "CoordHelper.fx"
 
 cbuffer cbPerFrame
 {
@@ -21,9 +22,12 @@ cbuffer cbPerObject
 	float gFarZ;
 	float gFarModifier;
 	float3 gCenterOfPlanet;
+	float3 gDirectOfPlanet;
 	float3 gFogAColor;
 	float3 gFogWColor;
 	float gFogWRange;
+	float3x3 gInverseSide;
+	float gSide;
 };
 
 float c = 0.1f;

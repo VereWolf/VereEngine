@@ -15,7 +15,7 @@ void WaterRenderMessage::Use()
 	mesh = meshCentre * mesh;
 
 	btTransform meshN = btTransform(btMatrix3x3(S * S2, 0.0, 0.0, 0.0, S * S2, 0.0, 0.0, 0.0, S * S2), m_Position + btVector3(0.0, 0.5 * S2, 0.0));
-	meshN = btTransform(m_Transform.getBasis()) * btTransform(m_AngleMatrix) * meshN;
+	meshN = btTransform(m_Transform.getBasis()) * meshN;
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 

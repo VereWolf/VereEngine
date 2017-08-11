@@ -42,7 +42,9 @@ void IDRegistr::ReturnElement(int id)
 
 	std::vector<int> buffer(m_level);
 
-	if (bs[0] == 0)
+	if (m_level <= 0) return;
+
+	if (bs[m_level - 1] == 0)
 	{
 		buffer[0] = m_reg[0].branches.x;
 	}
@@ -53,7 +55,7 @@ void IDRegistr::ReturnElement(int id)
 
 	for (int i = 1; i < m_level; ++i)
 	{
-		if (bs[i] == 0)
+		if (bs[m_level - i - 1] == 0)
 		{
 			buffer[i] = m_reg[buffer[i - 1]].branches.x;
 		}

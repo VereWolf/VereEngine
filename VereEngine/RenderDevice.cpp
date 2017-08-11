@@ -19,6 +19,8 @@ XMMATRIX RenderMessage::m_Proj;
 float RenderMessage::m_FarZ = 0.0f;
 float RenderMessage::m_FarRangeMod = 0.0f;
 float RenderMessage::m_FarModifier = 0.0f;
+float RenderMessage::m_HeightFar = 0.0f;
+float RenderMessage::m_Aspect = 0.0f;
 D3D11_VIEWPORT *RenderMessage::m_ViewPort;
 
 void RenderMessage::Use()
@@ -27,7 +29,11 @@ void RenderMessage::Use()
 
 	if (m_PlanetData)
 	{
+		btVector3 dir = -(m_PlanetData->GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition());
+		dir = m_PlanetData->GetWorldTransform().getBasis().inverse() * dir;
+
 		((BaseEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3((m_CameraOffset * m_PlanetData->GetWorldTransform()).getOrigin()));
+		((BaseEffect*)m_BaseEffect)->SetDirectOfPlanet(VereMath::ConvertToXMFLOAT3(dir));
 		((BaseEffect*)m_BaseEffect)->SetRadiusOfTerrain(m_PlanetData->GetRadiusOfTerrain());
 		((BaseEffect*)m_BaseEffect)->SetRadiusOfWater(m_PlanetData->GetRadiusOfWater());
 		((BaseEffect*)m_BaseEffect)->SetRadiusOfClouds(m_PlanetData->GetRadiusOfClouds());
@@ -90,7 +96,7 @@ RenderDevice::RenderDevice()
 	m_mainViewPort.MaxDepth = 1.0f;
 }
 
-RenderDevice::RenderDevice(DX::DeviceResources *resources, float farZ, float farRangeMod, float farModifier)
+RenderDevice::RenderDevice(DX::DeviceResources *resources, float farRangeMod)
 {
 	GameRenderDeviceHandle = this;
 	m_mainViewPort.TopLeftX = 0.0f;
@@ -100,8 +106,6 @@ RenderDevice::RenderDevice(DX::DeviceResources *resources, float farZ, float far
 	m_mainViewPort.MinDepth = 0.0f;
 	m_mainViewPort.MaxDepth = 1.0f;
 
-	RenderMessage::m_FarZ = farZ;
-	RenderMessage::m_FarModifier = farModifier;
 	RenderMessage::m_FarRangeMod = farRangeMod;
 
 	Init(resources);

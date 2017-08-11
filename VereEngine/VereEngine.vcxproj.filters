@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="App.xaml.cpp" />
     <ClCompile Include="MainRenderPage.xaml.cpp" />
     <ClCompile Include="DeviceResources.cpp">
@@ -373,6 +370,9 @@
     <CustomBuild Include="FX\WaterLOD.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="FX\CoordHelper.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -462,5 +462,10 @@
     <ResourceCompile Include="VereEngine.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Filter>Utility</Filter>
+    </ApplicationDefinition>
   </ItemGroup>
 </Project>
