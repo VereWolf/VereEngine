@@ -1,4 +1,4 @@
-
+#pragma once
 
 #include "pch.h"
 #include "GameObject.h"
@@ -8,9 +8,6 @@
 //#include "BillboardMesh.h"
 //#include "ClothingMesh.h"
 #include "GenerateMesh.h"
-
-#ifndef TEST_OBJECT
-#define TEST_OBJECT
 
 class TestObject : public GameObject
 {
@@ -37,7 +34,7 @@ public:
 
 		int idMB = GameRenderDeviceHandle->CreateMeshBuffer(&vertices[0], size, vertices.size(), &indices);
 
-		BaseEffect *baseEffect = new BaseEffect(m_resources, "FX/PosNormalTexTan.fxo");
+		Effect *baseEffect = new BaseEffect(m_resources, "FX/PosNormalTexTan.fxo");
 		int idE = GameRenderDeviceHandle->CreateEffect(baseEffect);
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vertex =
@@ -72,22 +69,16 @@ public:
 	{
 	}
 
-	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-		float camFarZ, btScalar heightFar, btScalar aspect,
-		float camFarRangeMod, float camModifier)
+	void Render()
 	{
 		btVector3 S = btVector3(GetScaling().getRow(0).getX(), GetScaling().getRow(1).getY(), GetScaling().getRow(2).getZ());
-		RenderMesage message;
+		RenderMessage message;
 		message.m_ModelID = m_RenderId;
 		message.m_Scaling = btTransform(btMatrix3x3(-S.getX(), 0.0, 0.0, 0.0, -S.getY(), 0.0, 0.0, 0.0, -S.getZ()), btVector3(0.0, 0.0, 0.0));
 		message.m_Transform = GetWorldTransform();
-		message.m_CameraOffset = camOffset;
-		message.m_View = camView;
-		message.m_Proj = camProj;
-		message.m_FarZ = camFarZ;
-		message.m_FarRangeMod = camFarRangeMod;
-		message.m_FarModifier = camModifier;
+		message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
 		message.m_RasterizeState = RenderStates::SolidRS;
+		message.m_BlendState = RenderStates::NoBlendBS;
 		GameRenderDeviceHandle->Render(&message);
 	}
 
@@ -355,7 +346,3 @@ private:
 	BillboardMesh mModel;
 	XMFLOAT4 mColor;
 };*/
-
-
-
-#endif //TEST_OBJECT

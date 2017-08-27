@@ -1,5 +1,4 @@
-#ifndef VERETEXTUE_FLOAT_H
-#define VERETEXTURE_FLOAT_H
+#pragma once
 
 #include "pch.h"
 
@@ -82,25 +81,30 @@ public:
 		return 0;
 	}
 
-	VereTextureFloat *CreateNewTextureFrom(float lvl, XMFLOAT2 offset, float height, float width)
+	void SetVariable(int x, int y, float V)
 	{
-		float S = (height + 2) * (width + 2);
+		m_map.at(y * m_width + x) = V;
+	}
+
+	VereTextureFloat *CreateNewTextureFrom(float lvl, XMFLOAT2 offset, float seam, float height, float width)
+	{
+		float S = (height + seam) * (width + seam);
 		std::vector<float> M(S);
 		float L2 = 1.0f / pow(2, lvl);
-		float H2 = 1.0f / (height + 2);
-		float W2 = 1.0f / (width + 2);
-		float OC = (height) / (height + 2.0f);
+		float H2 = 1.0f / (height + seam);
+		float W2 = 1.0f / (width + seam);
+		float OC = (height) / (height + seam);
 
 		XMFLOAT2 OF = XMFLOAT2(offset.x * L2 * OC, offset.y * L2 * OC);
 		XMFLOAT2 INC = XMFLOAT2(L2 * W2, L2 * H2);
 
 		XMFLOAT2 I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
 
-		for (int y = 0; y < (height + 2); ++y)
+		for (int y = 0; y < (height + seam); ++y)
 		{
-			for (int x = 0; x < (width + 2); ++x)
+			for (int x = 0; x < (width + seam); ++x)
 			{
-				M[y * (width + 2) + x] = GetVariable(I.x, I.y);
+				M[y * (width + seam) + x] = GetVariable(I.x, I.y);
 
 				I.x += INC.x;
 			}
@@ -110,7 +114,7 @@ public:
 		}
 
 		VereTextureFloat *T = new VereTextureFloat;
-		T->Init(&M[0], width + 2, height + 2);
+		T->Init(&M[0], width + seam, height + seam);
 
 		return T;
 	}
@@ -122,5 +126,3 @@ private:
 	int m_height;
 	int m_width;
 };
-
-#endif // VERETEXTURE_FLOAT_H
