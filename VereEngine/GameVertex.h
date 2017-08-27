@@ -1,5 +1,4 @@
-#ifndef GAME_VERTEX_H
-#define GAME_VERTEX_H
+#pragma once
 
 #include "pch.h"
 #include "GameBaseObject.h"
@@ -22,5 +21,3 @@ private:
 	ElementsVertex *m_gameVertex;
 	UINT m_stride;
 };
-
-#endif //GAME_VERTEX_H

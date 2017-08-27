@@ -9,6 +9,7 @@ ID3D11RasterizerState* RenderStates::NoCullRS = 0;
 ID3D11BlendState*      RenderStates::NoBlendBS = 0;
 ID3D11BlendState*      RenderStates::AlphaToCoverageBS = 0;
 ID3D11BlendState*      RenderStates::TransparentBS = 0;
+ID3D11BlendState*      RenderStates::NoAccumulateBS = 0;
 
 ID3D11DepthStencilState* RenderStates::MarkMirrowDDS = 0;
 ID3D11DepthStencilState* RenderStates::DrawReflectionDDS = 0;
@@ -87,10 +88,10 @@ bool RenderStates::InitAll(DX::DeviceResources *resources)
 
 	D3D11_BLEND_DESC transparentDesc = { 0 };
 	transparentDesc.AlphaToCoverageEnable = false;
-	transparentDesc.IndependentBlendEnable = true;
+	transparentDesc.IndependentBlendEnable = false;
 
 	transparentDesc.RenderTarget[0].BlendEnable = true;
-	transparentDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	transparentDesc.RenderTarget[0].SrcBlend =  D3D11_BLEND_INV_SRC_ALPHA;
 	transparentDesc.RenderTarget[0].DestBlend = D3D11_BLEND_SRC_ALPHA;
 	transparentDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 	transparentDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
@@ -99,6 +100,24 @@ bool RenderStates::InitAll(DX::DeviceResources *resources)
 	transparentDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	HR(resources->GetD3DDevice()->CreateBlendState(&transparentDesc, &TransparentBS));
+
+	//
+	// NoAccumulateBS
+	//
+
+	D3D11_BLEND_DESC noAccumulateDesc = { 0 };
+	noAccumulateDesc.AlphaToCoverageEnable = false;
+
+	noAccumulateDesc.RenderTarget[0].BlendEnable = true;
+	noAccumulateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	noAccumulateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	noAccumulateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_MAX;
+	noAccumulateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	noAccumulateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+	noAccumulateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
+	noAccumulateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	HR(resources->GetD3DDevice()->CreateBlendState(&noAccumulateDesc, &NoAccumulateBS));
 
 	D3D11_DEPTH_STENCIL_DESC mirrorDesc;
 	mirrorDesc.DepthEnable = true;
@@ -172,6 +191,7 @@ void RenderStates::DestroyAll()
 	ReleaseCOM(NoBlendBS);
 	ReleaseCOM(AlphaToCoverageBS);
 	ReleaseCOM(TransparentBS);
+	ReleaseCOM(NoAccumulateBS);
 	ReleaseCOM(MarkMirrowDDS);
 	ReleaseCOM(DrawReflectionDDS);
 	ReleaseCOM(NoDoubleBlendDDS);

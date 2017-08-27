@@ -1,5 +1,4 @@
-#ifndef ID_REGISTR
-#define ID_REGISTR
+#pragma once
 
 struct IDRegistrElement
 {
@@ -46,5 +45,3 @@ struct IDRegistr
 	int m_level;
 	std::vector<IDRegistrElement> m_reg;
 };
-
-#endif //ID_REGISTR

@@ -14,6 +14,7 @@
 #include "GamePointLight.h"
 #include "GameSpotLight.h"
 #include "GameTilePlanetData.h"
+#include "PlanetData.h"
 
 struct RenderVariables
 {
@@ -25,68 +26,68 @@ struct RenderVariables
 	std::vector<Material> material;
 };
 
-class RenderMesage
+class RenderMessage
 {
 public:
-	virtual void Use()
-	{
-		XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
-
-		/*btVector3 dirNorm = m_Transform.getOrigin();
-		if (dirNorm.getX() != 0.0 && dirNorm.getY() != 0.0 && dirNorm.getZ() != 0.0)
-		{
-			dirNorm = dirNorm.normalize();
-		}
-		XMFLOAT3 dir = XMFLOAT3(dirNorm.getX(), dirNorm.getY(), dirNorm.getZ());*/
-
-		XMMATRIX mesh = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(m_CameraOffset * m_Transform * m_Scaling));
-		XMMATRIX viewProj = m_View * m_Proj;
-		btTransform transformN = m_Transform;
-		transformN.getOrigin().setZero();
-
-		XMMATRIX meshN = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(transformN.inverse()));
-
-		m_BaseEffect->SetEyePosW(EyePos);
-		m_BaseEffect->SetMaterial(*m_Material);
-		m_BaseEffect->SetViewProj(viewProj);
-		m_BaseEffect->SetWorld(mesh);
-		m_BaseEffect->SetWorldN(meshN);
-		m_BaseEffect->SetFarZ(m_FarZ);
-		m_BaseEffect->SetFarRangeMod(m_FarRangeMod);
-		m_BaseEffect->SetFarModifier(m_FarModifier);
-	}
+	virtual void Use();
 
 	UINT m_ModelID;
 	Material *m_Material;
-	BaseEffect *m_BaseEffect;
+	Effect *m_BaseEffect;
+	PlanetData *m_PlanetData;
 	btTransform m_Transform;
 	btTransform m_Scaling;
-	btTransform m_CameraOffset;
-	XMMATRIX m_View;
-	XMMATRIX m_Proj;
-	float m_FarZ;
-	float m_FarRangeMod;
-	float m_FarModifier;
+	static btTransform m_CameraOffset;
+	static XMMATRIX m_View;
+	static XMMATRIX m_Proj;
+	static float m_FarZ;
+	static float m_FarRangeMod;
+	static float m_FarModifier;
+	static float m_HeightFar;
+	static float m_Aspect;
 	ID3D11RasterizerState* m_RasterizeState;
-
-
+	ID3D11BlendState * m_BlendState;
+	static D3D11_VIEWPORT * m_ViewPort;
 	};
+
+class RenderToScreenMessage : public RenderMessage
+{
+public:
+	void Use();
+
+	ID3D11ShaderResourceView * m_TargetSRV;
+	ID3D11ShaderResourceView * m_DepthSRV;
+};
 
 class RenderDevice
 {
 public:
 	RenderDevice();
-	RenderDevice(DX::DeviceResources *resources);
+	RenderDevice(DX::DeviceResources *resources, float farRangeMod);
 	~RenderDevice();
 	void Init(DX::DeviceResources *resources);
 
-	void Render(RenderMesage *message);
+	void Render(RenderMessage *message);
+	void RenderToScreen();
+
+	void ClearMainRenderTarget();
 
 	RenderAssetsStacks *GetRenderAssetsStacks() { return &m_renderAssetsStacks; }
 
-	ID3D11Buffer *BuildVerticesBuffer(void *vertices, UINT size);
+	ID3D11Buffer *BuildVerticesBuffer(void *vertices, UINT size, UINT stride);
 	ID3D11Buffer *BuildIndicesBuffer(std::vector<UINT> *indices);
 	ID3D11ShaderResourceView *BuildTexture(void *map, UINT height, UINT width, UINT format, UINT mipLevels);
+
+	void BindMainRenderTarget();
+	void BindRenderTarget(ID3D11RenderTargetView *target, ID3D11DepthStencilView *depthStencil);
+	D3D11_VIEWPORT *GetMainViewPort() { return &m_mainViewPort; }
+
+	ID3D11ShaderResourceView* GetMainDeepMapSRV() { return m_MainDeepMapSRV; }
+	ID3D11ShaderResourceView* GetMainTargetMapSRV() { return m_MainTargetMapSRV; }
+
+	void CreateQuadScreen();
+	int GetQuadScreenID() { return m_quadScreenID; }
+	int GetRenderIdRTS() { return m_RenderIdRTS; }
 
 	int CreateModel(Model * model);
 	void DeleteModel(int id);
@@ -104,9 +105,9 @@ public:
 	void DeleteVertex(int id);
 	GameVertex* GetVertex(int id);
 
-	int CreateEffect(BaseEffect *effect);
+	int CreateEffect(Effect *effect);
 	void DeleteEffect(int id);
-	BaseEffect* GetEffect(int id);
+	Effect* GetEffect(int id);
 
 	int CreateMeshBuffer(void *vertices, UINT vertexSize, UINT numElements, std::vector<UINT> *indeices);
 	void DeleteMeshBuffer(int id);
@@ -129,14 +130,27 @@ public:
 	void DeleteSpotLight(int id);
 	SpotLight* GetSpotLight(int id);
 
-	int CreateTilePlanetData(TilePlanetData * light);
+	/*int CreateTilePlanetData(TilePlanetData * light);
 	int CreateTilePlanetDataFromAnother(int sourceID, XMINT2 whichSquare, float height, float with, float multiplierH, float multiplierN);
 	void DeleteTilePlanetData(int id);
-	TilePlanetData* GetTilePlanetData(int id);
+	TilePlanetData* GetTilePlanetData(int id);*/
 private:
 	DX::DeviceResources *m_resources;
 
 	RenderAssetsStacks m_renderAssetsStacks;
+
+	D3D11_VIEWPORT m_mainViewPort;
+
+	int m_quadScreenID;
+	int m_RenderIdRTS;
+
+	ID3D11ShaderResourceView* m_MainDeepMapSRV;
+
+	ID3D11ShaderResourceView* m_MainTargetMapSRV;
+
+	ID3D11DepthStencilView* m_MainDeepMapDSV;
+
+	ID3D11RenderTargetView* m_MainTargetMapRTV;
 };
 
 __declspec(selectany) RenderDevice *GameRenderDeviceHandle = 0;

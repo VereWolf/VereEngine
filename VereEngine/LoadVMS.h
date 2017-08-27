@@ -1,5 +1,4 @@
-#ifndef LOAD_VMS
-#define LOAD_VMS
+#pragma once
 
 #include "pch.h"
 #include "vertex.h"
@@ -54,8 +53,8 @@ public:
 				XMLoadFloat3(&vertices.at(i).Normal),
 				XMVector3Normalize(XMLoadFloat3(&vertices.at(i).Tangent)))));
 
-			file.read((char*)&vertices.at(i).Tex.x, sizeof(float));
-			file.read((char*)&vertices.at(i).Tex.y, sizeof(float));
+			file.read((char*)&vertices.at(i).TexTess.x, sizeof(float));
+			file.read((char*)&vertices.at(i).TexTess.y, sizeof(float));
 		}
 
 		file.read((char*)&elmUINT, sizeof(UINT));
@@ -112,6 +111,3 @@ public:
 		return true;
 	}
 };
-
-
-#endif//LOAD_VMS

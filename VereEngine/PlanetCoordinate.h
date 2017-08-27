@@ -85,39 +85,21 @@ public:
 
 	inline static btVector3 GetCoordForCube(btVector3 dir, btTransform sideMatrix, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
 	{
-		btVector3 U = sideMatrix * up;
-		btVector3 R = sideMatrix * right;
-		btVector3 F = sideMatrix * front;
+		btVector3 U = up;
+		btVector3 R = right;
+		btVector3 F = front;
 
-		btVector3 UR = btVector3(dir.getX(), dir.getY(), 0.0).normalize();
-		btVector3 UF = btVector3(0.0, dir.getY(), dir.getZ()).normalize();
+		dir = (sideMatrix.inverse() * dir).normalize();
 
-		btScalar X = (UR / U.dot(UR) - U).length();
-		btScalar Y = (UF / U.dot(UF) - U).length();
-
-		btScalar DR = dir.dot(R);
-
-		if (DR < 0.0)
+		if (dir.getY() <= 0.0)
 		{
-			X = 0.5 - 0.5 * X;
-		}
-		else
-		{
-			X = 0.5 + 0.5 * X;
+			return btVector3(0.0, 0.0, -1.0);
 		}
 
-		btScalar DF = dir.dot(F);
+		dir.setX(0.5 * dir.getX() / dir.getY());
+		dir.setZ(0.5 * dir.getZ() / dir.getY());
 
-		if (DF < 0.0)
-		{
-			Y = 0.5 - 0.5 * Y;
-		}
-		else
-		{
-			Y = 0.5 + 0.5 * Y;
-		}
-
-		return btVector3(X, Y, 0.0);
+		return btVector3(dir.getX(), dir.getZ(), 0.0);
 	}
 
 	inline static btVector3 GetDirFromCubeCoord(btVector3 coord, btTransform sideMatrixInv, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
@@ -127,11 +109,17 @@ public:
 
 	inline static btVector3 GetCoordForCylinder(btVector3 dir, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
 	{
-		btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ()).normalize();
+		btScalar DXZ = 0.0;
+		btScalar DZ = 0.0;
+
+		if (dir.getX() != 0.0 || dir.getZ() != 0.0)
+		{
+			btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ()).normalize();
+			DXZ = dirXZ.dot(right);
+			DZ = dirXZ.dot(front);
+		}
 
 		btScalar DY = dir.dot(up);
-		btScalar DXZ = dirXZ.dot(right);
-		btScalar DZ = dirXZ.dot(front);
 
 		btScalar X = 0.318309886 * acos(DY);
 		btScalar Y = 0.159154943 * acos(DXZ);

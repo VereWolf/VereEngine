@@ -19,17 +19,17 @@ void SkyBox::Draw(DX::DeviceResources *resources, float time)
 {
 
 	VereFloat3 sun;
-	sun.operator=(m_sun.GetNVectorOfSun(GameTerrainDataHandle->GetTime()));
-	GameTerrainDataHandle->SetSunVector(XMFLOAT3(sun.x, sun.y, sun.z));
+	sun.operator=(m_sun.GetNVectorOfSun(GameDataHandle->GetTime()));
+	GameDataHandle->SetSunVector(XMFLOAT3(sun.x, sun.y, sun.z));
 	VereFloat3 top = VereFloat3(0.0f, 1.0f, 0.0f);
 	float dotSun = sun.Dot(top);
-	GameTerrainDataHandle->SetLight(VereMath::Clamp(dotSun + 1.05f, 0.0f, 1.05f) * 0.952f);
+	GameDataHandle->SetLight(VereMath::Clamp(dotSun + 1.05f, 0.0f, 1.05f) * 0.952f);
 
 
 	VereFloat3 blueColor(0.0f, 0.52f, 0.89f);
 	VereFloat3  orangeColor(0.83f, 0.51f, 0.22f);
 	VereFloat3  redColor(0.7f, 0.16f, 0.16f);
-	VereFloat3  skyColor = blueColor * GameTerrainDataHandle->GetLight();
+	VereFloat3  skyColor = blueColor * GameDataHandle->GetLight();
 
 
 	float S = 20000;
@@ -66,7 +66,7 @@ void SkyBox::Draw(DX::DeviceResources *resources, float time)
 	Effects::SkyBoxFX->SetWorld(mesh);
 	Effects::SkyBoxFX->SetSkyColor(XMFLOAT4(skyColor.x, skyColor.y, skyColor.z, 1.0f));
 	Effects::SkyBoxFX->SetSunVector(XMFLOAT3(sun.x, sun.y, sun.z));
-	Effects::SkyBoxFX->SetLight(GameTerrainDataHandle->GetLight());
+	Effects::SkyBoxFX->SetLight(GameDataHandle->GetLight());
 
 	for (UINT p = 0; p < techDesc.Passes; ++p)
 	{
