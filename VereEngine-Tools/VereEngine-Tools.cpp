@@ -8,8 +8,9 @@
 int main()
 {
 	RecalculationMapFromCoord RC;
-	RC.Generate();
+	//RC.GenerateTiles();
 	//RC.GenerateResize();
+	RC.ConvertNormalFromPNGtoRAW();
     return 0;
 }
 

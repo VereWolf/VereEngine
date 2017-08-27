@@ -1,24 +1,16 @@
-#ifndef ATMOSPHERE_H
-#define ATMOSPHERE_H
+#pragma once
 
-/*#include "pch.h"
-#include "AtmosphereBlock.h"
+#include "pch.h"
 
-class Atmosphere : public AtmosphereData
+class AtmosphereRenderMessage : public RenderMessage
 {
 public:
-	void Init(DX::DeviceResources* resources)
-	{
-		AtmosphereData::Init(resources);
+	void Use();
 
-		m_block.Init(this, 0, XMINT3(0, 0, 0), XMDOUBLE3(0.0, 0.0, 0.0), GetScaling());
-	}
-	void Draw()
-	{
-		m_block.Draw();
-	}
-private:
-	AtmosphereBlock m_block;
-};*/
-
-#endif // !ATMOSPHERE_H
+	btVector3	m_Position;
+	btTransform m_AngleMatrix;
+	XMINT2 m_Coord;
+	btScalar m_Spacing1;
+	btScalar m_Spacing2;
+	float m_Level;
+};

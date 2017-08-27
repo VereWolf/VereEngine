@@ -1,5 +1,4 @@
-#ifndef GAME_BASE_OBJECTS_STACK_H
-#define GAME_BASE_OBJECTS_STACK_H
+#pragma once
 
 #include "pch.h"
 #include "IDRegistr.h"
@@ -66,4 +65,7 @@ struct RenderTextAssetsStacks
 	GameBaseObjectsStack m_gameTextFormats;
 };
 
-#endif //GAME_BASE_OBJECTS_STACK_H
+struct PlanetAssetsStacks
+{
+	GameBaseObjectsStack  m_gamePlanetTiles;
+};

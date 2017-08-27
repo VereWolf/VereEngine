@@ -1,14 +1,12 @@
-
-#ifndef ENVIROMENT
-#define ENVIROMENT
+#pragma once
 
 #include "pch.h"
 #include "LightHelper.h"
 
 
-struct TerrainType
+struct Type
 {
-	TerrainType() { ZeroMemory(this, sizeof(this)); }
+	Type() { ZeroMemory(this, sizeof(this)); }
 	void SetMat(XMFLOAT4 itsAmbient, XMFLOAT4 itsDiffuse, XMFLOAT4 itsSpecular, XMFLOAT4 itsReflect, float itsFractaConst, float itsHorizontalFractaConst)
 	{
 		mat.Ambient = itsAmbient;
@@ -38,5 +36,3 @@ struct EnviromentalType
 	float mMaxAngleForRock;
 	float mMinAngleForRock;
 };
-
-#endif /*ENVIROMENT*/

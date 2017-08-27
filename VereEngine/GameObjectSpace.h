@@ -15,9 +15,7 @@ public:
 	}
 
 	void Init();
-	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-		float camFarZ, btScalar heightFar, btScalar aspect,
-		float camFarRangeMod, float camModifier);
+	void Render();
 	void Update();
 
 	GameObject* Clone() { return new GameObjectSpace(*this); }

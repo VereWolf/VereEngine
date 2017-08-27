@@ -1,6 +1,22 @@
 #include "stdafx.h"
 #include "VecMath.h"
 
+BYTE4::BYTE4()
+{
+	x = 0;
+	y = 0;
+	z = 0;
+	w = 0;
+}
+
+BYTE4::BYTE4(BYTE itsX, BYTE itsY, BYTE itsZ, BYTE itsW)
+{
+	x = itsX;
+	y = itsY;
+	z = itsZ;
+	w = itsW;
+}
+
 INT2::INT2()
 {
 	x = 0.0f;

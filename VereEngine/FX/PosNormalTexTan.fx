@@ -57,7 +57,7 @@ VertexOut VS(VertexIn vin)
 	//vout.PosW = vin.PosL;
 	vout.PosH = mul(float4(vout.PosW, 1.0f), gViewProj);
 	//vout.PosH = float4(vout.PosW, vout.PosW.z);
-	vout.PosH.z = log(gFarModifier * vout.PosH.w + 1.0f) / log(gFarModifier * gFarZ + 1.0f) * vout.PosH.w * gFarRangeMod;
+	vout.PosH.z = log(gFarModifier * vout.PosH.w + 1.0f) / log(gFarModifier * gFarZ + 1.0f) * vout.PosH.w;
 	//vout.PosH.z = log(0.1f * vout.PosH.w + 1.0f) / log(0.1f * 100000000000.0f + 1.0f) * vout.PosH.w;
 
 	return vout;
