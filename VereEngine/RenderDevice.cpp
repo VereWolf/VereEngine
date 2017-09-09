@@ -13,26 +13,63 @@
 #include "RenderDevice.h"
 
 
+btTransform RenderMessage::m_CameraOffset;
+XMMATRIX RenderMessage::m_View;
+XMMATRIX RenderMessage::m_Proj;
+float RenderMessage::m_FarZ = 0.0f;
+float RenderMessage::m_FarRangeMod = 0.0f;
+float RenderMessage::m_FarModifier = 0.0f;
+float RenderMessage::m_HeightFar = 0.0f;
+float RenderMessage::m_Aspect = 0.0f;
+D3D11_VIEWPORT *RenderMessage::m_ViewPort;
+
 void RenderMessage::Use()
 {
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
-	/*btVector3 dirNorm = m_Transform.getOrigin();
-	if (dirNorm.getX() != 0.0 && dirNorm.getY() != 0.0 && dirNorm.getZ() != 0.0)
+	if (m_PlanetData)
 	{
-	dirNorm = dirNorm.normalize();
+		btVector3 dir = -(m_PlanetData->GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition());
+		dir = m_PlanetData->GetWorldTransform().getBasis().inverse() * dir;
+
+		((BaseEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3((m_CameraOffset * m_PlanetData->GetWorldTransform()).getOrigin()));
+		((BaseEffect*)m_BaseEffect)->SetDirectOfPlanet(VereMath::ConvertToXMFLOAT3(dir));
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfTerrain(m_PlanetData->GetRadiusOfTerrain());
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfWater(m_PlanetData->GetRadiusOfWater());
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfClouds(m_PlanetData->GetRadiusOfClouds());
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfAtmosphere(m_PlanetData->GetRadiusOfAtmosphere());
+		((BaseEffect*)m_BaseEffect)->SetFogAColor(m_PlanetData->GetFogAColor());
+		((BaseEffect*)m_BaseEffect)->SetFogAStart(m_PlanetData->GetFogAStart());
+		((BaseEffect*)m_BaseEffect)->SetFogARange(m_PlanetData->GetFogARange());
+		((BaseEffect*)m_BaseEffect)->SetFogWColor(m_PlanetData->GetFogWColor());
+		((BaseEffect*)m_BaseEffect)->SetFogWStart(m_PlanetData->GetFogWStart());
+		((BaseEffect*)m_BaseEffect)->SetFogWRange(m_PlanetData->GetFogWRange());
 	}
-	XMFLOAT3 dir = XMFLOAT3(dirNorm.getX(), dirNorm.getY(), dirNorm.getZ());*/
+	else
+	{
+		((BaseEffect*)m_BaseEffect)->SetCenterOfPlanet(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfTerrain(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfWater(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfClouds(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetRadiusOfAtmosphere(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetFogAColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
+		((BaseEffect*)m_BaseEffect)->SetFogAStart(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetFogARange(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetFogWColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
+		((BaseEffect*)m_BaseEffect)->SetFogWStart(-1.0f);
+		((BaseEffect*)m_BaseEffect)->SetFogWRange(-1.0f);
+	}
 
 	XMMATRIX mesh = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(m_CameraOffset * m_Transform * m_Scaling));
 	XMMATRIX viewProj = m_View * m_Proj;
-	btTransform transformN = m_Transform;
-	transformN.getOrigin().setZero();
+	btMatrix3x3 transformN = m_Transform.getBasis();
 
-	XMMATRIX meshN = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(transformN.inverse()));
+	XMMATRIX meshN = XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(transformN.inverse()));
 
 	((BaseEffect*)m_BaseEffect)->SetEyePosW(EyePos);
 	((BaseEffect*)m_BaseEffect)->SetMaterial(*m_Material);
+	((BaseEffect*)m_BaseEffect)->SetView(m_View);
+	((BaseEffect*)m_BaseEffect)->SetProj(m_Proj);
 	((BaseEffect*)m_BaseEffect)->SetViewProj(viewProj);
 	((BaseEffect*)m_BaseEffect)->SetWorld(mesh);
 	((BaseEffect*)m_BaseEffect)->SetWorldN(meshN);
@@ -59,7 +96,7 @@ RenderDevice::RenderDevice()
 	m_mainViewPort.MaxDepth = 1.0f;
 }
 
-RenderDevice::RenderDevice(DX::DeviceResources *resources)
+RenderDevice::RenderDevice(DX::DeviceResources *resources, float farRangeMod)
 {
 	GameRenderDeviceHandle = this;
 	m_mainViewPort.TopLeftX = 0.0f;
@@ -68,6 +105,8 @@ RenderDevice::RenderDevice(DX::DeviceResources *resources)
 	m_mainViewPort.Width = 1920.0f;
 	m_mainViewPort.MinDepth = 0.0f;
 	m_mainViewPort.MaxDepth = 1.0f;
+
+	RenderMessage::m_FarRangeMod = farRangeMod;
 
 	Init(resources);
 }
@@ -88,8 +127,6 @@ void RenderDevice::Init(DX::DeviceResources *resources)
 	GetRenderAssetsStacks()->m_gameMeshBuffers.Init(resources);
 	GetRenderAssetsStacks()->m_gameModels.Init(resources);
 	GetRenderAssetsStacks()->m_gameTextures.Init(resources);
-	
-	GenerateDeepOfSphere(256);
 	
 	{
 		D3D11_TEXTURE2D_DESC texDesc;
@@ -409,29 +446,6 @@ void RenderDevice::BindRenderTarget(ID3D11RenderTargetView *target, ID3D11DepthS
 	m_resources->GetD3DDeviceContext()->OMSetRenderTargets(1, targets, depthStencil);
 }
 
-void RenderDevice::CopyShaderResourceView(ID3D11ShaderResourceView *dest, ID3D11ShaderResourceView *src)
-{
-	ID3D11Resource* targetMapSrc = 0;
-	ID3D11Texture2D* targetMap = 0;
-
-	src->GetResource(&targetMapSrc);
-
-	D3D11_TEXTURE2D_DESC texDesc;
-
-	((ID3D11Texture2D*)targetMapSrc)->GetDesc(&texDesc);
-
-	m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
-
-	m_resources->GetD3DDeviceContext()->CopyResource(targetMap, targetMapSrc);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	src->GetDesc(&srvDesc);
-	m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &dest);
-
-	ReleaseCOM(targetMapSrc);
-	ReleaseCOM(targetMap);
-}
-
 void RenderDevice::CreateQuadScreen()
 {
 	std::vector<Vertex::TerrainLOD> quadV(4);
@@ -455,36 +469,6 @@ void RenderDevice::CreateQuadScreen()
 	quadI[5] = 3;
 
 	m_quadScreenID = CreateMeshBuffer(&quadV[0], sizeof(Vertex::TerrainLOD), 4, &quadI);
-}
-
-void RenderDevice::GenerateDeepOfSphere(int size)
-{
-	std::vector<float> deep(pow(size, 2));
-
-	float maxR = size / 2;
-	float S = 1.0f / (size - 1.0f);
-
-	for (int j = 0; j < size; ++j)
-	{
-		for (int i = 0; i < size; ++i)
-		{
-			float x = 2.0f * (i * S - 0.5f);
-			float y = 2.0f * (j * S - 0.5f);
-
-			float r = pow(pow(x, 2.0f) + pow(y, 2.0f), 0.5f);
-
-			if (r > 1.0f)
-			{
-				deep[j * size + i] = -1.0f;
-			}
-			else
-			{
-				deep[j * size + i] = BUFFERUNIT * pow(1.0f - pow(x, 2.0f) - pow(y, 2.0f), 0.5f);
-			}
-		}
-	}
-
-	m_deepOfCircleID = CreateTexture(&deep[0], size, size, DXGI_FORMAT_R32_FLOAT, 1);
 }
 
 int RenderDevice::CreateModel(Model * model)
@@ -568,7 +552,7 @@ void RenderDevice::DeleteInputLayouts(int id)
 
 ID3D11InputLayout* RenderDevice::GetInputLayouts(int id)
 {
-	return ((GameInputLayouts*)m_renderAssetsStacks.m_gameInputLayouts.GetGameObject(id))->GetInputLayouts();;
+	return ((GameInputLayouts*)m_renderAssetsStacks.m_gameInputLayouts.GetGameObject(id))->GetInputLayouts();
 }
 
 int RenderDevice::CreateVertex(ElementsVertex *vertex)
@@ -740,7 +724,7 @@ SpotLight* RenderDevice::GetSpotLight(int id)
 	return ((GameSpotLight*)m_renderAssetsStacks.m_gameSpotLight.GetGameObject(id))->GetSpotLight();
 }
 
-int RenderDevice::CreateTilePlanetData(TilePlanetData * data)
+/*int RenderDevice::CreateTilePlanetData(TilePlanetData * data)
 {
 	GameTilePlanetData *gameTilePlanetData = new GameTilePlanetData;
 	gameTilePlanetData->PreInit(m_resources);
@@ -771,4 +755,4 @@ void RenderDevice::DeleteTilePlanetData(int id)
 TilePlanetData* RenderDevice::GetTilePlanetData(int id)
 {
 	return ((GameTilePlanetData*)m_renderAssetsStacks.m_gameTilePlanetData.GetGameObject(id))->GetTilePlanetData();
-}
+}*/

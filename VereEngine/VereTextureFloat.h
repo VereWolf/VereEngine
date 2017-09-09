@@ -31,8 +31,8 @@ public:
 	{
 		if (m_map.size() != 0)
 		{
-			x = VereMath::Clamp(((float)m_width - 1.0f) * x, 0.0f, m_width - 1);
-			y = VereMath::Clamp(((float)m_height - 1.0f) * y, 0.0f, m_height - 1);
+			x = VereMath::Clamp(((float)m_width - 1.0f) * x, 0.0f, (float)m_width - 1.0f);
+			y = VereMath::Clamp(((float)m_height - 1.0f) * y, 0.0f, (float)m_height - 1.0f);
 
 			float lx = x - (float)((int)x);
 			float ly = y - (float)((int)y);
@@ -68,7 +68,7 @@ public:
 				x1y1 = m_map.at(((int)y) * m_width + ((int)x));
 				x2y1 = m_map.at(((int)y) * m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
 				x1y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) * m_width + ((int)x));
-				x2y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) *m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
+				x2y2 = m_map.at(VereMath::Clamp(((int)y) + 1, 0, m_height - 1) * m_width + VereMath::Clamp(((int)x) + 1, 0, m_width - 1));
 			}
 
 			float v1 = x1y1 + lx * (x2y1 - x1y1);
@@ -81,25 +81,30 @@ public:
 		return 0;
 	}
 
-	VereTextureFloat *CreateNewTextureFrom(float lvl, XMFLOAT2 offset, float height, float width)
+	void SetVariable(int x, int y, float V)
 	{
-		float S = (height + 2) * (width + 2);
+		m_map.at(y * m_width + x) = V;
+	}
+
+	VereTextureFloat *CreateNewTextureFrom(float lvl, XMFLOAT2 offset, float seam, float height, float width)
+	{
+		float S = (height + seam) * (width + seam);
 		std::vector<float> M(S);
 		float L2 = 1.0f / pow(2, lvl);
-		float H2 = 1.0f / (height + 2);
-		float W2 = 1.0f / (width + 2);
-		float OC = (height) / (height + 2.0f);
+		float H2 = 1.0f / (height + seam);
+		float W2 = 1.0f / (width + seam);
+		float OC = (height) / (height + seam);
 
 		XMFLOAT2 OF = XMFLOAT2(offset.x * L2 * OC, offset.y * L2 * OC);
 		XMFLOAT2 INC = XMFLOAT2(L2 * W2, L2 * H2);
 
 		XMFLOAT2 I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
 
-		for (int y = 0; y < (height + 2); ++y)
+		for (int y = 0; y < (height + seam); ++y)
 		{
-			for (int x = 0; x < (width + 2); ++x)
+			for (int x = 0; x < (width + seam); ++x)
 			{
-				M[y * (width + 2) + x] = GetVariable(I.x, I.y);
+				M[y * (width + seam) + x] = GetVariable(I.x, I.y);
 
 				I.x += INC.x;
 			}
@@ -109,7 +114,7 @@ public:
 		}
 
 		VereTextureFloat *T = new VereTextureFloat;
-		T->Init(&M[0], width + 2, height + 2);
+		T->Init(&M[0], width + seam, height + seam);
 
 		return T;
 	}

@@ -2,6 +2,7 @@
 #include "StreamingDataManager.h"
 #include "GameStreamingData.h"
 #include "GameDataSet.h"
+#include "DataDepository.h"
 
 using namespace Platform;
 using namespace Windows::Foundation;
@@ -25,13 +26,19 @@ using namespace Windows::Storage::Streams;
 StreamingDataManager::StreamingDataManager()
 {
 	GameStreamingDataHandle = this;
+
+
 }
 
-StreamingDataManager::StreamingDataManager(DX::DeviceResources *resources)
+StreamingDataManager::StreamingDataManager(DX::DeviceResources *resources,
+	int levelsOfByteDepository, int levelsOfIntDepository, int levelsOfFloatDepository,
+	int levelsOfByte4Depository, int levelsOfInt4Depository, int levelsOfFloat4Depository)
 {
 	GameStreamingDataHandle = this;
 
-	Init(resources);
+	Init(resources,
+		levelsOfByteDepository, levelsOfIntDepository, levelsOfFloatDepository,
+		levelsOfByte4Depository, levelsOfInt4Depository, levelsOfFloat4Depository);
 }
 
 StreamingDataManager::~StreamingDataManager()
@@ -39,12 +46,32 @@ StreamingDataManager::~StreamingDataManager()
 
 }
 
-void StreamingDataManager::Init(DX::DeviceResources *resources)
+void StreamingDataManager::Init(DX::DeviceResources *resources,
+	int levelsOfByteDepository, int levelsOfIntDepository, int levelsOfFloatDepository,
+	int levelsOfByte4Depository, int levelsOfInt4Depository, int levelsOfFloat4Depository)
 {
 	m_resources = resources;
 
 	m_streamingData.m_gameData.Init(resources);
 	m_streamingData.m_gameDataSet.Init(resources);
+
+	m_dataByteDepositoryReg = new IDRegistr(levelsOfByteDepository);
+	m_dataByteDepository.resize(pow(2, levelsOfByteDepository));
+
+	m_dataIntDepositoryReg = new IDRegistr(levelsOfIntDepository);
+	m_dataIntDepository.resize(pow(2, levelsOfIntDepository));
+
+	m_dataFloatDepositoryReg = new IDRegistr(levelsOfFloatDepository);
+	m_dataFloatDepository.resize(pow(2, levelsOfFloatDepository));
+
+	m_dataByte4DepositoryReg = new IDRegistr(levelsOfByte4Depository);
+	m_dataByte4Depository.resize(pow(2, levelsOfByte4Depository));
+
+	m_dataInt4DepositoryReg = new IDRegistr(levelsOfInt4Depository);
+	m_dataInt4Depository.resize(pow(2, levelsOfInt4Depository));
+
+	m_dataFloat4DepositoryReg = new IDRegistr(levelsOfFloat4Depository);
+	m_dataFloat4Depository.resize(pow(2, levelsOfFloat4Depository));
 }
 
 int StreamingDataManager::LoadData(string nameFile)
@@ -73,30 +100,6 @@ int StreamingDataManager::LoadData(string nameFile)
 	return CreateStreamingData(dataBuffer, size);
 }
 
-/*bool StreamingDataManager::SaveData(String^ nameFile, int id)
-{
-
-	auto workItemHandler = ref new WorkItemHandler([this, nameFile, id](IAsyncAction ^ action)
-	{
-		Array<unsigned char> ^data = ref new Array<unsigned char>((unsigned char*)GetStreamingData(id), GetSizeOfStreamingData(id));
-
-		concurrency::create_task(KnownFolders::PicturesLibrary->CreateFileAsync(nameFile, CreationCollisionOption::ReplaceExisting));
-
-		concurrency::create_task(KnownFolders::PicturesLibrary->GetFileAsync(nameFile)).then([data](StorageFile^ sampleFile)
-		{
-			concurrency::create_task(FileIO::WriteBytesAsync(sampleFile, data));
-		});
-	});
-
-	m_Worker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
-
-	while (!(m_Worker->Status == AsyncStatus::Completed));
-
-	m_Worker->Close();
-
-	return true;
-}*/
-
 bool StreamingDataManager::SaveData(string nameFile, int id)
 {
 
@@ -122,146 +125,6 @@ bool StreamingDataManager::SaveData(string nameFile, int id)
 
 	return true;
 }
-
-/*int StreamingDataManager::LoadDataSet(string nameFile)
-{
-	std::ifstream fin(nameFile, std::ios::binary);
-
-	if (!fin)
-	{
-		return -1;
-	}
-
-	fin.seekg(0, std::ios_base::end);
-	int size = (int)fin.tellg();
-
-	if (size <= 0)
-	{
-		return -1;
-	}
-
-	std::vector<char> dataBuffer;
-
-	dataBuffer.resize(size);
-
-	fin.read(&dataBuffer[0], size);
-
-	int numDataBlock;
-	UINT currentData = 0;
-
-	memcpy(&numDataBlock, &dataBuffer[0], sizeof(numDataBlock));
-	currentData += sizeof(numDataBlock);
-
-	int id = CreateDataSet();
-	SetDataSetSize(id, numDataBlock);
-
-	std::vector<UINT> S(numDataBlock);
-
-	for (int i = 0; i < S.size(); ++i)
-	{
-		memcpy(&S[i], &dataBuffer[numDataBlock], sizeof(UINT));
-		numDataBlock += sizeof(UINT);
-	}
-
-	for (int i = 0; i < S.size(); ++i)
-	{
-		std::vector<char> *data = new std::vector<char>;
-		data->resize(S[i]);
-		memcpy(&data[0], &dataBuffer[numDataBlock], S[i]);
-
-		SetDataSet(id, i, CreateStreamingData(&data->at(0), S[i]));
-	}
-
-	return id;
-}
-
-bool StreamingDataManager::SaveDataSet(string nameFile, std::vector<int> *IDs)
-{
-	std::ofstream fout(nameFile, std::ios::binary);
-
-	if (!fout)
-	{
-		return false;
-	}
-
-	std::vector<char> dataBuffer;
-	int S = IDs->size();
-	unsigned int dataSize = sizeof(int) + S * sizeof(UINT);
-
-	for (int i = 0; i < S; ++i)
-	{
-		dataSize += GetSizeOfStreamingData(IDs->at(i));
-	}
-
-	dataBuffer.resize(dataSize);
-
-	memcpy(&dataBuffer[0], &S, sizeof(S));
-	dataSize = sizeof(S);
-
-	UINT S2;
-
-	for (int i = 0; i < S; ++i)
-	{
-		S2 = GetSizeOfStreamingData(IDs->at(i));
-		memcpy(&dataBuffer[dataSize], &S2, sizeof(S2));
-		dataSize += sizeof(S2);
-	}
-
-	for (int i = 0; i < S; ++i)
-	{
-		void *data = GetStreamingData(IDs->at(i));
-		int DS = GetSizeOfStreamingData(IDs->at(i));
-
-		memcpy(&dataBuffer[dataSize], &data, DS);
-		dataSize += DS;
-	}
-
-	fout.write(&dataBuffer[0], dataBuffer.size());
-
-	return true;
-}
-
-void StreamingDataManager::DeleteDataInDataSet(int id)
-{
-	int S = GetDataSetSize(id);
-
-	for (int i = 0; i < S; ++i)
-	{
-		DeleteStreamingData(GetDataSet(id, i));
-	}
-}
-
-int StreamingDataManager::CreateDataSet()
-{
-	GameDataSet *gameDataSet = new GameDataSet;
-
-	return m_streamingData.m_gameData.CreateGameObject(gameDataSet);
-}
-
-void StreamingDataManager::DeleteDataSet(int id)
-{
-	m_streamingData.m_gameDataSet.DeleteGameObject(id);
-}
-
-int StreamingDataManager::GetDataSetSize(int id)
-{
-	return ((GameDataSet*)m_streamingData.m_gameDataSet.GetGameObject(id))->GetDataSetSize();
-}
-
-void StreamingDataManager::SetDataSetSize(int id, int size)
-{
-	((GameDataSet*)m_streamingData.m_gameDataSet.GetGameObject(id))->SetDataSetSize(size);
-}
-
-void StreamingDataManager::SetDataSet(int id, int index, int value)
-{
-	((GameDataSet*)m_streamingData.m_gameDataSet.GetGameObject(id))->SetDataSet(index, value);
-}
-
-int StreamingDataManager::GetDataSet(int id, int index)
-{
-	return ((GameDataSet*)m_streamingData.m_gameDataSet.GetGameObject(id))->GetDataSet(index);
-}*/
 
 int  StreamingDataManager::CreateStreamingData(void *data, int size)
 {
@@ -297,30 +160,367 @@ int StreamingDataManager::GetSizeOfStreamingData(int id)
 	return NULL;
 }
 
-/*void StreamingDataManager::CylinderMapToSquareMap(
-	btScalar offsetOfMapinCylinderX, //ration
-	btScalar offsetOfMapinCylinderY, //ratio
-	btScalar ratioOfMapInCylinderX,
-	btScalar ratioOfMapInCylinderY,
-	btScalar squareSide,
-	btScalar heightOfMap,
-	btScalar widthOfMap,
-	std::vector<int> idOfSideOfSquareMap,
-	int idOfCylinderMap,
-	float stride,
-	btMatrix3x3 *blockMatrixs[12])
+int StreamingDataManager::CreateBYTEDepository(int level, int width, int height)
 {
-	/*for (int i = 0; i < 6; ++i)
-	{
-		for (float y = 0; y < squareSide; y += 1.0f)
-		{
-			for (float x = 0; x < squareSide; x += 1.0f)
-			{
-				btVector3 coord = PlanetCordinateMat::GetCoordForCylinder((btVector3(x - 0.5 * squareSide, 0.5 * squareSide, y - 0.5 * squareSide) * *blockMatrixs[i]).normalize());
-				coord = btVector3(((coord.getX() - offsetOfMapinCylinderX) / ratioOfMapInCylinderX) * widthOfMap * stride, ((coord.getY() - offsetOfMapinCylinderX) / ratioOfMapInCylinderY) * heightOfMap * stride, 0.0);
+	int id = m_dataByteDepositoryReg->TakeElement();
+	m_dataByteDepository[id] = new DataDepositoryBYTE(level, width, height);
 
-				memcpy(&GetStreamingData(idOfSideOfSquareMap[i])->at(y * pow(stride, 2) * squareSide + x* stride), &GetStreamingData(idOfCylinderMap)->at(coord.getY() * widthOfMap * stride + coord.getX()), stride);
-			}
-		}
-	}*/
-//};
+	return id;
+}
+
+void StreamingDataManager::DeleteBYTEDepository(int id)
+{
+	m_dataByteDepositoryReg->ReturnElement(id);
+	delete m_dataByteDepository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInBYTEDepository(int idDepository, void *data)
+{
+	int id = m_dataByteDepository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInBYTEDepository(int idDepository, int idBlock)
+{
+	m_dataByteDepository[idDepository]->ReleaseBlock(idBlock);
+}
+
+BYTE StreamingDataManager::GetValueFromBYTEDepository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataByteDepository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromBYTEDepository(int idDepository, int idBlock, int x, int y, BYTE value)
+{
+	m_dataByteDepository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+BYTE *StreamingDataManager::GetTextureFromBYTEDepository(int idDepository, int idBlock)
+{
+	return (BYTE*)m_dataByteDepository[idDepository]->GetTexture(idBlock);
+}
+
+void StreamingDataManager::SetTextureFromBYTEDepository(int idDepository, int idBlock, BYTE *data)
+{
+	m_dataByteDepository[idDepository]->SetTexture(idBlock, data);
+}
+
+BYTE *StreamingDataManager::CreateNewMapFromBYTEDepository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataByteDepository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromBYTEDepository(int idDepository)
+{
+	return m_dataByteDepository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromBYTEDepository(int idDepository)
+{
+	return m_dataByteDepository[idDepository]->GetHeight();
+}
+
+int StreamingDataManager::CreateINTDepository(int level, int width, int height)
+{
+	int id = m_dataIntDepositoryReg->TakeElement();
+	m_dataIntDepository[id] = new DataDepositoryINT(level, width, height);
+
+	return id;
+}
+
+void StreamingDataManager::DeleteINTDepository(int id)
+{
+	m_dataIntDepositoryReg->ReturnElement(id);
+	delete m_dataIntDepository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInINTDepository(int idDepository, void *data)
+{
+	int id = m_dataIntDepository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInINTDepository(int idDepository, int idBlock)
+{
+	m_dataIntDepository[idDepository]->ReleaseBlock(idBlock);
+}
+
+int StreamingDataManager::GetValueFromINTDepository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataIntDepository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromINTDepository(int idDepository, int idBlock, int x, int y, int value)
+{
+	m_dataIntDepository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+int *StreamingDataManager::GetTextureFromINTDepository(int idDepository, int idBlock)
+{
+	return (int*)m_dataIntDepository[idDepository]->GetTexture(idBlock);
+}
+
+void StreamingDataManager::SetTextureFromINTDepository(int idDepository, int idBlock, int *data)
+{
+	m_dataIntDepository[idDepository]->SetTexture(idBlock, data);
+}
+
+int *StreamingDataManager::CreateNewMapFromINTDepository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataIntDepository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromINTDepository(int idDepository)
+{
+	return m_dataIntDepository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromINTDepository(int idDepository)
+{
+	return m_dataIntDepository[idDepository]->GetHeight();
+}
+
+int StreamingDataManager::CreateFLOATDepository(int level, int width, int height)
+{
+	int id = m_dataFloatDepositoryReg->TakeElement();
+	m_dataFloatDepository[id] = new DataDepositoryFLOAT(level, width, height);
+
+	return id;
+}
+
+void StreamingDataManager::DeleteFLOATDepository(int id)
+{
+	m_dataFloatDepositoryReg->ReturnElement(id);
+	delete m_dataFloatDepository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInFLOATDepository(int idDepository, void *data)
+{
+	int id = m_dataFloatDepository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInFLOATDepository(int idDepository, int idBlock)
+{
+	m_dataFloatDepository[idDepository]->ReleaseBlock(idBlock);
+}
+
+float StreamingDataManager::GetValueFromFLOATDepository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataFloatDepository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromFLOATDepository(int idDepository, int idBlock, int x, int y, float value)
+{
+	m_dataFloatDepository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+float *StreamingDataManager::GetTextureFromFLOATDepository(int idDepository, int idBlock)
+{
+	return (float*)m_dataFloatDepository[idDepository]->GetTexture(idBlock);
+}
+
+void StreamingDataManager::SetTextureFromFLOATDepository(int idDepository, int idBlock, float *data)
+{
+	m_dataFloatDepository[idDepository]->SetTexture(idBlock, data);
+}
+
+VBYTE4 *StreamingDataManager::GetTextureFromBYTE4Depository(int idDepository, int idBlock)
+{
+	return (VBYTE4*)m_dataByte4Depository[idDepository]->GetTexture(idBlock);
+}
+
+void StreamingDataManager::SetTextureFromBYTE4Depository(int idDepository, int idBlock, VBYTE4 *data)
+{
+	m_dataByte4Depository[idDepository]->SetTexture(idBlock, data);
+}
+
+float *StreamingDataManager::CreateNewMapFromFLOATDepository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataFloatDepository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromFLOATDepository(int idDepository)
+{
+	return m_dataFloatDepository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromFLOATDepository(int idDepository)
+{
+	return m_dataFloatDepository[idDepository]->GetHeight();
+}
+
+int StreamingDataManager::CreateBYTE4Depository(int level, int width, int height)
+{
+	int id = m_dataByte4DepositoryReg->TakeElement();
+	m_dataByte4Depository[id] = new DataDepositoryBYTE4(level, width, height);
+
+	return id;
+}
+
+void StreamingDataManager::DeleteBYTE4Depository(int id)
+{
+	m_dataByte4DepositoryReg->ReturnElement(id);
+	delete m_dataByte4Depository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInBYTE4Depository(int idDepository, void *data)
+{
+	int id = m_dataByte4Depository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInBYTE4Depository(int idDepository, int idBlock)
+{
+	m_dataByte4Depository[idDepository]->ReleaseBlock(idBlock);
+}
+
+VBYTE4 StreamingDataManager::GetValueFromBYTE4Depository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataByte4Depository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromBYTE4Depository(int idDepository, int idBlock, int x, int y, VBYTE4 value)
+{
+	m_dataByte4Depository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+VBYTE4 *StreamingDataManager::CreateNewMapFromBYTE4Depository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataByte4Depository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromBYTE4Depository(int idDepository)
+{
+	return m_dataByte4Depository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromBYTE4Depository(int idDepository)
+{
+	return m_dataByte4Depository[idDepository]->GetHeight();
+}
+
+int StreamingDataManager::CreateINT4Depository(int level, int width, int height)
+{
+	int id = m_dataInt4DepositoryReg->TakeElement();
+	m_dataInt4Depository[id] = new DataDepositoryINT4(level, width, height);
+
+	return id;
+}
+
+void StreamingDataManager::DeleteINT4Depository(int id)
+{
+	m_dataInt4DepositoryReg->ReturnElement(id);
+	delete m_dataInt4Depository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInINT4Depository(int idDepository, void *data)
+{
+	int id = m_dataInt4Depository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInINT4Depository(int idDepository, int idBlock)
+{
+	m_dataInt4Depository[idDepository]->ReleaseBlock(idBlock);
+}
+
+XMINT4 StreamingDataManager::GetValueFromINT4Depository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataInt4Depository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromINT4Depository(int idDepository, int idBlock, int x, int y, XMINT4 value)
+{
+	m_dataInt4Depository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+XMINT4 *StreamingDataManager::GetTextureFromINT4Depository(int idDepository, int idBlock)
+{
+	return (XMINT4*)m_dataInt4Depository[idDepository]->GetTexture(idBlock);
+}
+
+void StreamingDataManager::SetTextureFromINT4Depository(int idDepository, int idBlock, XMINT4 *data)
+{
+	m_dataInt4Depository[idDepository]->SetTexture(idBlock, data);
+}
+
+XMINT4 *StreamingDataManager::CreateNewMapFromINT4Depository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataInt4Depository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromINT4Depository(int idDepository)
+{
+	return m_dataInt4Depository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromINT4Depository(int idDepository)
+{
+	return m_dataInt4Depository[idDepository]->GetHeight();
+}
+
+int StreamingDataManager::CreateFLOAT4Depository(int level, int width, int height)
+{
+	int id = m_dataFloat4DepositoryReg->TakeElement();
+	m_dataFloat4Depository[id] = new DataDepositoryFLOAT4(level, width, height);
+
+	return id;
+}
+
+void StreamingDataManager::DeleteFLOAT4Depository(int id)
+{
+	m_dataFloat4DepositoryReg->ReturnElement(id);
+	delete m_dataFloat4Depository[id];
+}
+
+int StreamingDataManager::CreateNewBlockInFLOAT4Depository(int idDepository, void *data)
+{
+	int id = m_dataFloat4Depository[idDepository]->CreateNewBlock(data);
+
+	return id;
+}
+
+void StreamingDataManager::ReleaseBlockInFLOAT4Depository(int idDepository, int idBlock)
+{
+	m_dataFloat4Depository[idDepository]->ReleaseBlock(idBlock);
+}
+
+XMFLOAT4 StreamingDataManager::GetValueFromFLOAT4Depository(int idDepository, int idBlock, float x, float y)
+{
+	return m_dataFloat4Depository[idDepository]->GetValue(idBlock, x, y);
+}
+
+void StreamingDataManager::SetValueFromFLOAT4Depository(int idDepository, int idBlock, int x, int y, XMFLOAT4 value)
+{
+	m_dataFloat4Depository[idDepository]->SetValue(idBlock, x, y, value);
+}
+
+XMFLOAT4 *StreamingDataManager::GetTextureFromFLOAT4Depository(int idDepository, int idBlock)
+{
+	return (XMFLOAT4*)m_dataFloat4Depository[idDepository]->GetTexture(idBlock);
+}
+void StreamingDataManager::SetTextureFromFLOAT4Depository(int idDepository, int idBlock, XMFLOAT4 *data)
+{
+	m_dataFloat4Depository[idDepository]->SetTexture(idBlock, data);
+}
+
+XMFLOAT4 *StreamingDataManager::CreateNewMapFromFLOAT4Depository(int idDepository, int idBlock, float lvl, XMFLOAT2 offset, float seam, float height, float width)
+{
+	return m_dataFloat4Depository[idDepository]->CreateNewMapFrom(idBlock, lvl, offset, seam, height, width);
+}
+
+int StreamingDataManager::GetWidthFromFLOAT4Depository(int idDepository)
+{
+	return m_dataFloat4Depository[idDepository]->GetWidth();
+}
+
+int StreamingDataManager::GetHeightFromFLOAT4Depository(int idDepository)
+{
+	return m_dataFloat4Depository[idDepository]->GetHeight();
+}

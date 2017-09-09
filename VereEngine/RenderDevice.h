@@ -14,6 +14,7 @@
 #include "GamePointLight.h"
 #include "GameSpotLight.h"
 #include "GameTilePlanetData.h"
+#include "PlanetData.h"
 
 struct RenderVariables
 {
@@ -33,19 +34,20 @@ public:
 	UINT m_ModelID;
 	Material *m_Material;
 	Effect *m_BaseEffect;
+	PlanetData *m_PlanetData;
 	btTransform m_Transform;
 	btTransform m_Scaling;
-	btTransform m_CameraOffset;
-	XMMATRIX m_View;
-	XMMATRIX m_Proj;
-	float m_FarZ;
-	float m_FarRangeMod;
-	float m_FarModifier;
+	static btTransform m_CameraOffset;
+	static XMMATRIX m_View;
+	static XMMATRIX m_Proj;
+	static float m_FarZ;
+	static float m_FarRangeMod;
+	static float m_FarModifier;
+	static float m_HeightFar;
+	static float m_Aspect;
 	ID3D11RasterizerState* m_RasterizeState;
 	ID3D11BlendState * m_BlendState;
-	D3D11_VIEWPORT * m_ViewPort;
-
-
+	static D3D11_VIEWPORT * m_ViewPort;
 	};
 
 class RenderToScreenMessage : public RenderMessage
@@ -61,7 +63,7 @@ class RenderDevice
 {
 public:
 	RenderDevice();
-	RenderDevice(DX::DeviceResources *resources);
+	RenderDevice(DX::DeviceResources *resources, float farRangeMod);
 	~RenderDevice();
 	void Init(DX::DeviceResources *resources);
 
@@ -79,7 +81,6 @@ public:
 	void BindMainRenderTarget();
 	void BindRenderTarget(ID3D11RenderTargetView *target, ID3D11DepthStencilView *depthStencil);
 	D3D11_VIEWPORT *GetMainViewPort() { return &m_mainViewPort; }
-	void CopyShaderResourceView(ID3D11ShaderResourceView *dest, ID3D11ShaderResourceView *src);
 
 	ID3D11ShaderResourceView* GetMainDeepMapSRV() { return m_MainDeepMapSRV; }
 	ID3D11ShaderResourceView* GetMainTargetMapSRV() { return m_MainTargetMapSRV; }
@@ -87,9 +88,6 @@ public:
 	void CreateQuadScreen();
 	int GetQuadScreenID() { return m_quadScreenID; }
 	int GetRenderIdRTS() { return m_RenderIdRTS; }
-
-	void GenerateDeepOfSphere(int size);
-	int GetDeepOfSphereTextureID() { return m_deepOfCircleID; }
 
 	int CreateModel(Model * model);
 	void DeleteModel(int id);
@@ -132,10 +130,10 @@ public:
 	void DeleteSpotLight(int id);
 	SpotLight* GetSpotLight(int id);
 
-	int CreateTilePlanetData(TilePlanetData * light);
+	/*int CreateTilePlanetData(TilePlanetData * light);
 	int CreateTilePlanetDataFromAnother(int sourceID, XMINT2 whichSquare, float height, float with, float multiplierH, float multiplierN);
 	void DeleteTilePlanetData(int id);
-	TilePlanetData* GetTilePlanetData(int id);
+	TilePlanetData* GetTilePlanetData(int id);*/
 private:
 	DX::DeviceResources *m_resources;
 
@@ -145,8 +143,6 @@ private:
 
 	int m_quadScreenID;
 	int m_RenderIdRTS;
-
-	int m_deepOfCircleID;
 
 	ID3D11ShaderResourceView* m_MainDeepMapSRV;
 

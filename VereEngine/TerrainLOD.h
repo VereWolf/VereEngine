@@ -12,10 +12,16 @@ public:
 	XMINT2 m_Coord;
 	btScalar m_Spacing1;
 	btScalar m_Spacing2;
-	btScalar m_Radius;
 	float m_Level;
 	btVector3 m_Tangent;
 
+	btMatrix3x3 m_InverseSide;
+	float m_Side;
+
+	bool m_IsMap;
+
 	ID3D11ShaderResourceView * m_HeightSRV;
 	ID3D11ShaderResourceView * m_NormalSRV;
+	ID3D11ShaderResourceView * m_EnviromentSRV;
+	ID3D11ShaderResourceView * m_TreesSRV;
 };

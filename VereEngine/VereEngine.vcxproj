@@ -235,11 +235,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Atmosphere.h" />
-    <ClInclude Include="AtmosphereBlock.h" />
-    <ClInclude Include="AtmosphereData.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clouds.h" />
     <ClInclude Include="Content\ShaderStructures.h" />
+    <ClInclude Include="DataDepository.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXHelper.h" />
     <ClInclude Include="Game2DTextFormat.h" />
@@ -261,6 +260,7 @@
     <ClInclude Include="GameObjectsProcess.h" />
     <ClInclude Include="GameObjectsStackManager.h" />
     <ClInclude Include="GameObjectsIDRegistr.h" />
+    <ClInclude Include="GamePlanetHelper.h" />
     <ClInclude Include="GameStreamingData.h" />
     <ClInclude Include="GameTilePlanetData.h" />
     <ClInclude Include="GamePointLight.h" />
@@ -269,6 +269,8 @@
     <ClInclude Include="GameSpotLight.h" />
     <ClInclude Include="GameTexture.h" />
     <ClInclude Include="GameVertex.h" />
+    <ClInclude Include="GamePlanetTile.h" />
+    <ClInclude Include="VereTextureFloat4.h" />
     <ClInclude Include="IDRegistr.h" />
     <ClInclude Include="LuaBinding.h" />
     <ClInclude Include="MainEditorPage.xaml.h">
@@ -281,6 +283,7 @@
     <ClInclude Include="PlanetCoordinate.h" />
     <ClInclude Include="PlanetData.h" />
     <ClInclude Include="PlanetLOD.h" />
+    <ClInclude Include="GamePlanetKind.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="d3dx11effect.h" />
@@ -323,6 +326,7 @@
     </ClCompile>
     <ClCompile Include="Atmosphere.cpp" />
     <ClCompile Include="Clouds.cpp" />
+    <ClCompile Include="DataDepository.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="GameBaseObject.cpp" />
     <ClCompile Include="GameBaseObjectsStack.cpp" />
@@ -330,6 +334,9 @@
     <ClCompile Include="GameObjectSpace.cpp" />
     <ClCompile Include="GameObjectsProcess.cpp" />
     <ClCompile Include="GameObjectsIDRegistr.cpp" />
+    <ClCompile Include="GamePlanetHelper.cpp" />
+    <ClCompile Include="GamePlanetTile.cpp" />
+    <ClCompile Include="GamePlanetKind.cpp" />
     <ClCompile Include="GameResourceObject.cpp" />
     <ClCompile Include="GameResourceObjectsStack.cpp" />
     <ClCompile Include="IDRegistr.cpp" />
@@ -437,14 +444,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\AtmosphereCalc.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "$(TargetDir)\FX\%(Filename).fxo" "%(FullPath)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
@@ -486,7 +485,12 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\QuadScreenWithCoord.fx">
+    <CustomBuild Include="FX\AtmosphereHelper.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\CoordHelper.fx">
       <FileType>Document</FileType>
     </CustomBuild>
   </ItemGroup>

@@ -69,21 +69,13 @@ public:
 	{
 	}
 
-	void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-		float camFarZ, btScalar heightFar, btScalar aspect,
-		float camFarRangeMod, float camModifier)
+	void Render()
 	{
 		btVector3 S = btVector3(GetScaling().getRow(0).getX(), GetScaling().getRow(1).getY(), GetScaling().getRow(2).getZ());
 		RenderMessage message;
 		message.m_ModelID = m_RenderId;
 		message.m_Scaling = btTransform(btMatrix3x3(-S.getX(), 0.0, 0.0, 0.0, -S.getY(), 0.0, 0.0, 0.0, -S.getZ()), btVector3(0.0, 0.0, 0.0));
 		message.m_Transform = GetWorldTransform();
-		message.m_CameraOffset = camOffset;
-		message.m_View = camView;
-		message.m_Proj = camProj;
-		message.m_FarZ = camFarZ;
-		message.m_FarRangeMod = camFarRangeMod;
-		message.m_FarModifier = camModifier;
 		message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
 		message.m_RasterizeState = RenderStates::SolidRS;
 		message.m_BlendState = RenderStates::NoBlendBS;

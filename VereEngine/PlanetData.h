@@ -4,8 +4,9 @@
 #include "GameObjectSpace.h"
 #include "Camera.h"
 #include "IDRegistr.h"
+#include "GamePlanetTile.h"
 
-class PlanetData: public GameObjectSpace
+class PlanetData : public GameObjectSpace
 {
 public:
 	PlanetData();
@@ -18,27 +19,23 @@ public:
 
 		ReleaseCOM(m_AtmosphereDeepMapSRV);
 		ReleaseCOM(m_CloudsDeepMapSRV);
-		ReleaseCOM(m_WaterDeepMapSRV);
+		ReleaseCOM(m_WaterTopDeepMapSRV);
 		ReleaseCOM(m_PlanetDeepMapSRV);
-		ReleaseCOM(m_CoordDeepMapSRV);
 
 		ReleaseCOM(m_AtmosphereTargetMapSRV);
 		ReleaseCOM(m_CloudsTargetMapSRV);
-		ReleaseCOM(m_WaterTargetMapSRV);
+		ReleaseCOM(m_WaterTopTargetMapSRV);
 		ReleaseCOM(m_PlanetTargetMapSRV);
-		ReleaseCOM(m_CoordTargetMapSRV);
 
 		ReleaseCOM(m_AtmosphereDeepMapDSV);
 		ReleaseCOM(m_CloudsDeepMapDSV);
-		ReleaseCOM(m_WaterDeepMapDSV);
+		ReleaseCOM(m_WaterTopDeepMapDSV);
 		ReleaseCOM(m_PlanetDeepMapDSV);
-		ReleaseCOM(m_CoordDeepMapDSV);
 
 		ReleaseCOM(m_AtmosphereTargetMapRTV);
 		ReleaseCOM(m_CloudsTargetMapRTV);
-		ReleaseCOM(m_WaterTargetMapRTV);
+		ReleaseCOM(m_WaterTopTargetMapRTV);
 		ReleaseCOM(m_PlanetTargetMapRTV);
-		ReleaseCOM(m_CoordTargetMapRTV);
 
 		SafeDelete(m_planetElementID);
 	}
@@ -59,32 +56,34 @@ public:
 
 	ID3D11ShaderResourceView* GetAtmosphereDeepMapSRV() { return m_AtmosphereDeepMapSRV; }
 	ID3D11ShaderResourceView* GetCloudsDeepMapSRV() { return m_CloudsDeepMapSRV; }
-	ID3D11ShaderResourceView* GetWaterDeepMapSRV() { return m_WaterDeepMapSRV; }
+	ID3D11ShaderResourceView* GetWaterTopDeepMapSRV() { return m_WaterTopDeepMapSRV; }
+	ID3D11ShaderResourceView* GetWaterBottomDeepMapSRV() { return m_WaterBottomDeepMapSRV; }
 	ID3D11ShaderResourceView* GetPlanetDeepMapSRV() { return m_PlanetDeepMapSRV; }
-	ID3D11ShaderResourceView* GetCoordDeepMapSRV() { return m_CoordDeepMapSRV; }
 
 	ID3D11ShaderResourceView* GetAtmosphereTargetMapSRV() { return m_AtmosphereTargetMapSRV; }
 	ID3D11ShaderResourceView* GetCloudsTargetMapSRV() { return m_CloudsTargetMapSRV; }
-	ID3D11ShaderResourceView* GetWaterTargetMapSRV() { return m_WaterTargetMapSRV; }
+	ID3D11ShaderResourceView* GetWaterTopTargetMapSRV() { return m_WaterTopTargetMapSRV; }
+	ID3D11ShaderResourceView* GetWaterBottomTargetMapSRV() { return m_WaterBottomTargetMapSRV; }
 	ID3D11ShaderResourceView* GetPlanetTargetMapSRV() { return m_PlanetTargetMapSRV; }
-	ID3D11ShaderResourceView* GetCoordTargetMapSRV() { return m_CoordTargetMapSRV; }
 
 	ID3D11DepthStencilView* GetAtmosphereDeepMapDSV() { return m_AtmosphereDeepMapDSV; }
 	ID3D11DepthStencilView* GetCloudsDeepMapDSV() { return m_CloudsDeepMapDSV; }
-	ID3D11DepthStencilView* GetWaterDeepMapDSV() { return m_WaterDeepMapDSV; }
+	ID3D11DepthStencilView* GetWaterTopDeepMapDSV() { return m_WaterTopDeepMapDSV; }
+	ID3D11DepthStencilView* GetWaterBottomDeepMapDSV() { return m_WaterBottomDeepMapDSV; }
 	ID3D11DepthStencilView* GetPlanetDeepMapDSV() { return m_PlanetDeepMapDSV; }
-	ID3D11DepthStencilView* GetCoordDeepMapDSV() { return m_CoordDeepMapDSV; }
 
 	ID3D11RenderTargetView* GetAtmosphereTargetMapRTV() { return m_AtmosphereTargetMapRTV; }
 	ID3D11RenderTargetView* GetCloudsTargetMapRTV() { return m_CloudsTargetMapRTV; }
-	ID3D11RenderTargetView* GetWaterTargetMapRTV() { return m_WaterTargetMapRTV; }
+	ID3D11RenderTargetView* GetWaterTopTargetMapRTV() { return m_WaterTopTargetMapRTV; }
+	ID3D11RenderTargetView* GetWaterBottomTargetMapRTV() { return m_WaterBottomTargetMapRTV; }
 	ID3D11RenderTargetView* GetPlanetTargetMapRTV() { return m_PlanetTargetMapRTV; }
-	ID3D11RenderTargetView* GetCoordTargetMapRTV() { return m_CoordTargetMapRTV; }
 
 	D3D11_VIEWPORT *GetViewPort() { return &m_Viewport; }
 
 	ID3D11Buffer *const *GetLODVB() { return &m_LODVB; }
 	ID3D11Buffer *GetLODIB() { return m_LODIB; }
+
+	std::string GetFullPath();
 
 	inline float GetRadiusOfTerrain() { return m_radiusOfTerrain; }
 	inline void SetRadiusOfTerrain(float n) { m_radiusOfTerrain = n; }
@@ -98,23 +97,61 @@ public:
 	inline float GetRadiusOfClouds() { return m_radiusOfClouds; }
 	inline void SetRadiusOfClouds(float n) { m_radiusOfClouds = n; }
 
+	float GetFogAStart() { return m_fogAStart; }
+	void SetFogAStart(float s) { m_fogAStart = s; }
+	float GetFogARange() { return m_fogARange; }
+	void SetFogARange(float r) { m_fogARange = r; }
+	XMFLOAT3 GetFogAColor() { return m_fogAColor; }
+	void SetFogAColor(XMFLOAT3 c) { m_fogAColor = c; }
+
+	float GetFogWStart() { return m_fogWStart; }
+	void SetFogWStart(float s) { m_fogWStart = s; }
+	float GetFogWRange() { return m_fogWRange; }
+	void SetFogWRange(float r) { m_fogWRange = r; }
+	XMFLOAT3 GetFogWColor() { return m_fogWColor; }
+	void SetFogWColor(XMFLOAT3 c) { m_fogWColor = c; }
+
 	inline btMatrix3x3 GetBlockAnglMatrix(int side) { return m_blockMatrixs[side]; }
 	int GetNearestSide(bool withOffset);
 	inline btVector3 GetTangent() { return m_tang; }
 	inline int16_t GetMaxLevel() { return m_maxLevel; }
 	inline void SetMaxLevel(int16_t n) { m_maxLevel = n; }
-	inline int16_t GetMaxRenderLevel() { return m_maxRenderLevel; }
-	inline void SetMaxRenderLevel(int16_t n) { m_maxRenderLevel = n; }
+	inline int16_t GetCurrentMaxLevel() { return m_currentMaxLevel; }
+	inline void SetCurrentMaxLevel(int16_t n) { m_currentMaxLevel = n; }
 	inline int16_t GetNumPointInRowInCell() { return m_numPointsInRowInCell; }
 	inline void SetNumPointInRowInCell(int n) { m_numPointsInRowInCell = n; }
-	inline int16_t GetLoadDataAfterAgain() { return m_loadDataAfterAgain; }
-	inline void SetLoadDataAfterAgain(int16_t d) { m_loadDataAfterAgain = d; }
-	inline int16_t GetMaxLevelOfStreaming() { return m_maxLevelOfStreaming; }
-	inline void SetMaxLevelOfStreaming(int16_t d) { m_maxLevelOfStreaming = d; }
+	inline int16_t GetNumPointInRowInBigCell() { return m_numPointsInRowInBigCell; }
+	inline void SetNumPointInRowInBigCell(int n) { m_numPointsInRowInBigCell = n; }
+	inline int16_t GetLoadDataPer() { return m_loadDataPer; }
+	inline void SetLoadDataPer(int16_t d) { m_loadDataPer = d; }
+	inline int16_t GetLoadDataMaxLvl() { return m_loadDataMaxLvl; }
+	inline void SetLoadDataMaxLvl(int16_t d) { m_loadDataMaxLvl = d; }
+	inline int16_t GetLoadTilesLvl() { return m_loadTilesLvl; }
+	inline void SetLoadTilesLvl(int16_t d) { m_loadTilesLvl = d; }
 	inline string GetPosFix(int side) { return m_posfix[side]; }
+
+	int16_t GetMaxNumBlockBig() { return m_maxNumBlockBig; }
+	void SetMaxNumBlockBig(int16_t d) { m_maxNumBlockBig = d; }
+	int16_t GetCurerentNumBlockBig() { return m_currentNumBlockBig; }
+	void SetCurrentNumBlockBig(int16_t d) { m_currentNumBlockBig = d; }
+
+	int16_t GetMaxNumBlockSmall() { return m_maxNumBlockSmall; }
+	void SetMaxNumBlockSmall(int16_t d) { m_maxNumBlockSmall = d; }
+	int16_t GetCurerentNumBlockSmall() { return m_currentNumBlockSmall; }
+	void SetCurrentNumBlockSmall(int16_t d) { m_currentNumBlockSmall = d; }
 
 	ID3D11ShaderResourceView *GetNormalSRV() { return m_normalSRV; }
 	ID3D11ShaderResourceView *GetHeightSRV() { return m_heightSRV; }
+
+	int GetIDHeightMapBig() { return m_idHeightMapBig; }
+	int GetIDNormalMapBig() { return m_idNormalMapBig; }
+	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
+	int GetIDTreesMapBig() { return m_idTreesMapBig; }
+
+	int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
+	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
+	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
+	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }
 
 	void GenerateCoord(float height, float width, float level);
 private:
@@ -123,21 +160,31 @@ private:
 	float m_radiusOfAtmosphere;
 	float m_radiusOfClouds;
 
+	float m_fogAStart;
+	float m_fogARange;
+	XMFLOAT3 m_fogAColor;
+
+	float m_fogWStart;
+	float m_fogWRange;
+	XMFLOAT3 m_fogWColor;
+
 	int16_t m_numPointsInRowInCell;
+	int16_t m_numPointsInRowInBigCell;
 	int16_t m_maxLevel;
-	int16_t m_maxRenderLevel;
-	int16_t m_loadDataAfterAgain;
-	int16_t m_maxLevelOfStreaming;
+	int16_t m_currentMaxLevel;
+	int16_t m_loadDataPer;
+	int16_t m_loadDataMaxLvl;
+	int16_t m_loadTilesLvl;
+	int16_t m_maxNumBlockBig;
+	int16_t m_currentNumBlockBig;
+	int16_t m_maxNumBlockSmall;
+	int16_t m_currentNumBlockSmall;
 
 	std::string m_posfix[12];
 
 	int m_RenderIdWater;
 	int m_RenderIdAtmosphere;
 	int m_RenderIdClouds;
-
-	int m_RenderIdWaterScreen;
-	int m_RenderIdAtmosphereScreen;
-	int m_RenderIdCloudsScreen;
 
 	ID3D11Buffer *m_LODVB;
 	ID3D11Buffer *m_LODIB;
@@ -155,30 +202,43 @@ private:
 
 	ID3D11ShaderResourceView* m_AtmosphereDeepMapSRV;
 	ID3D11ShaderResourceView* m_CloudsDeepMapSRV;
-	ID3D11ShaderResourceView* m_WaterDeepMapSRV;
+	ID3D11ShaderResourceView* m_WaterTopDeepMapSRV;
+	ID3D11ShaderResourceView* m_WaterBottomDeepMapSRV;
 	ID3D11ShaderResourceView* m_PlanetDeepMapSRV;
-	ID3D11ShaderResourceView* m_CoordDeepMapSRV;
 
 	ID3D11ShaderResourceView* m_AtmosphereTargetMapSRV;
 	ID3D11ShaderResourceView* m_CloudsTargetMapSRV;
-	ID3D11ShaderResourceView* m_WaterTargetMapSRV;
+	ID3D11ShaderResourceView* m_WaterTopTargetMapSRV;
+	ID3D11ShaderResourceView* m_WaterBottomTargetMapSRV;
 	ID3D11ShaderResourceView* m_PlanetTargetMapSRV;
-	ID3D11ShaderResourceView* m_CoordTargetMapSRV;
 
 	ID3D11DepthStencilView* m_AtmosphereDeepMapDSV;
 	ID3D11DepthStencilView* m_CloudsDeepMapDSV;
-	ID3D11DepthStencilView* m_WaterDeepMapDSV;
+	ID3D11DepthStencilView* m_WaterTopDeepMapDSV;
+	ID3D11DepthStencilView* m_WaterBottomDeepMapDSV;
 	ID3D11DepthStencilView* m_PlanetDeepMapDSV;
-	ID3D11DepthStencilView* m_CoordDeepMapDSV;
 
 	ID3D11RenderTargetView* m_AtmosphereTargetMapRTV;
 	ID3D11RenderTargetView* m_CloudsTargetMapRTV;
-	ID3D11RenderTargetView* m_WaterTargetMapRTV;
+	ID3D11RenderTargetView* m_WaterTopTargetMapRTV;
+	ID3D11RenderTargetView* m_WaterBottomTargetMapRTV;
 	ID3D11RenderTargetView* m_PlanetTargetMapRTV;
-	ID3D11RenderTargetView* m_CoordTargetMapRTV;
 
 	D3D11_VIEWPORT m_Viewport;
 
+protected:
+	std::string m_planetPath;
+	static std::string m_rootFolder;
+
+	int m_idHeightMapBig;
+	int m_idNormalMapBig;
+	int m_idEnviromentMapBig;
+	int m_idTreesMapBig;
+
+	int m_idHeightMapSmall;
+	int m_idNormalMapSmall;
+	int m_idEnviromentMapSmall;
+	int m_idTreesMapSmall;
 public:
 	std::vector<GameComponent*> m_planetElements;
 	IDRegistr *m_planetElementID;

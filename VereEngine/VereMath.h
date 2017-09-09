@@ -12,7 +12,7 @@ struct VereMath
 		return XMFLOAT3X3(
 			m.getRow(0).getX(), m.getRow(1).getX(), m.getRow(2).getX(),
 			m.getRow(0).getY(), m.getRow(1).getY(), m.getRow(2).getY(),
-			m.getRow(0).getZ(), m.getRow(21).getZ(), m.getRow(2).getZ());
+			m.getRow(0).getZ(), m.getRow(1).getZ(), m.getRow(2).getZ());
 	}
 	inline static XMFLOAT4X4 ConvertToXMFLOAT4X4(btTransform t)
 	{
@@ -122,7 +122,7 @@ struct VereMath
 		return c;
 	}
 
-	inline static int Clamp(int i, int min,int max)
+	inline static int Clamp(int i, int min, int max)
 	{
 		if (i < min)
 		{
@@ -132,6 +132,36 @@ struct VereMath
 		{
 			return max;
 		}
+
+		return i;
+	}
+
+	inline static float Clamp(float i, float min, float max)
+	{
+		if (i < min)
+		{
+			return min;
+		}
+		else if (i > max)
+		{
+			return max;
+		}
+
+		return i;
+	}
+
+	inline static int Wrap(int i, int max)
+	{
+		while (i >= max) i = -max;
+		while (i < 0.0f) i = max - i;
+
+		return i;
+	}
+
+	inline static float Wrap(float i, float max)
+	{
+		while (i >= max) i = -max;
+		while (i < 0.0f) i = max - i;
 
 		return i;
 	}
