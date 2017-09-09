@@ -1,4 +1,5 @@
 #include "LightHelper.fx"
+#include "AtmosphereHelper.fx"
 
 cbuffer cbPerObject
 {
@@ -13,15 +14,14 @@ cbuffer cbPerObject
 
 Texture2D gMainDepthMap;
 Texture2D gMainTargetMap;
-Texture2D gCoordDepthMap;
-Texture2D gCoordTargetMap;
-Texture2D gWaterDepthMap;
-Texture2D gWaterTargetMap;
+Texture2D gWaterTopDepthMap;
+Texture2D gWaterTopTargetMap;
+Texture2D gWaterBottomDepthMap;
+Texture2D gWaterBottomTargetMap;
 Texture2D gCloudsDepthMap;
 Texture2D gCloudsTargetMap;
 Texture2D gAtmosphereDepthMap;
 Texture2D gAtmosphereTargetMap;
-Texture2D gSphereDepthPatternMap;
 
 SamplerState samState
 {
@@ -85,45 +85,38 @@ PixelOut PS(VertexOut  pin) : SV_Target
 {
 	PixelOut pout1;
 PixelOut pout2;
+float alpha = 0.0f;
+
 pout1.Depth = gMainDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
 pout1.Color = gMainTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
-pout2.Depth = gWaterDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
-pout2.Color = gWaterTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
-float alpha = 0.4f;
+
+pout2.Depth = gAtmosphereDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
+pout2.Color = gAtmosphereTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
+
+alpha = pout2.Color.a;
 
 pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);
 
-pout2.Depth = gCloudsDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
+pout2.Depth = gWaterBottomDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
+pout2.Color = gWaterBottomTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
+
+alpha = 1.0f - pout2.Color.a + 0.4f;
+
+pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);
+
+pout2.Depth = gWaterTopDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
+pout2.Color = gWaterTopTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
+
+alpha = 0.4f;
+
+pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);
+
+/*pout2.Depth = gCloudsDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
 pout2.Color = gCloudsTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;
 
 alpha = 0.05f;
 
-pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);
-
-/*pout2.Depth = gAtmosphereDepthMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
-pout2.Color = gAtmosphereTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rgba;*/
-
-pout2.Depth = gSphereDepthPatternMap.SampleLevel(samState, gCoordTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rg, 0).r * gSize;
-if (pout2.Depth < 0.0f)
-{
-	pout2.Depth = 1.0f;
-}
-else
-{
-	alpha = 0.4f;
-
-	pout2.Depth = gDepth - pout2.Depth;
-
-	//pout2.Depth = log(gFarModifier * pout2.Depth + 1.0f) / log(gFarModifier * gFarZ + 1.0f) * pout2.Depth;
-	pout2.Color = float4(pout2.Depth, 1.0f, 1.0f, 0.0f);
-	pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);
-}
-/*float C = gSphereDepthPatternMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r;
-
-pout1.Color = float4(gCoordTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rg,
-	gSphereDepthPatternMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).r, 0.0f);*/
-
-//pout1.Color.rgb = float3(gDepth, gDepth, gSphereDepthPatternMap.SampleLevel(samState, gCoordTargetMap.SampleLevel(samState, float2(pin.TexTess.x, pin.TexTess.y), 0).rg, 0).r * gSize);
+pout1 = CalcTransparent(pout1.Depth, pout2.Depth, pout1.Color, pout2.Color, alpha);*/
 
 return pout1;
 }

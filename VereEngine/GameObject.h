@@ -39,9 +39,7 @@ public:
 		btVector3 spacing, btScalar mass, btVector3 localInertia, btScalar rangeForFullProcces, btCollisionShape *collisionShape);
 	virtual void Init() = 0;
 	virtual void Update() = 0;
-	virtual void Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-		float camFarZ, btScalar heightFar, btScalar aspect,
-		float camFarRangeMod, float camModifier) = 0;
+	virtual void Render() = 0;
 	void Integrate();
 
 	virtual GameObject* Clone() = 0;

@@ -67,6 +67,7 @@ using namespace DirectX;
 
 #include "VereMath.h"
 #include "VereTextureFloat.h"
+#include "VereTextureFloat4.h"
 #include "VereTextureByte4.h"
 #include "VereQueue.h"
 #include "d3dUtil.h"

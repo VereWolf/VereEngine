@@ -15,4 +15,7 @@ public:
 private:
 	int m_componentID;
 	int m_isProccessed;
+
+protected:
+	XMFLOAT4 m_progress;
 };

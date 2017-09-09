@@ -1,5 +1,5 @@
-#include "AtmosphereCalc.fx"
 #include "LightHelper.fx"
+#include "AtmosphereHelper.fx"
 
 cbuffer cbPerFrame
 {
@@ -12,16 +12,15 @@ cbuffer cbPerObject
 	float3x3 gWorldN;
 	float4x4 gViewProj;
 	float gSpacing;
-	float gRadius;
-	float3 gCentrePos;
+	float gRadiusOfWater;
 	float3 gOffset;
 	float gLevel;
 	float gFarZ;
 	float gFarModifier;
 	float3 gCenterOfPlanet;
-	float gFogStart;
-	float gFogRange;
-	float3 gFogColor;
+	float3 gFogAColor;
+	float3 gFogWColor;
+	float gFogWRange;
 };
 
 float c = 0.1f;
@@ -124,11 +123,11 @@ DomainOut DS(PatchTess patchTess,
 
 	dout.PosW = mul(float4(dout.PosW, 1.0f), gWorld).xyz;
 
-	float3 N = normalize(dout.PosW - gCentrePos);
+	float3 N = normalize(dout.PosW - gCenterOfPlanet);
 
 	dout.NormalW = N;
 
-	dout.PosW = gRadius * N + gCentrePos;
+	dout.PosW = gRadiusOfWater * N + gCenterOfPlanet;
 
 	dout.PosV = mul(float4(dout.PosW, 1.0f), gViewProj).xyz;
 	dout.PosH = mul(float4(dout.PosW, 1.0f), gViewProj);
@@ -140,11 +139,9 @@ DomainOut DS(PatchTess patchTess,
 
 float4 PS(DomainOut  pin) : SV_Target
 {
+	float d = clamp(CalcWater(gCenterOfPlanet, pin.PosW, float3(0.0f, 0.0f, 0.0f), gRadiusOfWater, gFogWRange), 0.0f, 1.0f);
 
-	float3 color = float3(1.0f, 1.0f, 1.0f);
-
-
-	return float4(color, 1);
+	return float4(gFogWColor, d);
 }
 
 technique11 LightTech

@@ -1,5 +1,5 @@
-#include "AtmosphereCalc.fx"
 #include "LightHelper.fx"
+#include "AtmosphereHelper.fx"
 
 cbuffer cbPerFrame
 {
@@ -13,8 +13,7 @@ cbuffer cbPerObject
 	float3x3 gWorldN;
 	float4x4 gViewProj;
 	float gSpacing;
-	float gRadius;
-	float3 gCentrePos;
+	float gRadiusOfClouds;
 	float3 gOffset;
 	float gLevel;
 	float gFarZ;
@@ -125,11 +124,11 @@ DomainOut DS(PatchTess patchTess,
 
 	dout.PosW = mul(float4(dout.PosW, 1.0f), gWorld).xyz;
 
-	float3 N = normalize(dout.PosW - gCentrePos);
+	float3 N = normalize(dout.PosW - gCenterOfPlanet);
 
 	dout.NormalW = N;
 
-	dout.PosW = gRadius * N + gCentrePos;
+	dout.PosW = gRadiusOfClouds * N + gCenterOfPlanet;
 
 	dout.PosV = mul(float4(dout.PosW, 1.0f), gViewProj).xyz;
 	dout.PosH = mul(float4(dout.PosW, 1.0f), gViewProj);

@@ -6,4 +6,5 @@ GameComponent::GameComponent()
 {
 	m_componentID = -1;
 	m_isProccessed = 0;
+	m_progress = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 }

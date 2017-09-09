@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-struct TilePlanetData
+/*struct TilePlanetData
 {
 public:
 	VereTextureFloat *m_heightMap;
@@ -20,4 +20,4 @@ public:
 	inline void ReleaseTilePlanetData() { SafeDelete(m_gameTilePlanetData); }
 private:
 	TilePlanetData *m_gameTilePlanetData;
-};
+};*/

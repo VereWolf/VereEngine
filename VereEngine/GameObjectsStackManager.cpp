@@ -167,14 +167,16 @@ void GameObjectsStackManager::DrawScene()
 	int S = GetGameObjectStackSize();
 
 	PlanetLOD::m_onlyRenderText = false;
+	RenderMessage::m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
+	RenderMessage::m_CameraOffset = GetMainCamera()->btOffset();
+	RenderMessage::m_View = GetMainCamera()->View();
+	RenderMessage::m_Proj = GetMainCamera()->Proj();
 
 	for (int i = 0; i < S; ++i)
 	{
 		if (GetGameObjectByID(i) != NULL && GetGameObjectByID(i)->GetRenderId() >= 0)
 		{
-			GetGameObjectByID(i)->Render(GetMainCamera()->btOffset(), GetMainCamera()->View(), GetMainCamera()->Proj(),
-				GetMainCamera()->GetFarZ(), GetMainCamera()->GetFarWindowHeight(), GetMainCamera()->GetAspect(),
-				GetMainCamera()->GetFarRangeMod(), GetMainCamera()->GetFarModifier());
+			GetGameObjectByID(i)->Render();
 		}
 	}
 

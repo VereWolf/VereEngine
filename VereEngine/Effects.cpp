@@ -48,13 +48,21 @@ BaseEffect::BaseEffect(DX::DeviceResources *resources, const std::string& filena
 	World = mFX->GetVariableByName("gWorld")->AsMatrix();
 	WorldN = mFX->GetVariableByName("gWorldN")->AsMatrix();
 	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	FogColor = mFX->GetVariableByName("gFogColor")->AsVector();
 	FarZ = mFX->GetVariableByName("gFarZ");
 	FarRangeMod = mFX->GetVariableByName("gFarRangeMod");
 	FarModifier = mFX->GetVariableByName("gFarModifier");
-	FogStart = mFX->GetVariableByName("gFogStart");
-	FogRange = mFX->GetVariableByName("gFogRange");
+	FogAColor = mFX->GetVariableByName("gFogAColor")->AsVector();
+	FogAStart = mFX->GetVariableByName("gFogAStart");
+	FogARange = mFX->GetVariableByName("gFogARange");
+	FogWColor = mFX->GetVariableByName("gFogWColor")->AsVector();
+	FogWStart = mFX->GetVariableByName("gFogWStart");
+	FogWRange = mFX->GetVariableByName("gFogWRange");
 	CenterOfPlanet = mFX->GetVariableByName("gCenterOfPlanet")->AsVector();
+	DirectOfPlanet = mFX->GetVariableByName("gDirectOfPlanet")->AsVector();
+	RadiusOfTerrain = mFX->GetVariableByName("gRadiusOfTerrain");
+	RadiusOfWater = mFX->GetVariableByName("gRadiusOfWater");
+	RadiusOfClouds = mFX->GetVariableByName("gRadiusOfClouds");
+	RadiusOfAtmosphere = mFX->GetVariableByName("gRadiusOfAtmosphere");
 	SkyColor = mFX->GetVariableByName("gSkyColor")->AsVector();
 	Mat = mFX->GetVariableByName("gMaterial");
 }
@@ -143,32 +151,9 @@ void BaseEffect::BindShaderResource(UINT index, LPCSTR name)
 }
 #pragma endregion
 
-#pragma region WorldEffect
-WorldEffect::WorldEffect(DX::DeviceResources *resources, const std::string& filename)
-	: Effect(resources, filename)
-{
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	World = mFX->GetVariableByName("gWorldN")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	FogColor = mFX->GetVariableByName("gFogColor")->AsVector();
-	FogStart = mFX->GetVariableByName("gFogStart");
-	FogRange = mFX->GetVariableByName("gFogRange");
-	RadiusOfPlanet = mFX->GetVariableByName("gRadiusOfPlanet");
-	CenterOfPlanet = mFX->GetVariableByName("gCenterOfPlanet")->AsVector();
-	SkyColor = mFX->GetVariableByName("gSkyColor")->AsVector();
-	Mat = mFX->GetVariableByName("gMaterial");
-	//SunVector = mFX->GetVariableByName("gSunVector")->AsVector();
-	//Light = mFX->GetVariableByName("gLight");
-}
-#pragma endregion
-
 #pragma region SkyBox
 SkyBoxEffect::SkyBoxEffect(DX::DeviceResources *resources, const std::string& filename)
-	: WorldEffect(resources, filename)
+	: BaseEffect(resources, filename)
 {
 	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
 	World = mFX->GetVariableByName("gWorld")->AsMatrix();
@@ -179,21 +164,22 @@ SkyBoxEffect::SkyBoxEffect(DX::DeviceResources *resources, const std::string& fi
 TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
 	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Tang = mFX->GetVariableByName("gTang")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
-	Radius = mFX->GetVariableByName("gRadius");
 	Level = mFX->GetVariableByName("gLevel");
+	Side = mFX->GetVariableByName("gSide");
+
+	InverseSide = mFX->GetVariableByName("gInverseSide")->AsMatrix();
+	Side = mFX->GetVariableByName("gSide");
+
+	IsMap = mFX->GetVariableByName("gIsMap");
 
 	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
 	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
+	EnviromentMap = mFX->GetVariableByName("gEnviromentMap")->AsShaderResource();
+	TreesMap = mFX->GetVariableByName("gTreesMap")->AsShaderResource();
 }
 #pragma endregion
 
@@ -201,16 +187,8 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 AtmosphereEffect::AtmosphereEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
-	Radius = mFX->GetVariableByName("gRadius");
 	Level = mFX->GetVariableByName("gLevel");
 }
 #pragma endregion
@@ -219,16 +197,8 @@ AtmosphereEffect::AtmosphereEffect(DX::DeviceResources *resources, const std::st
 CloudsEffect::CloudsEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
-	Radius = mFX->GetVariableByName("gRadius");
 	Level = mFX->GetVariableByName("gLevel");
 }
 #pragma endregion
@@ -237,16 +207,8 @@ CloudsEffect::CloudsEffect(DX::DeviceResources *resources, const std::string& fi
 WaterLODEffect::WaterLODEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-	Proj = mFX->GetVariableByName("gProj")->AsMatrix();
-	View = mFX->GetVariableByName("gView")->AsMatrix();
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
-	CentrePos = mFX->GetVariableByName("gCentrePos")->AsVector();
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
-	Radius = mFX->GetVariableByName("gRadius");
 	Level = mFX->GetVariableByName("gLevel");
 }
 #pragma endregion
@@ -258,15 +220,14 @@ QuadScreenWCA::QuadScreenWCA(DX::DeviceResources *resources, const std::string& 
 	View = mFX->GetVariableByName("gView")->AsMatrix();
 	MainTargetMap = mFX->GetVariableByName("gMainTargetMap")->AsShaderResource();
 	MainDepthMap = mFX->GetVariableByName("gMainDepthMap")->AsShaderResource();
-	CoordTargetMap = mFX->GetVariableByName("gCoordTargetMap")->AsShaderResource();
-	CoordDepthMap = mFX->GetVariableByName("gCoordDepthMap")->AsShaderResource();
-	WaterTargetMap = mFX->GetVariableByName("gWaterTargetMap")->AsShaderResource();
-	WaterDepthMap = mFX->GetVariableByName("gWaterDepthMap")->AsShaderResource();
+	WaterTopTargetMap = mFX->GetVariableByName("gWaterTopTargetMap")->AsShaderResource();
+	WaterTopDepthMap = mFX->GetVariableByName("gWaterTopDepthMap")->AsShaderResource();
+	WaterBottomTargetMap = mFX->GetVariableByName("gWaterBottomTargetMap")->AsShaderResource();
+	WaterBottomDepthMap = mFX->GetVariableByName("gWaterBottomDepthMap")->AsShaderResource();
 	CloudsTargetMap = mFX->GetVariableByName("gCloudsTargetMap")->AsShaderResource();
 	CloudsDepthMap = mFX->GetVariableByName("gCloudsDepthMap")->AsShaderResource();
 	AtmosphereTargetMap = mFX->GetVariableByName("gAtmosphereTargetMap")->AsShaderResource();
 	AtmosphereDepthMap = mFX->GetVariableByName("gAtmosphereDepthMap")->AsShaderResource();
-	SphereDepthPatternMap = mFX->GetVariableByName("gSphereDepthPatternMap")->AsShaderResource();
 
 	Depth = mFX->GetVariableByName("gDepth");
 	Size = mFX->GetVariableByName("gSize");
@@ -275,25 +236,11 @@ QuadScreenWCA::QuadScreenWCA(DX::DeviceResources *resources, const std::string& 
 }
 #pragma endregion
 
-#pragma region QuadScreenWithCoord
-QuadScreenWithCoord::QuadScreenWithCoord(DX::DeviceResources *resources, const std::string& filename)
-	: BaseEffect(resources, filename)
-{
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	Size = mFX->GetVariableByName("gSize");
-}
-#pragma endregion
-
 #pragma region PosNormalTexTan
 PosNormalTexTanEffect::PosNormalTexTanEffect(DX::DeviceResources *resources, const std::string& filename)
-	: WorldEffect(resources, filename)
+	: BaseEffect(resources, filename)
 {
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	WorldN = mFX->GetVariableByName("gWorldN")->AsMatrix();
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
 	WorldInvTranspose = mFX->GetVariableByName("gWorldInvTranspose")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
 	DirLights = mFX->GetVariableByName("gDirLight");
 	Mat = mFX->GetVariableByName("gMaterial");
 	isDiffuseMap = mFX->GetVariableByName("gIsDiffuseMap");
@@ -309,12 +256,8 @@ PosNormalTexTanEffect::PosNormalTexTanEffect(DX::DeviceResources *resources, con
 
 #pragma region BodyEffect
 BodyEffect::BodyEffect(DX::DeviceResources *resources, const std::string& filename)
-	: WorldEffect(resources, filename)
+	: BaseEffect(resources, filename)
 {
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	WorldN = mFX->GetVariableByName("gWorldN")->AsMatrix();
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
 	Mat = mFX->GetVariableByName("gMaterial");
 	TS = mFX->GetVariableByName("gTS");
 }
@@ -322,11 +265,8 @@ BodyEffect::BodyEffect(DX::DeviceResources *resources, const std::string& filena
 
 #pragma region BillboardEffect
 BillboardEffect::BillboardEffect(DX::DeviceResources *resources, const std::string& filename)
-	: WorldEffect(resources, filename)
+	: BaseEffect(resources, filename)
 {
-	World = mFX->GetVariableByName("gWorld")->AsMatrix();
-	ViewProj = mFX->GetVariableByName("gViewProj")->AsMatrix();
-	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
 	RenderStart = mFX->GetVariableByName("gRenderStart");
 	RenderEnd = mFX->GetVariableByName("gRenderEnd");
 	Coord = mFX->GetVariableByName("gCoord")->AsVector();
@@ -351,7 +291,6 @@ AtmosphereEffect* Effects::AtmosphereFX = 0;
 CloudsEffect* Effects::CloudsFX = 0;
 WaterLODEffect* Effects::WaterLODFX = 0;
 QuadScreenWCA* Effects::QuadScreenWCAFX = 0;
-QuadScreenWithCoord* Effects::QuadScreenWithCoordFX = 0;
 PosNormalTexTanEffect* Effects::PosNormalTexTanFX = 0;
 BodyEffect* Effects::BodyFX = 0;
 BillboardEffect* Effects::BillboardFX = 0;
@@ -365,7 +304,6 @@ void Effects::InitAll(DX::DeviceResources *resources)
 	CloudsFX = new CloudsEffect(resources, "FX/Clouds.fxo");
 	WaterLODFX = new WaterLODEffect(resources, "FX/WaterLOD.fxo");
 	QuadScreenWCAFX = new QuadScreenWCA(resources, "FX/QuadScreenWCA.fxo");
-	QuadScreenWithCoordFX = new QuadScreenWithCoord(resources, "FX/QuadScreenWithCoord.fxo");
 	PosNormalTexTanFX = new PosNormalTexTanEffect(resources, "FX/PosNormalTexTan.fxo");
 	BodyFX = new BodyEffect(resources, "FX/Body.fxo");
 	BillboardFX = new BillboardEffect(resources, "FX/Billboard.fxo");
@@ -380,7 +318,6 @@ void Effects::DestroyAll()
 	delete CloudsFX;
 	delete WaterLODFX;
 	delete QuadScreenWCAFX;
-	delete QuadScreenWithCoordFX;
 	delete PosNormalTexTanFX;
 	delete BodyFX;
 	delete BillboardFX;

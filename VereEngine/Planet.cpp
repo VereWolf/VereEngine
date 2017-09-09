@@ -10,33 +10,25 @@ void QuadScreenWCAMessage::Use()
 	((QuadScreenWCA*)m_BaseEffect)->SetView(m_View);
 	((QuadScreenWCA*)m_BaseEffect)->SetMainDepthMap(m_MainDepthSRV);
 	((QuadScreenWCA*)m_BaseEffect)->SetMainTargetMap(m_MainTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetCoordDepthMap(m_CoordDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetCoordTargetMap(m_CoordTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterDepthMap(m_WaterDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterTargetMap(m_WaterTargetSRV);
+	((QuadScreenWCA*)m_BaseEffect)->SetWaterTopDepthMap(m_WaterTopDepthSRV);
+	((QuadScreenWCA*)m_BaseEffect)->SetWaterTopTargetMap(m_WaterTopTargetSRV);
+	((QuadScreenWCA*)m_BaseEffect)->SetWaterBottomDepthMap(m_WaterBottomDepthSRV);
+	((QuadScreenWCA*)m_BaseEffect)->SetWaterBottomTargetMap(m_WaterBottomTargetSRV);
 	((QuadScreenWCA*)m_BaseEffect)->SetCloudsDepthMap(m_CloudsDepthSRV);
 	((QuadScreenWCA*)m_BaseEffect)->SetCloudsTargetMap(m_CloudsTargetSRV);
 	((QuadScreenWCA*)m_BaseEffect)->SetAtmosphereDepthMap(m_AtmosphereDepthSRV);
 	((QuadScreenWCA*)m_BaseEffect)->SetAtmosphereTargetMap(m_AtmosphereTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetSphereDepthPatternMap(m_SphereDepthPatternMap);
 	((QuadScreenWCA*)m_BaseEffect)->SetDepth(m_Depth);
 	((QuadScreenWCA*)m_BaseEffect)->SetSize(m_Size);
 	((QuadScreenWCA*)m_BaseEffect)->SetWaterRatio(m_WaterRatio);
 	((QuadScreenWCA*)m_BaseEffect)->SetCloudsRatio(m_CloudsRatio);
 }
 
-void QuadScreenWithCoordMessage::Use()
-{
-	XMMATRIX mesh = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(m_CameraOffset * m_Transform));
-	((QuadScreenWithCoord*)m_BaseEffect)->SetWorld(mesh);
-	((QuadScreenWithCoord*)m_BaseEffect)->SetViewProj(m_View * m_Proj);
-	((QuadScreenWithCoord*)m_BaseEffect)->SetView(m_View);
-	((QuadScreenWithCoord*)m_BaseEffect)->SetProj(m_Proj);
-	((QuadScreenWithCoord*)m_BaseEffect)->SetSize(m_size);
-}
-
 Planet::Planet()
 {
+	m_interator = 0;
+	m_CP = btVector3(0.0, 0.0, 0.0);
+	m_PP = btVector3(0.0, 0.0, 0.0);
 }
 
 Planet::Planet(Planet & other)
@@ -48,20 +40,25 @@ void Planet::Init()
 	GameObjectSpace::Init();
 	PlanetData::Init();
 }
-void Planet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
-	float camFarZ, btScalar heightFar, btScalar aspect,
-	float camFarRangeMod, float camModifier)
+void Planet::Render()
 {
 	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetAtmosphereTargetMapRTV(), DirectX::Colors::Transparent);
 	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetCloudsTargetMapRTV(), DirectX::Colors::Transparent);
-	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetWaterTargetMapRTV(), DirectX::Colors::Transparent);
+	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetWaterTopTargetMapRTV(), DirectX::Colors::Transparent);
+	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetWaterBottomTargetMapRTV(), DirectX::Colors::Transparent);
 	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetPlanetTargetMapRTV(), DirectX::Colors::Transparent);
-	m_resources->GetD3DDeviceContext()->ClearRenderTargetView(GetCoordTargetMapRTV(), DirectX::Colors::Transparent);
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetAtmosphereDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetCloudsDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetWaterDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetWaterTopDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetWaterBottomDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetPlanetDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetCoordDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	m_PP = m_CP;
+	m_CP = GameObjectStackHandle->GetMainCamera()->GetLocalPosition();
+
+	btVector3 CH = m_CP - m_PP;
+
+	SetCurrentMaxLevel(VereMath::Clamp(GetMaxLevel() - 5 * CH.length() * GetScaling().getRow(0).getX() / pow(GetMaxLevel(), 2), 1, GetMaxLevel()));
 
 	if (m_planetElementsInProcess.GetSize() > 0)
 	{
@@ -78,57 +75,34 @@ void Planet::Render(btTransform camOffset, XMMATRIX camView, XMMATRIX camProj,
 
 	for (int i = 0; i < 6; ++i)
 	{
-		m_PlanetLOD[i].Render(camOffset, camView, camProj,
-			camFarZ,heightFar, aspect, camFarRangeMod, camModifier);
+		m_PlanetLOD[i].Render();
 	}
 
-	DrawQuadWithCoord();
-	DrawWCA();
-	DrawPlanet();
+	GameComponentsManagerHandle->DeleteUselessElement(KT_TERRAIN_LOD0, KT_TERRAIN_LOD2);
 
-	for (int i = 0; i < m_planetElementID->GetRangeOfElement(); ++i)
+	for (int i = 0; i < 12; ++i)
 	{
-		if (m_planetElements[i] != NULL)
+		if (m_interator >= m_planetElementID->GetRangeOfElement()) m_interator = 0;
+
+		if (m_planetElements[m_interator] != NULL)
 		{
-			if (m_planetElements[i]->IsDestroy() == true)
+			if (m_planetElements[m_interator]->IsDestroy() == true)
 			{
-				if (m_planetElements[i]->GetProccessed() == 2)
+				if (m_planetElements[m_interator]->GetProccessed() == 2)
 				{
-					m_planetElementID->ReturnElement(i);
-					SafeDelete(m_planetElements[i]);
+					m_planetElementID->ReturnElement(m_interator);
+
+					delete (PlanetLOD*)m_planetElements[m_interator];
+					m_planetElements[m_interator] = NULL;
 				}
 			}
-			/*else
-			{
-				((PlanetLOD*)m_planetElements[i])->Render(camOffset, camView, camProj,
-					camFarZ, heightFar, aspect, camFarRangeMod, camModifier);
-			}*/
 		}
+
+		++m_interator;
 	}
 
-	//GameObjectStackHandle->GetMainCamera()->SetUp((GameObjectStackHandle->GetMainCamera()->GetPosition() - GetLocalPosition()).normalize());
-}
-
-void Planet::DrawQuadWithCoord()
-{
-	QuadScreenWithCoordMessage message;
-
-	message.m_ModelID = m_RenderIdQuadScreenWithCoord;
-	message.m_Transform = GetWorldTransform();
-	message.m_View = GameObjectStackHandle->GetMainCamera()->View();
-	message.m_Proj = GameObjectStackHandle->GetMainCamera()->Proj();
-	message.m_CameraOffset = GameObjectStackHandle->GetMainCamera()->btOffset();
-	message.m_size = 2.0f * GetRadiusOfAtmosphere();
-	message.m_FarZ = GameObjectStackHandle->GetMainCamera()->GetFarZ();
-	message.m_FarModifier = GameObjectStackHandle->GetMainCamera()->GetFarModifier();
-	message.m_ViewPort = GameRenderDeviceHandle->GetMainViewPort();
-	message.m_RasterizeState = RenderStates::NoCullRS;
-	message.m_BlendState = RenderStates::NoBlendBS;
-
-	//GameRenderDeviceHandle->BindMainRenderTarget();
-	GameRenderDeviceHandle->BindRenderTarget(GetCoordTargetMapRTV(), GetCoordDeepMapDSV());
-	GameRenderDeviceHandle->Render(&message);
-	GameRenderDeviceHandle->BindMainRenderTarget();
+	DrawWCA();
+	DrawPlanet();
 }
 
 void Planet::DrawWCA()
@@ -144,15 +118,14 @@ void Planet::DrawWCA()
 	message.m_ModelID = m_RenderIdWCAQuadScreen;
 	message.m_MainDepthSRV = GameRenderDeviceHandle->GetMainDeepMapSRV();
 	message.m_MainTargetSRV = GameRenderDeviceHandle->GetMainTargetMapSRV();
-	message.m_CoordDepthSRV = GetCoordDeepMapSRV();
-	message.m_CoordTargetSRV = GetCoordTargetMapSRV();
-	message.m_WaterDepthSRV = GetWaterDeepMapSRV();
-	message.m_WaterTargetSRV = GetWaterTargetMapSRV();
+	message.m_WaterTopDepthSRV = GetWaterTopDeepMapSRV();
+	message.m_WaterTopTargetSRV = GetWaterTopTargetMapSRV();
+	message.m_WaterBottomDepthSRV = GetWaterBottomDeepMapSRV();
+	message.m_WaterBottomTargetSRV = GetWaterBottomTargetMapSRV();
 	message.m_CloudsDepthSRV = GetCloudsDeepMapSRV();
 	message.m_CloudsTargetSRV = GetCloudsTargetMapSRV();
 	message.m_AtmosphereDepthSRV = GetAtmosphereDeepMapSRV();
 	message.m_AtmosphereTargetSRV = GetAtmosphereTargetMapSRV();
-	message.m_SphereDepthPatternMap = GameRenderDeviceHandle->GetTexture(GameRenderDeviceHandle->GetDeepOfSphereTextureID());
 	message.m_View = world;
 	btTransform T = GameObjectStackHandle->GetMainCamera()->btOffset() * GetWorldTransform();
 
@@ -201,12 +174,32 @@ void Planet::DrawPlanet()
 	GameRenderDeviceHandle->Render(&message);
 }
 
-void Planet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming)
+void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int loadTilesLvl, int loadDataPer,
+	XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
+	int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock)
 {
+	m_planetPath = planetPath;
+
 	SetNumPointInRowInCell(cellSize);
+	SetNumPointInRowInBigCell(sizeOfBigTile);
 	SetMaxLevel(maxLevel);
-	SetLoadDataAfterAgain(loadDataAfterAgain);
-	SetMaxLevelOfStreaming(maxLevelOfStreaming);
+	SetLoadDataMaxLvl(loadDataMaxLvl);
+	SetLoadTilesLvl(loadTilesLvl);
+	SetLoadDataPer(loadDataPer);
+
+	SetFogAColor(fogColor);
+	SetFogWColor(waterColor);
+	SetFogWRange(waterDeep);
+
+	m_idHeightMapBig = GameStreamingDataHandle->CreateFLOATDepository(levelOfBigBlock, sizeOfBigTile, sizeOfBigTile);
+	m_idNormalMapBig = GameStreamingDataHandle->CreateBYTE4Depository(levelOfBigBlock, sizeOfBigTile, sizeOfBigTile);
+	m_idEnviromentMapBig = GameStreamingDataHandle->CreateBYTE4Depository(3, sizeOfBigTile, sizeOfBigTile);
+	m_idTreesMapBig = GameStreamingDataHandle->CreateBYTE4Depository(levelOfBigBlock, sizeOfBigTile, sizeOfBigTile);
+
+	m_idHeightMapSmall = GameStreamingDataHandle->CreateFLOATDepository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
+	m_idNormalMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
+	m_idEnviromentMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
+	m_idTreesMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
 
 	{
 		std::vector<D3D11_INPUT_ELEMENT_DESC> *terrainLOD = new std::vector<D3D11_INPUT_ELEMENT_DESC>(2);
@@ -290,39 +283,22 @@ void Planet::BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT lo
 		modelWCAQS->material.Reflect.w = 0.0f;
 
 		m_RenderIdWCAQuadScreen = GameRenderDeviceHandle->CreateModel(modelWCAQS);
-
-		Model *modelQSWC = new Model;
-		modelQSWC->idMeshBuffer = GameRenderDeviceHandle->GetQuadScreenID();
-		modelQSWC->sizeOfVertex = sizeof(Vertex::TerrainLOD);
-		modelQSWC->faceCount = 2;
-		modelQSWC->faceStart = 0;
-		modelQSWC->idEffect = GameRenderDeviceHandle->CreateEffect(Effects::QuadScreenWithCoordFX);
-		modelQSWC->idVertex = GameRenderDeviceHandle->CreateVertex(quadScreen);
-		modelQSWC->idInputLayouts = GameRenderDeviceHandle->CreateInputLayouts(modelQSWC->idVertex, modelQSWC->idEffect);
-		modelQSWC->topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		modelQSWC->material.Ambient.x = 1.0f;
-		modelQSWC->material.Ambient.y = 1.0f;
-		modelQSWC->material.Ambient.z = 1.0f;
-		modelQSWC->material.Ambient.w = 1.0f;
-		modelQSWC->material.Diffuse.x = 1.0f;
-		modelQSWC->material.Diffuse.y = 1.0f;
-		modelQSWC->material.Diffuse.z = 1.0f;
-		modelQSWC->material.Diffuse.w = 1.0f;
-		modelQSWC->material.Specular.x = 0.0f;
-		modelQSWC->material.Specular.y = 0.0f;
-		modelQSWC->material.Specular.z = 0.0f;
-		modelQSWC->material.Specular.w = 0.0f;
-		modelQSWC->material.Reflect.x = 0.0f;
-		modelQSWC->material.Reflect.y = 0.0f;
-		modelQSWC->material.Reflect.z = 0.0f;
-		modelQSWC->material.Reflect.w = 0.0f;
-
-		m_RenderIdQuadScreenWithCoord = GameRenderDeviceHandle->CreateModel(modelQSWC);
 	}
+
+	SetMaxNumBlockBig(pow(2, levelOfBigBlock));
+	SetCurrentNumBlockBig(6);
+	SetMaxNumBlockSmall(pow(2, levelOfSmallBlock));
+	SetCurrentNumBlockSmall(6);
+
+	IDRegistr *IDR = new IDRegistr(levelOfSmallBlock);
+	m_planetElementID = IDR;
+	m_planetElements.resize(GetMaxNumBlockSmall(), NULL);
 
 	for (int i = 0; i < 6; ++i)
 	{
-		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, NULL, NULL);
-		m_PlanetLOD[i].ComponentProccess();
+		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, 0, XMINT2(0, 0), 0.0f, 1.0f, XMINT2(0, 0), 1.0f, false, -1, -1, -1, -1);
+		m_PlanetLOD[i].SetValueOfLODSmall(1);
+		m_PlanetLOD[i].SetValueOfLODBig(1);
+		while (m_PlanetLOD[i].ComponentProccess() == false);
 	}
 }

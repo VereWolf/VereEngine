@@ -4,6 +4,8 @@
 #include "PlanetData.h"
 #include "IDRegistr.h"
 
+std::string PlanetData::m_rootFolder = "planet/";
+
 PlanetData::PlanetData()
 {
 	m_planetElementID = NULL;
@@ -16,10 +18,6 @@ void PlanetData::Init()
 
 	btMatrix3x3 M1 = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
 	btMatrix3x3 M2 = btMatrix3x3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
-
-	IDRegistr *IDR = new IDRegistr(10);
-	m_planetElementID = IDR;
-	m_planetElements.resize(pow(2, 10), NULL);
 
 	for (int i = 0; i < 12; ++i)
 	{
@@ -210,14 +208,48 @@ void PlanetData::Init()
 		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Texture2D.MipSlice = 0;
-		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_WaterDeepMapDSV);
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_WaterTopDeepMapDSV);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
 		srvDesc.Texture2D.MostDetailedMip = 0;
-		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_WaterDeepMapSRV);
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_WaterTopDeepMapSRV);
+
+		ReleaseCOM(depthMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* depthMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_WaterBottomDeepMapDSV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_WaterBottomDeepMapSRV);
 
 		ReleaseCOM(depthMap);
 	}
@@ -252,40 +284,6 @@ void PlanetData::Init()
 		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_PlanetDeepMapSRV);
-
-		ReleaseCOM(depthMap);
-	}
-
-	{
-		D3D11_TEXTURE2D_DESC texDesc;
-		texDesc.Width = m_Width;
-		texDesc.Height = m_Height;
-		texDesc.MipLevels = 1;
-		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-		texDesc.SampleDesc.Count = 1;
-		texDesc.SampleDesc.Quality = 0;
-		texDesc.Usage = D3D11_USAGE_DEFAULT;
-		texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
-		texDesc.CPUAccessFlags = 0;
-		texDesc.MiscFlags = 0;
-
-		ID3D11Texture2D* depthMap = 0;
-		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &depthMap);
-
-		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-		dsvDesc.Flags = 0;
-		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		dsvDesc.Texture2D.MipSlice = 0;
-		m_resources->GetD3DDevice()->CreateDepthStencilView(depthMap, &dsvDesc, &m_CoordDeepMapDSV);
-
-		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
-		srvDesc.Texture2D.MostDetailedMip = 0;
-		m_resources->GetD3DDevice()->CreateShaderResourceView(depthMap, &srvDesc, &m_CoordDeepMapSRV);
 
 		ReleaseCOM(depthMap);
 	}
@@ -383,14 +381,49 @@ void PlanetData::Init()
 		rtvDesc.Texture2D.MipSlice = 0;
 		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
-		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_WaterTargetMapRTV);
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_WaterTopTargetMapRTV);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		srvDesc.Format = texDesc.Format;
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
 		srvDesc.Texture2D.MostDetailedMip = 0;
-		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_WaterTargetMapSRV);
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_WaterTopTargetMapSRV);
+
+		ReleaseCOM(targetMap);
+	}
+
+	{
+		D3D11_TEXTURE2D_DESC texDesc;
+		texDesc.Width = m_Width;
+		texDesc.Height = m_Height;
+		texDesc.MipLevels = 1;
+		texDesc.ArraySize = 1;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.SampleDesc.Count = 1;
+		texDesc.SampleDesc.Quality = 0;
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		texDesc.CPUAccessFlags = 0;
+		texDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* targetMap = 0;
+		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_WaterBottomTargetMapRTV);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_WaterBottomTargetMapSRV);
 
 		ReleaseCOM(targetMap);
 	}
@@ -429,41 +462,6 @@ void PlanetData::Init()
 
 		ReleaseCOM(targetMap);
 	}
-
-	{
-		D3D11_TEXTURE2D_DESC texDesc;
-		texDesc.Width = m_Width;
-		texDesc.Height = m_Height;
-		texDesc.MipLevels = 1;
-		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		texDesc.SampleDesc.Count = 1;
-		texDesc.SampleDesc.Quality = 0;
-		texDesc.Usage = D3D11_USAGE_DEFAULT;
-		texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		texDesc.CPUAccessFlags = 0;
-		texDesc.MiscFlags = 0;
-
-		ID3D11Texture2D* targetMap = 0;
-		m_resources->GetD3DDevice()->CreateTexture2D(&texDesc, 0, &targetMap);
-
-		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-		ZeroMemory(&rtvDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
-		rtvDesc.Format = texDesc.Format;
-		rtvDesc.Texture2D.MipSlice = 0;
-		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-
-		m_resources->GetD3DDevice()->CreateRenderTargetView(targetMap, &rtvDesc, &m_CoordTargetMapRTV);
-
-		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-		srvDesc.Format = texDesc.Format;
-		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
-		srvDesc.Texture2D.MostDetailedMip = 0;
-		m_resources->GetD3DDevice()->CreateShaderResourceView(targetMap, &srvDesc, &m_CoordTargetMapSRV);
-
-		ReleaseCOM(targetMap);
-	}
 }
 
 int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount)
@@ -480,7 +478,7 @@ int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVert
 		{
 			if (i == 0 || i == PIC + 1 || j == 0 || j == PIC + 1)
 			{
-				vertices[j * (PIC + 2) + i].Pos.y = -0.2f;
+				vertices[j * (PIC + 2) + i].Pos.y = -0.02f;
 			}
 			else
 			{
@@ -519,6 +517,15 @@ int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVert
 	return GameRenderDeviceHandle->CreateMeshBuffer(&vertices[0], sizeOfVertex, verticesCount, &indices);
 }
 
+std::string PlanetData::GetFullPath()
+{
+	std::stringstream P;
+
+	P << m_rootFolder << m_planetPath;
+
+	return P.str();
+}
+
 void PlanetData::GenerateCoord(float height, float width, float level)
 {
 	int PL = pow(2, level);
@@ -534,54 +541,30 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 	btVector3 V2 = btVector3(0.0, 0.0, 0.0);
 	std::vector<float> map(2 * (height + 2 * HE2) * (width + 2 * WE2));
 
-	//for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
-		int i = 2;
-		for (int m = 0; m < PL; ++m)
+		for (int y = 0; y < ((int)height + 2 * HE2); y += 1)
 		{
-			for (int n = 0; n < PL; ++n)
+			for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
 			{
-				H = -0.5 - HE1 + ofs;
-				for (int y = 0; y < ((int)height + 2 * HE2); y += 1)
-				{
-					W = -0.5 - WE1 + ofs;
-					for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
-					{
-						V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
-						map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
-						map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
-						W += WI;
-					}
-					H += HI;
-				}
-				int id = GameStreamingDataHandle->CreateStreamingData(&map.at(0), sizeof(float) * map.size());
-
-				//Platform::String ^str;
-
-				stringstream str;
-
-				/*if (level == 0)
-				{
-					str = "coord_" + m_posfix[i] + ".txt";
-				}
-				else
-				{
-					str = "coord_" + m_posfix[i] + "_" + level + "_" + n + "_" + m + ".txt";
-				}*/
-				
-				if (level == 0)
-				{
-					str << "coord_" << GetPosFix(i) << ".txt";
-				}
-				else
-				{
-					str << "coord_" << GetPosFix(i) << "_" << to_string((int)level) << "_" + to_string(n) << "_" + to_string(m) << ".txt";
-				}
-
-				GameStreamingDataHandle->SaveData(str.str(), id);
-				GameStreamingDataHandle->DeleteStreamingData(id);
+				H = ((float)(y - HE2)) / (height - 1.0f) - 0.5;
+				W = ((float)(x - WE2)) / (width - 1.0f) - 0.5;
+				V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
+				map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
+				map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
 			}
 		}
+		int id = GameStreamingDataHandle->CreateStreamingData(&map.at(0), sizeof(float) * map.size());
+
+		stringstream str;
+
+		if (level == 0)
+		{
+			str << "coord_" << GetPosFix(i) << ".txt";
+		}
+
+		GameStreamingDataHandle->SaveData(str.str(), id);
+		GameStreamingDataHandle->DeleteStreamingData(id);
 	}
 }
 

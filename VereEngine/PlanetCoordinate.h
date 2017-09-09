@@ -96,35 +96,10 @@ public:
 			return btVector3(0.0, 0.0, -1.0);
 		}
 
-		btVector3 UR = btVector3(dir.getX(), dir.getY(), 0.0).normalize();
-		btVector3 UF = btVector3(0.0, dir.getY(), dir.getZ()).normalize();
+		dir.setX(0.5 * dir.getX() / dir.getY());
+		dir.setZ(0.5 * dir.getZ() / dir.getY());
 
-		btScalar X = U.dot(UR);
-		btScalar Y = U.dot(UF);
-
-		btScalar DR = dir.dot(R);
-
-		if (DR < 0.0)
-		{
-			X = (0.5 - pow(1.0 - pow(X, 2.0), 0.5) * 0.70710678);
-		}
-		else
-		{
-			X = (0.5 + pow(1.0 - pow(X, 2.0), 0.5) * 0.70710678);
-		}
-
-		btScalar DF = dir.dot(F);
-
-		if (DF < 0.0)
-		{
-			Y = (0.5 - pow(1.0 - pow(Y, 2.0), 0.5) * 0.70710678);
-		}
-		else
-		{
-			Y = (0.5 + pow(1.0 - pow(Y, 2.0), 0.5) * 0.70710678);
-		}
-
-		return btVector3(X, Y, 0.0);
+		return btVector3(dir.getX(), dir.getZ(), 0.0);
 	}
 
 	inline static btVector3 GetDirFromCubeCoord(btVector3 coord, btTransform sideMatrixInv, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
@@ -134,11 +109,17 @@ public:
 
 	inline static btVector3 GetCoordForCylinder(btVector3 dir, btVector3 up = btVector3(0.0, 1.0, 0.0), btVector3 right = btVector3(1.0, 0.0, 0.0), btVector3 front = btVector3(0.0, 0.0, 1.0))
 	{
-		btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ()).normalize();
+		btScalar DXZ = 0.0;
+		btScalar DZ = 0.0;
+
+		if (dir.getX() != 0.0 || dir.getZ() != 0.0)
+		{
+			btVector3 dirXZ = btVector3(dir.getX(), 0.0, dir.getZ()).normalize();
+			DXZ = dirXZ.dot(right);
+			DZ = dirXZ.dot(front);
+		}
 
 		btScalar DY = dir.dot(up);
-		btScalar DXZ = dirXZ.dot(right);
-		btScalar DZ = dirXZ.dot(front);
 
 		btScalar X = 0.318309886 * acos(DY);
 		btScalar Y = 0.159154943 * acos(DXZ);

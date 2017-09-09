@@ -64,3 +64,8 @@ struct RenderTextAssetsStacks
 	GameBaseObjectsStack m_gameTextLayouts;
 	GameBaseObjectsStack m_gameTextFormats;
 };
+
+struct PlanetAssetsStacks
+{
+	GameBaseObjectsStack  m_gamePlanetTiles;
+};
