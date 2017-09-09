@@ -7,6 +7,7 @@
 #include "RenderDevice.h"
 #include "TextRenderDevice.h"
 #include "GameObjectsStackManager.h"
+#include "GamePlanetHelper.h"
 
 // Renders Direct2D and 3D content on the screen.
 namespace VereEngine
@@ -43,6 +44,7 @@ namespace VereEngine
 		std::shared_ptr<RenderDevice> m_gameRenderDevice;
 		std::shared_ptr<TextRenderDevice> m_gameTextRenderDevice;
 		std::shared_ptr<GameObjectsStackManager> m_gameObjects;
+		std::shared_ptr<GamePlanetHelper> m_gamePlanetHelper;
 
 		Windows::Foundation::IAsyncAction^ m_renderLoopWorker;
 		Windows::Foundation::IAsyncAction^ m_expensiveLoopWorker;
