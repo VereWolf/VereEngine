@@ -186,6 +186,7 @@ public:
 	void SetTang(XMFLOAT3 &V) { Tang->SetRawValue(&V, 0, sizeof(XMFLOAT3)); }
 	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
+<<<<<<< HEAD
 
 	void SetInverseSide(CXMMATRIX &M) { InverseSide->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetSide(const float& v) { Side->SetRawValue(&v, 0, sizeof(float)); }
@@ -201,9 +202,34 @@ public:
 
 	ID3DX11EffectMatrixVariable* InverseSide;
 	ID3DX11EffectVariable* Side;
+=======
+
+	void SetInverseSide(CXMMATRIX &M) { InverseSide->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetSide(const float& v) { Side->SetRawValue(&v, 0, sizeof(float)); }
+
+	void SetIsMap(const bool& b) { IsMap->SetRawValue(&b, 0, sizeof(bool)); }
+
+	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
+	void SetNormalMap(ID3D11ShaderResourceView* tex) { NormalMap->SetResource(tex); }
+	void SetEnviromentMap(ID3D11ShaderResourceView* tex) { EnviromentMap->SetResource(tex); }
+	void SetTreesMap(ID3D11ShaderResourceView* tex) { TreesMap->SetResource(tex); }
+
+	ID3DX11EffectVectorVariable* CentrePos;
+	ID3DX11EffectVectorVariable* Offset;
+	ID3DX11EffectVectorVariable* Tang;
+	ID3DX11EffectVariable* Spacing;
+	ID3DX11EffectVariable* Level;
+
+	ID3DX11EffectMatrixVariable* InverseSide;
+	ID3DX11EffectVariable* Side;
+
+	ID3DX11EffectVariable* IsMap;
+>>>>>>> VereEngine-Planet
 
 	ID3DX11EffectShaderResourceVariable* HeightMap;
 	ID3DX11EffectShaderResourceVariable* NormalMap;
+	ID3DX11EffectShaderResourceVariable* EnviromentMap;
+	ID3DX11EffectShaderResourceVariable* TreesMap;
 };
 
 #pragma endregion

@@ -49,7 +49,7 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
-      <Filter>Atmosphere</Filter>
+      <Filter>Editor\Atmosphere</Filter>
     </ClCompile>
     <ClCompile Include="MainEditorPage.xaml.cpp" />
     <ClCompile Include="TreeViewBranch.xaml.cpp" />
@@ -113,6 +113,21 @@
     <ClCompile Include="Clouds.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="GamePlanetKind.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlanetTile.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlanetHelper.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="DataDepository.cpp">
+      <Filter>StreamingData</Filter>
+    </ClCompile>
+>>>>>>> VereEngine-Planet
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -217,10 +232,10 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="SkyBox.h">
-      <Filter>Atmosphere</Filter>
+      <Filter>Editor\Atmosphere</Filter>
     </ClInclude>
     <ClInclude Include="Sun.h">
-      <Filter>Atmosphere</Filter>
+      <Filter>Editor\Atmosphere</Filter>
     </ClInclude>
     <ClInclude Include="MainEditorPage.xaml.h" />
     <ClInclude Include="TreeViewBranch.xaml.h" />
@@ -332,6 +347,24 @@
     <ClInclude Include="Clouds.h">
       <Filter>Planet</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="GamePlanetKind.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlanetTile.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlanetHelper.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="VereTextureFloat4.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DataDepository.h">
+      <Filter>StreamingData</Filter>
+    </ClInclude>
+>>>>>>> VereEngine-Planet
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -356,11 +389,19 @@
       <Filter>FX</Filter>
     </CustomBuild>
     <CustomBuild Include="FX\Clouds.fx">
+<<<<<<< HEAD
       <Filter>FX</Filter>
     </CustomBuild>
     <CustomBuild Include="FX\RenderToScreen.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+=======
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\RenderToScreen.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+>>>>>>> VereEngine-Planet
     <CustomBuild Include="FX\QuadScreenWCA.fx">
       <Filter>FX</Filter>
     </CustomBuild>
@@ -439,9 +480,6 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Atmosphere">
-      <UniqueIdentifier>{140311eb-5e7a-4ab2-8162-264b1102d71d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TextRenderDevice">
       <UniqueIdentifier>{bbef4d64-23ea-493e-adb8-7253b3484b36}</UniqueIdentifier>
     </Filter>
@@ -457,6 +495,12 @@
     <Filter Include="RenderDevice">
       <UniqueIdentifier>{957b3035-b0d1-4741-be7f-5ecf321809e3}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+=======
+    <Filter Include="Editor\Atmosphere">
+      <UniqueIdentifier>{140311eb-5e7a-4ab2-8162-264b1102d71d}</UniqueIdentifier>
+    </Filter>
+>>>>>>> VereEngine-Planet
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VereEngine.rc">

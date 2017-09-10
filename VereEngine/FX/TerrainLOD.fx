@@ -28,6 +28,10 @@ cbuffer cbPerObject
 	float gFogWRange;
 	float3x3 gInverseSide;
 	float gSide;
+<<<<<<< HEAD
+=======
+	bool gIsMap;
+>>>>>>> VereEngine-Planet
 };
 
 float c = 0.1f;
@@ -50,6 +54,11 @@ SamplerState samNormalMap
 
 Texture2D gHeightMap;
 Texture2D gNormalMap;
+<<<<<<< HEAD
+=======
+Texture2D gEnviromentMap;
+Texture2D gTreesMap;
+>>>>>>> VereEngine-Planet
 
 struct VertexIn
 {
@@ -148,18 +157,41 @@ DomainOut DS(PatchTess patchTess,
 
 	dout.PosW = mul(float4(dout.PosW, 1.0f), gWorld).xyz;
 
+<<<<<<< HEAD
 	float H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x + CH;
+=======
+	float H = -2300.0f;
+
+	if (gIsMap == true)
+	{
+		H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x + CH;
+	}
+>>>>>>> VereEngine-Planet
 
 	float3 N = normalize(dout.PosW - gCenterOfPlanet);
 	float3 B = normalize(cross(mul(gTang, gWorldN), N));
 	float3 T = normalize(cross(N, B));
 
+<<<<<<< HEAD
 	float3 normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(dout.TexTess.x, dout.TexTess.y), 0).xyz - 1.0f;
 
 	float3x3 TBN = float3x3(T, N, B);
 
 	dout.NormalW = mul(normalT, TBN);
 
+=======
+	float3 normalT = float3(0.0f, 1.0f, 0.0f);
+
+	if (gIsMap == true)
+	{
+		normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(dout.TexTess.x, dout.TexTess.y), 0).xyz - 1.0f;
+	}
+
+	float3x3 TBN = float3x3(T, N, B);
+
+	dout.NormalW = mul(normalT, TBN);
+
+>>>>>>> VereEngine-Planet
 	dout.PosW = (H + gRadiusOfTerrain) * N + gCenterOfPlanet;
 
 	dout.PosV = mul(float4(dout.PosW, 1.0f), gViewProj).xyz;
@@ -172,11 +204,107 @@ DomainOut DS(PatchTess patchTess,
 
 float4 PS(DomainOut  pin) : SV_Target
 {
+<<<<<<< HEAD
 	float3 color = float3(1.0f,1.0f,1.0f);
 
 	float3 N = pin.NormalW;
 	color = (0.6f + 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f)) * color / 1.6f;
 
+=======
+	float3 C1 = float3(0.478f, 0.463f, 0.439f);
+	float3 C2;
+	float3 color = float3(1.0f, 1.0f, 1.0f);
+
+	float4 E = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	if (gIsMap == true)
+	{
+		E = gEnviromentMap.SampleLevel(samNormalMap, float2(pin.TexTess.x, pin.TexTess.y), 0).xyzw;
+
+		int warm = (E.x + 0.125f) * 4.0f;
+		int water = (E.y + 0.125f) * 4.0f;
+
+		if (warm == 0)
+		{
+			C2 = float3(0.9f, 0.9f, 0.93f);
+		}
+		else if (warm == 1)
+		{
+			C2 = float3(0.558f, 0.631f, 0.274f);
+		}
+		else if (warm == 2)
+		{
+			if (water == 3 || water == 4)
+			{
+				C2 = float3(0.518f, 0.663f, 0.217f);
+			}
+			else if (water == 2)
+			{
+				C2 = float3(0.518f, 0.631f, 0.204f);
+			}
+			else if (water == 1)
+			{
+				C2 = float3(0.563f, 0.621f, 0.227f);
+			}
+			else
+			{
+				C2 = float3(0.731f, 0.558f, 0.324f);
+			}
+		}
+		else if (warm == 3)
+		{
+			if (water == 3 || water == 4)
+			{
+				C2 = float3(0.340f, 0.645f, 0.304f);
+			}
+			else if (water == 2)
+			{
+				C2 = float3(0.508f, 0.631f, 0.304f);
+			}
+			else if (water == 1)
+			{
+				C2 = float3(0.573f, 0.611f, 0.304f);
+			}
+			else
+			{
+				C2 = float3(0.731f, 0.558f, 0.251f);
+			}
+		}
+		else
+		{
+			if (water == 4 || water == 3)
+			{
+				C2 = float3(0.231f, 0.658f, 0.304f);
+			}
+			else if (water == 2)
+			{
+				C2 = float3(0.558f, 0.603f, 0.304f);
+			}
+			/*else if (water == 1)
+			{
+				C2 = float3(0.573f, 0.631f, 0.304f);
+			}*/
+			else
+			{
+				C2 = float3(0.731f, 0.558f, 0.204f);
+			}
+		}
+	}
+
+	float3 normalT = float3(0.0f, 1.0f, 0.0f);
+
+	if (gIsMap == true)
+	{
+		normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(pin.TexTess.x, pin.TexTess.y), 0).xyz - 1.0f;
+
+		color = C1 + E.w * (C2 - C1);
+	}
+
+	float3 N = pin.NormalW;
+
+	color = (0.6f + 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f)) * color / 1.6f;
+
+>>>>>>> VereEngine-Planet
 	float d = clamp(CalcWater(gCenterOfPlanet, pin.PosW, float3(0.0f, 0.0f, 0.0f), gRadiusOfWater, gFogWRange), 0.0f, 1.0f);
 
 	color = d * gFogWColor + (1.0f - d) * color;
@@ -186,6 +314,10 @@ float4 PS(DomainOut  pin) : SV_Target
 	color = d * gFogAColor + (1.0f - d) * color;
 
 	return float4(color, 1.0f);
+<<<<<<< HEAD
+=======
+	//return float4(E.xy, 0.0f, 1.0f);
+>>>>>>> VereEngine-Planet
 }
 
 technique11 LightTech

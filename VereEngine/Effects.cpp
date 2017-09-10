@@ -173,9 +173,19 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 
 	InverseSide = mFX->GetVariableByName("gInverseSide")->AsMatrix();
 	Side = mFX->GetVariableByName("gSide");
+<<<<<<< HEAD
 
 	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
 	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
+=======
+
+	IsMap = mFX->GetVariableByName("gIsMap");
+
+	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
+	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
+	EnviromentMap = mFX->GetVariableByName("gEnviromentMap")->AsShaderResource();
+	TreesMap = mFX->GetVariableByName("gTreesMap")->AsShaderResource();
+>>>>>>> VereEngine-Planet
 }
 #pragma endregion
 

@@ -5,7 +5,10 @@
 
 void TerrainRenderMessage::Use()
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> VereEngine-Planet
 	RenderMessage::Use();
 	btScalar S = m_Spacing1;
 	btScalar S2 = m_Spacing2;
@@ -30,6 +33,18 @@ void TerrainRenderMessage::Use()
 	((TerrainLODEffect*)m_BaseEffect)->SetInverseSide(XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(m_InverseSide)));
 	((TerrainLODEffect*)m_BaseEffect)->SetSide(m_Side);
 
+<<<<<<< HEAD
 	((TerrainLODEffect*)m_BaseEffect)->SetHeightMap(m_HeightSRV);
 	((TerrainLODEffect*)m_BaseEffect)->SetNormalMap(m_NormalSRV);
+=======
+	((TerrainLODEffect*)m_BaseEffect)->SetIsMap(m_IsMap);
+
+	if (m_IsMap)
+	{
+		((TerrainLODEffect*)m_BaseEffect)->SetHeightMap(m_HeightSRV);
+		((TerrainLODEffect*)m_BaseEffect)->SetNormalMap(m_NormalSRV);
+		((TerrainLODEffect*)m_BaseEffect)->SetEnviromentMap(m_EnviromentSRV);
+		((TerrainLODEffect*)m_BaseEffect)->SetTreesMap(m_TreesSRV);
+	}
+>>>>>>> VereEngine-Planet
 }

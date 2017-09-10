@@ -4,6 +4,7 @@
 #include "GameObjectSpace.h"
 #include "Camera.h"
 #include "IDRegistr.h"
+#include "GamePlanetTile.h"
 
 class PlanetData : public GameObjectSpace
 {
@@ -82,6 +83,11 @@ public:
 	ID3D11Buffer *const *GetLODVB() { return &m_LODVB; }
 	ID3D11Buffer *GetLODIB() { return m_LODIB; }
 
+<<<<<<< HEAD
+=======
+	std::string GetFullPath();
+
+>>>>>>> VereEngine-Planet
 	inline float GetRadiusOfTerrain() { return m_radiusOfTerrain; }
 	inline void SetRadiusOfTerrain(float n) { m_radiusOfTerrain = n; }
 
@@ -113,18 +119,42 @@ public:
 	inline btVector3 GetTangent() { return m_tang; }
 	inline int16_t GetMaxLevel() { return m_maxLevel; }
 	inline void SetMaxLevel(int16_t n) { m_maxLevel = n; }
-	inline int16_t GetMaxRenderLevel() { return m_maxRenderLevel; }
-	inline void SetMaxRenderLevel(int16_t n) { m_maxRenderLevel = n; }
+	inline int16_t GetCurrentMaxLevel() { return m_currentMaxLevel; }
+	inline void SetCurrentMaxLevel(int16_t n) { m_currentMaxLevel = n; }
 	inline int16_t GetNumPointInRowInCell() { return m_numPointsInRowInCell; }
 	inline void SetNumPointInRowInCell(int n) { m_numPointsInRowInCell = n; }
-	inline int16_t GetLoadDataAfterAgain() { return m_loadDataAfterAgain; }
-	inline void SetLoadDataAfterAgain(int16_t d) { m_loadDataAfterAgain = d; }
-	inline int16_t GetMaxLevelOfStreaming() { return m_maxLevelOfStreaming; }
-	inline void SetMaxLevelOfStreaming(int16_t d) { m_maxLevelOfStreaming = d; }
+	inline int16_t GetNumPointInRowInBigCell() { return m_numPointsInRowInBigCell; }
+	inline void SetNumPointInRowInBigCell(int n) { m_numPointsInRowInBigCell = n; }
+	inline int16_t GetLoadDataPer() { return m_loadDataPer; }
+	inline void SetLoadDataPer(int16_t d) { m_loadDataPer = d; }
+	inline int16_t GetLoadDataMaxLvl() { return m_loadDataMaxLvl; }
+	inline void SetLoadDataMaxLvl(int16_t d) { m_loadDataMaxLvl = d; }
+	inline int16_t GetLoadTilesLvl() { return m_loadTilesLvl; }
+	inline void SetLoadTilesLvl(int16_t d) { m_loadTilesLvl = d; }
 	inline string GetPosFix(int side) { return m_posfix[side]; }
+
+	int16_t GetMaxNumBlockBig() { return m_maxNumBlockBig; }
+	void SetMaxNumBlockBig(int16_t d) { m_maxNumBlockBig = d; }
+	int16_t GetCurerentNumBlockBig() { return m_currentNumBlockBig; }
+	void SetCurrentNumBlockBig(int16_t d) { m_currentNumBlockBig = d; }
+
+	int16_t GetMaxNumBlockSmall() { return m_maxNumBlockSmall; }
+	void SetMaxNumBlockSmall(int16_t d) { m_maxNumBlockSmall = d; }
+	int16_t GetCurerentNumBlockSmall() { return m_currentNumBlockSmall; }
+	void SetCurrentNumBlockSmall(int16_t d) { m_currentNumBlockSmall = d; }
 
 	ID3D11ShaderResourceView *GetNormalSRV() { return m_normalSRV; }
 	ID3D11ShaderResourceView *GetHeightSRV() { return m_heightSRV; }
+
+	int GetIDHeightMapBig() { return m_idHeightMapBig; }
+	int GetIDNormalMapBig() { return m_idNormalMapBig; }
+	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
+	int GetIDTreesMapBig() { return m_idTreesMapBig; }
+
+	int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
+	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
+	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
+	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }
 
 	void GenerateCoord(float height, float width, float level);
 private:
@@ -142,10 +172,16 @@ private:
 	XMFLOAT3 m_fogWColor;
 
 	int16_t m_numPointsInRowInCell;
+	int16_t m_numPointsInRowInBigCell;
 	int16_t m_maxLevel;
-	int16_t m_maxRenderLevel;
-	int16_t m_loadDataAfterAgain;
-	int16_t m_maxLevelOfStreaming;
+	int16_t m_currentMaxLevel;
+	int16_t m_loadDataPer;
+	int16_t m_loadDataMaxLvl;
+	int16_t m_loadTilesLvl;
+	int16_t m_maxNumBlockBig;
+	int16_t m_currentNumBlockBig;
+	int16_t m_maxNumBlockSmall;
+	int16_t m_currentNumBlockSmall;
 
 	std::string m_posfix[12];
 
@@ -193,6 +229,22 @@ private:
 
 	D3D11_VIEWPORT m_Viewport;
 
+<<<<<<< HEAD
+=======
+protected:
+	std::string m_planetPath;
+	static std::string m_rootFolder;
+
+	int m_idHeightMapBig;
+	int m_idNormalMapBig;
+	int m_idEnviromentMapBig;
+	int m_idTreesMapBig;
+
+	int m_idHeightMapSmall;
+	int m_idNormalMapSmall;
+	int m_idEnviromentMapSmall;
+	int m_idTreesMapSmall;
+>>>>>>> VereEngine-Planet
 public:
 	std::vector<GameComponent*> m_planetElements;
 	IDRegistr *m_planetElementID;

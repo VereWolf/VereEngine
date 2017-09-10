@@ -238,6 +238,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clouds.h" />
     <ClInclude Include="Content\ShaderStructures.h" />
+    <ClInclude Include="DataDepository.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXHelper.h" />
     <ClInclude Include="Game2DTextFormat.h" />
@@ -259,6 +260,7 @@
     <ClInclude Include="GameObjectsProcess.h" />
     <ClInclude Include="GameObjectsStackManager.h" />
     <ClInclude Include="GameObjectsIDRegistr.h" />
+    <ClInclude Include="GamePlanetHelper.h" />
     <ClInclude Include="GameStreamingData.h" />
     <ClInclude Include="GameTilePlanetData.h" />
     <ClInclude Include="GamePointLight.h" />
@@ -267,6 +269,8 @@
     <ClInclude Include="GameSpotLight.h" />
     <ClInclude Include="GameTexture.h" />
     <ClInclude Include="GameVertex.h" />
+    <ClInclude Include="GamePlanetTile.h" />
+    <ClInclude Include="VereTextureFloat4.h" />
     <ClInclude Include="IDRegistr.h" />
     <ClInclude Include="LuaBinding.h" />
     <ClInclude Include="MainEditorPage.xaml.h">
@@ -279,6 +283,7 @@
     <ClInclude Include="PlanetCoordinate.h" />
     <ClInclude Include="PlanetData.h" />
     <ClInclude Include="PlanetLOD.h" />
+    <ClInclude Include="GamePlanetKind.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="d3dx11effect.h" />
@@ -321,6 +326,10 @@
     </ClCompile>
     <ClCompile Include="Atmosphere.cpp" />
     <ClCompile Include="Clouds.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="DataDepository.cpp" />
+>>>>>>> VereEngine-Planet
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="GameBaseObject.cpp" />
     <ClCompile Include="GameBaseObjectsStack.cpp" />
@@ -328,6 +337,9 @@
     <ClCompile Include="GameObjectSpace.cpp" />
     <ClCompile Include="GameObjectsProcess.cpp" />
     <ClCompile Include="GameObjectsIDRegistr.cpp" />
+    <ClCompile Include="GamePlanetHelper.cpp" />
+    <ClCompile Include="GamePlanetTile.cpp" />
+    <ClCompile Include="GamePlanetKind.cpp" />
     <ClCompile Include="GameResourceObject.cpp" />
     <ClCompile Include="GameResourceObjectsStack.cpp" />
     <ClCompile Include="IDRegistr.cpp" />
