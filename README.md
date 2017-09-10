@@ -1,6 +1,6 @@
 # VereEngine
 
-https://youtu.be/qFMTzsz6Jb8
+[![VereEngine WIP](https://img.youtube.com/vi/qFMTzsz6Jb8/0.jpg)](https://www.youtube.com/watch?v=qFMTzsz6Jb8)
 
 VereEngine is for games in progress.
 
