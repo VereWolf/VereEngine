@@ -130,10 +130,10 @@ public:
 	void DeleteSpotLight(int id);
 	SpotLight* GetSpotLight(int id);
 
-	int CreateTilePlanetData(TilePlanetData * light);
+	/*int CreateTilePlanetData(TilePlanetData * light);
 	int CreateTilePlanetDataFromAnother(int sourceID, XMINT2 whichSquare, float height, float with, float multiplierH, float multiplierN);
 	void DeleteTilePlanetData(int id);
-	TilePlanetData* GetTilePlanetData(int id);
+	TilePlanetData* GetTilePlanetData(int id);*/
 private:
 	DX::DeviceResources *m_resources;
 

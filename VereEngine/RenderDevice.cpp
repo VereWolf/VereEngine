@@ -552,7 +552,7 @@ void RenderDevice::DeleteInputLayouts(int id)
 
 ID3D11InputLayout* RenderDevice::GetInputLayouts(int id)
 {
-	return ((GameInputLayouts*)m_renderAssetsStacks.m_gameInputLayouts.GetGameObject(id))->GetInputLayouts();;
+	return ((GameInputLayouts*)m_renderAssetsStacks.m_gameInputLayouts.GetGameObject(id))->GetInputLayouts();
 }
 
 int RenderDevice::CreateVertex(ElementsVertex *vertex)
@@ -724,7 +724,7 @@ SpotLight* RenderDevice::GetSpotLight(int id)
 	return ((GameSpotLight*)m_renderAssetsStacks.m_gameSpotLight.GetGameObject(id))->GetSpotLight();
 }
 
-int RenderDevice::CreateTilePlanetData(TilePlanetData * data)
+/*int RenderDevice::CreateTilePlanetData(TilePlanetData * data)
 {
 	GameTilePlanetData *gameTilePlanetData = new GameTilePlanetData;
 	gameTilePlanetData->PreInit(m_resources);
@@ -755,4 +755,4 @@ void RenderDevice::DeleteTilePlanetData(int id)
 TilePlanetData* RenderDevice::GetTilePlanetData(int id)
 {
 	return ((GameTilePlanetData*)m_renderAssetsStacks.m_gameTilePlanetData.GetGameObject(id))->GetTilePlanetData();
-}
+}*/

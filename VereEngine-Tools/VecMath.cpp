@@ -1,6 +1,22 @@
 #include "stdafx.h"
 #include "VecMath.h"
 
+BYTE4::BYTE4()
+{
+	x = 0;
+	y = 0;
+	z = 0;
+	w = 0;
+}
+
+BYTE4::BYTE4(BYTE itsX, BYTE itsY, BYTE itsZ, BYTE itsW)
+{
+	x = itsX;
+	y = itsY;
+	z = itsZ;
+	w = itsW;
+}
+
 INT2::INT2()
 {
 	x = 0.0f;
@@ -89,6 +105,26 @@ float VMath::Clamp(float i, float min, float max)
 		i = max;
 
 	return i;
+}
+
+float VMath::GetMax(float v1, float v2)
+{
+	if (v1 > v2)
+	{
+		return v1;
+	}
+
+	return v2;
+}
+
+float VMath::GetMin(float v1, float v2)
+{
+	if (v1 < v2)
+	{
+		return v1;
+	}
+
+	return v2;
 }
 
 Float2 VMath::Normalize(Float2 v)
