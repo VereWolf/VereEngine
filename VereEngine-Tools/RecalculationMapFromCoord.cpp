@@ -113,13 +113,17 @@ void RecalculationMapFromCoord::Generate()
 
 	std::vector<Float4> TM(S);
 	std::vector<Float4> WM(S);
+	std::vector<Float4> TRM(S);
 	std::vector<Float4> EM(S2);
 	std::vector<BYTE4> EM2(S2);
+	std::vector<BYTE4> TRM2(S2);
+	std::vector<Float4> TRM3(S2);
 
 	DataStreaming::LoadFile(GetWholeFilePatch("heightmap_512.raw"), &HM[0], H, W, sizeof(float));
 	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"normalmap_512.png"), &NM, H, W);
 	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"warmmap_512.png"), &TM, H, W);
 	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"watermap_512.png"), &WM, H, W);
+	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"trees_512.png"), &TRM, H, W);
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -128,16 +132,27 @@ void RecalculationMapFromCoord::Generate()
 		std::wstringstream sH2;
 		std::stringstream sN;
 		std::stringstream sE;
+		std::stringstream sT;
 		std::wstringstream sE2;
+		std::wstringstream sT2;
 
 		str << "coord_" << site[i] << ".txt";
 		sH << "height_" << site[i] << ".raw";
 		sH2 << L"height_" << wsite[i] << L".png";
 		sN << "normal_" << site[i] << ".raw";
 		sE << "enviroment_" << site[i] << ".raw";
-		sE2 << L"enviroment" << wsite[i] << L".png";
+		sT << "trees_" << site[i] << ".raw";
+		sE2 << L"enviroment_" << wsite[i] << L".png";
+		sT2 << L"trees_" << wsite[i] << L".png";
 
 		DataStreaming::LoadFile(GetWholeFilePatch(&str.str()[0]), &M[0], H2, W2, sizeof(Float2));
+
+		float min = 9999.0f;
+		INT2 CMIN;
+		INT2 CMIN2;
+		float max = -9999.0f;
+		INT2 CMAX;
+		INT2 CMAX2;
 
 		for (int j = 0; j < S2; ++j)
 		{
@@ -161,6 +176,7 @@ void RecalculationMapFromCoord::Generate()
 				HM3[j].w = 1.0f;
 				EM[j].x = VMath::Clamp(TM[C.x * H + C.y].x - 0.0001625f * VMath::Clamp(HM2[j], 0.0f, HM2[j]), 0.0f, 1.0f);
 				EM[j].y = WM[C.x * H + C.y].x;
+				TRM2[j] = BYTE4(TRM[C.x * H + C.y].x * 255, 0, 0, 0);
 
 				if (HM2[j] < 0.0f)
 				{
@@ -170,6 +186,76 @@ void RecalculationMapFromCoord::Generate()
 				{
 					EM[j].y = 1.0f + 0.01666f * HM2[j] * (EM[j].y - 1.0f);
 				}
+
+				if (EM[j].x < 0.25f && EM[j].y < 0.31f)
+				{
+					TRM2[j].x = 0;
+				}
+
+				/*min = 9999.0f;
+				max = -9999.0f;
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + C.x >= 0 && sx + C.x < W && sy + C.y >= 0 && sy + C.y < H)
+						{
+							if (HM[(sx + C.x) * H + (sy + C.y)] > max)
+							{
+								max = HM[(sx + C.x) * H + (sy + C.y)];
+								CMAX = INT2(C.x + sx, C.y + sy);
+							}
+
+							if (HM[(sx + C.x) * H + (sy + C.y)] < min)
+							{
+								min = HM[(sx + C.x) * H + (sy + C.y)];
+								CMIN = INT2(C.x + sx, C.y + sy);
+							}
+						}
+					}
+				}
+
+				min = 9999.0f;
+				max = -9999.0f;
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + CMIN.x >= 0 && sx + CMIN.x < W && sy + CMIN.y >= 0 && sy + CMIN.y < H)
+						{
+							if (HM[(sx + CMIN.x) * H + (sy + CMIN.y)] > max)
+							{
+								max = HM[(sx + CMIN.x) * H + (sy + CMIN.y)];
+								CMAX2 = INT2(CMIN.x + sx, CMIN.y + sy);
+							}
+						}
+					}
+				}
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + CMAX.x >= 0 && sx + CMAX.x < W && sy + CMAX.y >= 0 && sy + CMAX.y < H)
+						{
+
+							if (HM[(sx + CMAX.x) * H + (sy + CMAX.y)] < min)
+							{
+								min = HM[(sx + CMAX.x) * H + (sy + CMAX.y)];
+								CMIN2 = INT2(CMAX.x + sx, CMAX.y + sy);
+							}
+						}
+					}
+				}*/
+
+				if (/*(CMAX2.x == C.x && CMAX2.y == C.y) || (CMIN2.x == C.x && CMIN2.y == C.y) || */(EM[j].x < 0.25f || EM[j].y < 0.31f) || HM2[j] < 20.0f)
+				{
+					TRM2[j].x = 0;
+				}
+
+				TRM3[j] = Float4((float)TRM2[j].x * 0.00392156f, 0.0f, 0.0f, 0.0f);
 			}
 			else
 			{
@@ -178,6 +264,8 @@ void RecalculationMapFromCoord::Generate()
 				HM3[j] = Float4(0.0f, 0.0f, 0.0f, 1.0f);
 				EM[j].x = 0.0f;
 				EM[j].y = 0.0f;
+				TRM2[j] = BYTE4(0, 0, 0, 0);
+				TRM3[j] = Float4(0.0f, 0.0f, 0.0f, 0.0f);
 			}
 
 			EM[j].z = 0.0f;
@@ -189,13 +277,16 @@ void RecalculationMapFromCoord::Generate()
 			EM2[j].w = 0.0f;
 		}
 		std::wstringstream str2;
+		std::wstringstream strT2;
 		str2 << L"coord_" << wsite[i] << L".png";
 		DataStreaming::SaveImage(GetWholeFilePatch(&str2.str()[0]), &M2, H2, W2);
 		DataStreaming::SaveImage(GetWholeFilePatch(&sH2.str()[0]), &HM3, H2, W2);
 		DataStreaming::SaveImage(GetWholeFilePatch(&sE2.str()[0]), &EM, H2, W2);
+		DataStreaming::SaveImage(GetWholeFilePatch(&sT2.str()[0]), &TRM3, H2, W2);
 		DataStreaming::SaveFile(GetWholeFilePatch(&sN.str()[0]), &NM2[0], H2, W2, sizeof(BYTE4));
 		DataStreaming::SaveFile(GetWholeFilePatch(&sH.str()[0]), &HM2[0], H2, W2, sizeof(float));
 		DataStreaming::SaveFile(GetWholeFilePatch(&sE.str()[0]), &EM2[0], H2, W2, sizeof(BYTE4));
+		DataStreaming::SaveFile(GetWholeFilePatch(&sT.str()[0]), &TRM2[0], H2, W2, sizeof(BYTE4));
 	}
 }
 

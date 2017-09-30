@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "DataDepository.h"
 
+void CreateTextureFromTextureMessage::Use()
+{
+	((GenerateTexturesFromTextureEffect*)m_Effect)->SetStartPos(m_startPos);
+	((GenerateTexturesFromTextureEffect*)m_Effect)->SetStepSize(m_stepSize);
+
+	((GenerateTexturesFromTextureEffect*)m_Effect)->SetInputMap(m_inputSRV);
+	((GenerateTexturesFromTextureEffect*)m_Effect)->SetOutputMap(m_outputUAV);
+}
+
 DataDepository::~DataDepository()
 {
 	delete m_idStack;
@@ -25,6 +34,91 @@ void DataDepository::Init(int level, int width, int height, int elementType)
 	m_idStack = new IDRegistr(level);
 	m_data = new char[m_size];
 };
+
+bool  DataDepository::CreateTexturesForInput(DX::DeviceResources* resources, int id, ID3D11ShaderResourceView **inputSRV, DXGI_FORMAT format)
+{
+
+	D3D11_TEXTURE2D_DESC inputTexDesc;
+	ZeroMemory(&inputTexDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	inputTexDesc.Width = m_width;
+	inputTexDesc.Height = m_height;
+	inputTexDesc.MipLevels = 1;
+	inputTexDesc.ArraySize = 1;
+	inputTexDesc.Format = format;
+	inputTexDesc.SampleDesc.Count = 1;
+	inputTexDesc.SampleDesc.Quality = 0;
+	inputTexDesc.Usage = D3D11_USAGE_DEFAULT;
+	inputTexDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	inputTexDesc.CPUAccessFlags = 0;
+	inputTexDesc.MiscFlags = 0;
+
+	ID3D11Texture2D* inputTex = 0;
+
+	D3D11_SUBRESOURCE_DATA sbd;
+	ZeroMemory(&sbd, sizeof(D3D11_SUBRESOURCE_DATA));
+
+	sbd.pSysMem = GetTexture(id);
+	if (format == DXGI_FORMAT_R8G8B8A8_UNORM)
+	{
+		sbd.SysMemPitch = sizeof(VBYTE4) * m_width;
+	}
+	else if (format == DXGI_FORMAT_R32_FLOAT)
+	{
+		sbd.SysMemPitch = sizeof(float) * m_width;
+	}
+
+	sbd.SysMemSlicePitch = 0;
+
+	HR(resources->GetD3DDevice()->CreateTexture2D(&inputTexDesc, &sbd, &inputTex));
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC isrvDesc;
+	ZeroMemory(&isrvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	isrvDesc.Format = format;
+	isrvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	isrvDesc.Texture2D.MostDetailedMip = 0;
+	isrvDesc.Texture2D.MipLevels = 1;
+	HR(resources->GetD3DDevice()->CreateShaderResourceView(inputTex, &isrvDesc, inputSRV));
+
+	ReleaseCOM(inputTex);
+
+	return true;
+}
+
+bool DataDepository::CreateTexturesForOutput(DX::DeviceResources* resources, ID3D11ShaderResourceView **outputSRV, ID3D11UnorderedAccessView **outputUAV, DXGI_FORMAT format)
+{
+	D3D11_TEXTURE2D_DESC outputTexDesc;
+	outputTexDesc.Width = m_width;
+	outputTexDesc.Height = m_height;
+	outputTexDesc.MipLevels = 1;
+	outputTexDesc.ArraySize = 1;
+	outputTexDesc.Format = format;
+	outputTexDesc.SampleDesc.Count = 1;
+	outputTexDesc.SampleDesc.Quality = 0;
+	outputTexDesc.Usage = D3D11_USAGE_DEFAULT;
+	outputTexDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
+	outputTexDesc.CPUAccessFlags = 0;
+	outputTexDesc.MiscFlags = 0;
+
+	ID3D11Texture2D* outputTex = 0;
+	HR(resources->GetD3DDevice()->CreateTexture2D(&outputTexDesc, 0, &outputTex));
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC osrvDesc;
+	osrvDesc.Format = format;
+	osrvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	osrvDesc.Texture2D.MostDetailedMip = 0;
+	osrvDesc.Texture2D.MipLevels = 1;
+	HR(resources->GetD3DDevice()->CreateShaderResourceView(outputTex, &osrvDesc, outputSRV));
+
+	D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+	uavDesc.Format = format;
+	uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+	uavDesc.Texture2D.MipSlice = 0;
+	HR(resources->GetD3DDevice()->CreateUnorderedAccessView(outputTex, &uavDesc, outputUAV));
+
+	ReleaseCOM(outputTex);
+
+	return true;
+}
 
 int DataDepository::CreateNewBlock(void *data)
 {

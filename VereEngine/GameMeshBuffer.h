@@ -24,7 +24,7 @@ public:
 	btVector3 GetMaxVector() { return m_maxV; }
 
 	inline void ReleaseVertexBuffer() { ReleaseCOM(m_gameVertexBuffer); }
-	inline void ReleaseIndexBuffer() { ReleaseCOM(m_gameIndexBuffer); }
+	inline void ReleaseIndexBuffer() { if (m_gameIndexBuffer != NULL)ReleaseCOM(m_gameIndexBuffer); }
 private:
 	ID3D11Buffer* m_gameVertexBuffer;
 	ID3D11Buffer* m_gameIndexBuffer;

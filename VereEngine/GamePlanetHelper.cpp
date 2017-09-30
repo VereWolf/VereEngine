@@ -31,6 +31,20 @@ void GamePlanetHelper::Init(DX::DeviceResources *resources)
 
 	GameStreamingDataHandle->DeleteStreamingData(idTile1);
 	GameStreamingDataHandle->DeleteStreamingData(idTile2);
+
+
+
+	int idTreesTiles = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_tiles.raw");
+	int idTreesIndex = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_index.raw");
+
+	m_TreesTiles.resize(GameStreamingDataHandle->GetSizeOfStreamingData(idTreesTiles) / sizeof(float));
+	m_TreesIndex.resize(GameStreamingDataHandle->GetSizeOfStreamingData(idTreesIndex) / sizeof(int));
+
+	memcpy(&m_TreesTiles[0], GameStreamingDataHandle->GetStreamingData(idTreesTiles), GameStreamingDataHandle->GetSizeOfStreamingData(idTreesTiles));
+	memcpy(&m_TreesIndex[0], GameStreamingDataHandle->GetStreamingData(idTreesIndex), GameStreamingDataHandle->GetSizeOfStreamingData(idTreesIndex));
+
+	GameStreamingDataHandle->DeleteStreamingData(idTreesTiles);
+	GameStreamingDataHandle->DeleteStreamingData(idTreesIndex);
 }
 
 int GamePlanetHelper::CreatePlanetTile(std::string nameNormalFlat, std::string nameHeightFlat,

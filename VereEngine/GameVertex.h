@@ -2,7 +2,6 @@
 
 #include "pch.h"
 #include "GameBaseObject.h"
-#include "Vertex.h"
 
 using namespace std;
 

@@ -8,7 +8,7 @@ class GameBaseObject
 public:
 	GameBaseObject();
 	GameBaseObject(GameBaseObject &other);
-	~GameBaseObject()
+	virtual ~GameBaseObject()
 	{
 
 	}

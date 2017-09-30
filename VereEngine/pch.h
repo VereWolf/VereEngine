@@ -75,13 +75,33 @@ using namespace DirectX;
 #include "LightHelper.h"
 #include "RenderState.h"
 #include "PLanetCoordinate.h"
-//#include "Effects.h"
+#include "Vertex.h"
+#include "Effects.h"
 //#include "Body.h"
 //#include "LoadVMS.h"
 //#include "DeviceResources.h"
 //#include "GameTimer.h"
 //#include "GameObject.h"
 //#include "inputclass.h"
+
+class BaseMessage
+{
+public:
+	virtual void Use() = 0;
+
+	Effect *m_Effect;
+};
+
+class ComputeMessage : public BaseMessage
+{
+public:
+	virtual void Use() = 0;
+
+	XMFLOAT3 Thread;
+
+	float m_Width;
+	float m_Height;
+};
 
 #include "App.xaml.h"
 

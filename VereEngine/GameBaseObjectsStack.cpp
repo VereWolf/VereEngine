@@ -27,6 +27,8 @@ int GameBaseObjectsStack::CreateGameObject(GameBaseObject *object)
 
 void GameBaseObjectsStack::DeleteGameObject(int id)
 {
+	if (id < 0) return;
+
 	if (m_gameObjects[id] != NULL)
 	{
 		idObjectStack->ReturnElement(id);

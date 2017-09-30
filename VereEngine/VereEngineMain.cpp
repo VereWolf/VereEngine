@@ -3,8 +3,6 @@
 #include "VereEngineMain.h"
 #include "DirectXHelper.h"
 #include "RenderState.h"
-#include "Effects.h"
-#include "Vertex.h"
 #include "GenerateMesh.h"
 
 using namespace VereEngine;
@@ -39,6 +37,11 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	m_gamePlanetHelper = std::unique_ptr<GamePlanetHelper>(new GamePlanetHelper(m_deviceResources.get()));
 
+#ifdef DEBUG
+	GameStreamingDataHandle->OpenFileOutput("Debug.txt");
+#endif // DEBUG
+
+
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 
 	int idF1 = GameTextRenderDeviceHandle->CreateTextFormat(
@@ -72,8 +75,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
-		528, 9, 7);
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 10, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
+		528, 10, 8);
 
 	GameObjectSpace *circleMoonSpace = new GameObjectSpace;
 
@@ -101,6 +104,10 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 VereEngineMain::~VereEngineMain()
 {
 	// Deregister device notification
+
+#ifdef DEBUG
+	GameStreamingDataHandle->CloseFileOutput();
+#endif // DEBUG
 	m_deviceResources->RegisterDeviceNotify(nullptr);
 }
 

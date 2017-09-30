@@ -147,6 +147,7 @@
     <ClInclude Include="CalcCoordForMap.h" />
     <ClInclude Include="ConvertMap.h" />
     <ClInclude Include="DataStreaming.h" />
+    <ClInclude Include="GenerateTrees.h" />
     <ClInclude Include="RecalculationMapFromCoord.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="BaseForTool.cpp" />
     <ClCompile Include="CalcCoordForMap.cpp" />
     <ClCompile Include="DataStreaming.cpp" />
+    <ClCompile Include="GenerateTrees.cpp" />
     <ClCompile Include="RecalculationMapFromCoord.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

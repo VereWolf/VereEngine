@@ -6,7 +6,9 @@
 #include "TerrainLOD.h"
 #include "WaterLOD.h"
 #include "Atmosphere.h"
+#include "TreesLOD.h"
 #include "Clouds.h"
+#include "GenerateBlockOfLOD.h"
 
 class PlanetLOD: public GameComponent
 {
@@ -36,29 +38,53 @@ public:
 			}
 		}
 
-		if (m_idHeightMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInFLOATDepository(m_data->GetIDHeightMapSmall(), m_idHeightMapSmall);
+		/*if (m_idHeightMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInFLOATDepository(m_data->GetIDHeightMapSmall(), m_idHeightMapSmall);
+		if (m_idNormalMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDNormalMapSmall(), m_idNormalMapSmall);
 		if (m_idNormalMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDNormalMapSmall(), m_idNormalMapSmall);
 		if (m_idEnviromentMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDEnviromentMapSmall(), m_idEnviromentMapSmall);
-		if (m_idTreesMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDTreesMapSmall(), m_idTreesMapSmall);
+		if (m_idTreesMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDTreesMapSmall(), m_idTreesMapSmall);*/
 
-		if (m_idHeightMapSRT >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapSRT);
+		if (m_idHeightMapInput >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapInput);
+		if (m_idNormalMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapInput);
+		if (m_idAngleMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idAngleMapInput);
+		if (m_idEnviromentMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapInput);
+		if (m_idTreesMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapInput);
+
+		if (m_idHeightMapOutput >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapOutput);
+		if (m_idNormalMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapOutput);
+		if (m_idAngleMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idAngleMapOutput);
+		if (m_idEnviromentMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapOutput);
+		if (m_idTreesMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapOutput);
+
+		/*if (m_idHeightMapSRT >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapSRT);
 		if (m_idNormalMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapSRT);
 		if (m_idEnviromentMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapSRT);
-		if (m_idTreesMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapSRT);
+		if (m_idTreesMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapSRT);*/
 
 		GameRenderDeviceHandle->DeleteModel(m_modelID);
+
+		if (m_idBillboardTrees >= 0 && m_level == m_data->GetGenerateTreesLvl())
+		{
+			GameRenderDeviceHandle->DeleteVertex(GameRenderDeviceHandle->GetModel(m_idBillboardTrees)->idVertex);
+			GameRenderDeviceHandle->DeleteEffect(GameRenderDeviceHandle->GetModel(m_idBillboardTrees)->idEffect);
+			GameRenderDeviceHandle->DeleteInputLayouts(GameRenderDeviceHandle->GetModel(m_idBillboardTrees)->idInputLayouts);
+			GameRenderDeviceHandle->DeleteMeshBuffer(GameRenderDeviceHandle->GetModel(m_idBillboardTrees)->idMeshBuffer);
+			GameRenderDeviceHandle->DeleteModel(m_idBillboardTrees);
+		}
 	}
 
 	void Init(PlanetData * master, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling,
 		int levelFromLastLoadData, XMINT2 coordFromLastLoadData, btScalar scalingFromLastLoadData,
 		int levelFromLoadTile, XMINT2 coordFromLoadTile, btScalar scalingFromLoadTile, bool isMap,
-		int idHeightMapBig, int idNormalMapBig, int idEnviromentMapBig, int idTreesMapBig);
+		int idHeightMapBig, int idNormalMapBig, int idEnviromentMapBig, int idTreesMapBig,
+		int idBillboardTreesVertex, std::vector<int> *billboardTreesIndex, btTransform billboardMatrix, int idBillboardTrees);
 	void Render();
 
 	void DrawTerrain();
 	void DrawWater();
 	void DrawAtmosphere();
 	void DrawClouds();
+	void DrawTreesBillboard();
 
 	void DestroyNextBlocks();
 
@@ -71,10 +97,10 @@ public:
 	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
 	int GetIDTreesMapBig() { return m_idTreesMapBig; }
 
-	int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
+	/*int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
 	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
 	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
-	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }
+	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }*/
 
 	int GetValueOfLODBig() { return m_valueOfLODBig; }
 	void SetValueOfLODBig(int d) { m_valueOfLODBig = d; }
@@ -111,15 +137,27 @@ private:
 	int m_idEnviromentMapBig;
 	int m_idTreesMapBig;
 
-	int m_idHeightMapSmall;
-	int m_idNormalMapSmall;
-	int m_idEnviromentMapSmall;
-	int m_idTreesMapSmall;
+	//int m_idHeightMapSmall;
+	//int m_idNormalMapSmall;
+	//int m_idEnviromentMapSmall;
+	//int m_idTreesMapSmall;
 
-	int m_idHeightMapSRT;
-	int m_idNormalMapSRT;
-	int m_idEnviromentMapSRT;
-	int m_idTreesMapSRT;
+	//int m_idHeightMapSRT;
+	//int m_idNormalMapSRT;
+	//int m_idEnviromentMapSRT;
+	//int m_idTreesMapSRT;
+
+	int m_idHeightMapInput;
+	int m_idNormalMapInput;
+	int m_idAngleMapInput;
+	int m_idEnviromentMapInput;
+	int m_idTreesMapInput;
+
+	int m_idHeightMapOutput;
+	int m_idNormalMapOutput;
+	int m_idAngleMapOutput;
+	int m_idEnviromentMapOutput;
+	int m_idTreesMapOutput;
 
 	btVector3 m_OffsetCubeT;
 	btVector3 m_CentreT;
@@ -165,9 +203,22 @@ private:
 	void *m_VdT;
 	int m_VsT;
 
+	std::vector<Vertex::Billboard> m_treesVertices;
+	std::vector<int> m_treesIndices;
+
+	int m_index;
+	btVector3 m_posCounter;
+	std::vector<btVector3> m_posArray;
+	btVector3 m_treesOffset;
+
 	int m_valueOfLODBig;
 	int m_valueOfLODSmall;
 
 	int m_valueOfLODBigForNext;
 	int m_valueOfLODSmallForNext;
+
+	int m_idBillboardTreesVertex;
+	std::vector<int> *m_billboardTreesIndex;
+	btTransform m_billBoardMatrix;
+	int m_idBillboardTrees;
 };

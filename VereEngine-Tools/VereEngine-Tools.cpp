@@ -3,15 +3,21 @@
 
 #include "stdafx.h"
 #include "RecalculationMapFromCoord.h"
+#include "GenerateTrees.h"
 
 
 int main()
 {
 	RecalculationMapFromCoord RC;
 	RC.Generate();
-	RC.GenerateTiles();
+	//RC.GenerateTiles();
 	//RC.GenerateResize();
 	//RC.ConvertNormalFromPNGtoRAW();
+
+	//GenerateTrees GT;
+
+	//GT.Generate(17983);
+
     return 0;
 }
 

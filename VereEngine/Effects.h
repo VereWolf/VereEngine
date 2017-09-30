@@ -162,7 +162,7 @@ public:
 
 #pragma endregion
 
-#pragma region Block
+#pragma region SkyBox
 class SkyBoxEffect : public BaseEffect
 {
 public:
@@ -369,7 +369,7 @@ public:
 	BillboardEffect(DX::DeviceResources *resources, const std::string& filename);
 	~BillboardEffect() {};
 
-	void SetRenderStart(const float& v)							{ RenderStart->SetRawValue(&v, 0, sizeof(float)); }
+	/*void SetRenderStart(const float& v)							{ RenderStart->SetRawValue(&v, 0, sizeof(float)); }
 	void SetRenderEnd(const float& v)							{ RenderEnd->SetRawValue(&v, 0, sizeof(float)); }void SetCoord(const XMINT2& v)								{ Coord->SetRawValue(&v, 0, sizeof(XMINT2)); }
 	void SetSpacing(const float& v)								{ Spacing->SetRawValue(&v, 0, sizeof(float)); }
 	void SetHeightMap(ID3D11ShaderResourceView* tex)			{ HeightMap->SetResource(tex); }
@@ -391,7 +391,67 @@ public:
 	ID3DX11EffectShaderResourceVariable* HeightTile_1;
 	ID3DX11EffectShaderResourceVariable* HeightTile_2;
 	ID3DX11EffectShaderResourceVariable* NormalTile_1;
-	ID3DX11EffectShaderResourceVariable* NormalTile_2;
+	ID3DX11EffectShaderResourceVariable* NormalTile_2;*/
+};
+
+#pragma endregion
+
+#pragma region GenerateTexturesFromTexture
+class GenerateTexturesFromTextureEffect : public Effect
+{
+public:
+	GenerateTexturesFromTextureEffect(DX::DeviceResources *resources, const std::string& filename);
+	~GenerateTexturesFromTextureEffect() {};
+
+	void SetStartPos(XMFLOAT2 &V) { StartPos->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
+	void SetStepSize(XMFLOAT2 &V) { StepSize->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
+
+	void SetInputMap(ID3D11ShaderResourceView* tex) { InputMap->SetResource(tex); }
+	void SetOutputMap(ID3D11UnorderedAccessView* tex) { OutputMap->SetUnorderedAccessView(tex); }
+
+	ID3DX11EffectVectorVariable* StartPos;
+	ID3DX11EffectVectorVariable* StepSize;
+
+	ID3DX11EffectShaderResourceVariable* InputMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputMap;
+};
+
+#pragma endregion
+
+#pragma region GenerateBlockOfLOD
+class GenerateBlockOfLODEffect : public Effect
+{
+public:
+	GenerateBlockOfLODEffect(DX::DeviceResources *resources, const std::string& filename);
+	~GenerateBlockOfLODEffect() {};
+
+	void SetOffset(float &V) { Offset->SetRawValue(&V, 0, sizeof(float)); }
+	void SetScaling(float &V) { Scaling->SetRawValue(&V, 0, sizeof(float)); }
+
+	void SetInputHeightMap(ID3D11ShaderResourceView* tex) { InputHeightMap->SetResource(tex); }
+	void SetInputNormalMap(ID3D11ShaderResourceView* tex) { InputNormalMap->SetResource(tex); }
+	void SetInputEnviromentMap(ID3D11ShaderResourceView* tex) { InputEnviromentMap->SetResource(tex); }
+	void SetInputTreesMap(ID3D11ShaderResourceView* tex) { InputTreesMap->SetResource(tex); }
+	void SetInputTileMap(ID3D11ShaderResourceView* tex) { InputTileMap->SetResource(tex); }
+	void SetOutputHeightMap(ID3D11UnorderedAccessView* tex) { OutputHeightMap->SetUnorderedAccessView(tex); }
+	void SetOutputNormalMap(ID3D11UnorderedAccessView* tex) { OutputNormalMap->SetUnorderedAccessView(tex); }
+	void SetOutputAngleMap(ID3D11UnorderedAccessView* tex) { OutputAngleMap->SetUnorderedAccessView(tex); }
+	void SetOutputEnviromentMap(ID3D11UnorderedAccessView* tex) { OutputEnviromentMap->SetUnorderedAccessView(tex); }
+	void SetOutputTreesMap(ID3D11UnorderedAccessView* tex) { OutputTreesMap->SetUnorderedAccessView(tex); }
+
+	ID3DX11EffectVariable* Offset;
+	ID3DX11EffectVariable* Scaling;
+
+	ID3DX11EffectShaderResourceVariable* InputHeightMap;
+	ID3DX11EffectShaderResourceVariable* InputNormalMap;
+	ID3DX11EffectShaderResourceVariable* InputEnviromentMap;
+	ID3DX11EffectShaderResourceVariable* InputTreesMap;
+	ID3DX11EffectShaderResourceVariable* InputTileMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputHeightMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputNormalMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputAngleMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputEnviromentMap;
+	ID3DX11EffectUnorderedAccessViewVariable* OutputTreesMap;
 };
 
 #pragma endregion
@@ -414,5 +474,9 @@ public:
 	static PosNormalTexTanEffect* PosNormalTexTanFX;
 	static BodyEffect* BodyFX;
 	static BillboardEffect* BillboardFX;
+
+	static GenerateTexturesFromTextureEffect *GenerateFloatTexFromFloatTexFX;
+	static GenerateTexturesFromTextureEffect *GenerateBYTE4TexFromBYTE4TexFX;
+	static GenerateBlockOfLODEffect *GenerateBlockOfLODFX;
 };
 #pragma endregion

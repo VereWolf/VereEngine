@@ -19,9 +19,9 @@ void WaterRenderMessage::Use()
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
-	((WaterLODEffect*)m_BaseEffect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
-	((WaterLODEffect*)m_BaseEffect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
-	((WaterLODEffect*)m_BaseEffect)->SetSpacing(((float)S2));
-	((WaterLODEffect*)m_BaseEffect)->SetLevel(1.0f / pow(2, m_Level));
-	((WaterLODEffect*)m_BaseEffect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((WaterLODEffect*)m_Effect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
+	((WaterLODEffect*)m_Effect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
+	((WaterLODEffect*)m_Effect)->SetSpacing(((float)S2));
+	((WaterLODEffect*)m_Effect)->SetLevel(1.0f / pow(2, m_Level));
+	((WaterLODEffect*)m_Effect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
 }

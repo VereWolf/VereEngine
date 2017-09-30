@@ -125,6 +125,15 @@
     <ClCompile Include="DataDepository.cpp">
       <Filter>StreamingData</Filter>
     </ClCompile>
+    <ClCompile Include="GameSkeleton.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="TreesLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateBlockOfLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -359,6 +368,18 @@
     <ClInclude Include="DataDepository.h">
       <Filter>StreamingData</Filter>
     </ClInclude>
+    <ClInclude Include="GameSkeleton.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="TreesLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateBlockOfLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOutputTexture.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -400,6 +421,15 @@
     <CustomBuild Include="FX\CoordHelper.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="FX\GenerateFloatTexFromFloatTex.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateBYTE4TexFromBYTE4Tex.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateBlockOfLOD.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -435,6 +465,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="VereEngine_TemporaryKey.pfx" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

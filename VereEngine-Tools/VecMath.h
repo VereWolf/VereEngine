@@ -62,6 +62,7 @@ public:
 	static float Dot(Float3 v0, Float3 v1);
 	static Float3 Cross(Float3 v0, Float3 v1);
 	static float Clamp(float i, float min, float max);
+	static float Wrap(float i, float max);
 	static float GetMax(float v1, float v2);
 	static float GetMin(float v1, float v2);
 	static Float2 Normalize(Float2 v);

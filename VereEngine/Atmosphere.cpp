@@ -19,9 +19,9 @@ void AtmosphereRenderMessage::Use()
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
-	((AtmosphereEffect*)m_BaseEffect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
-	((AtmosphereEffect*)m_BaseEffect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
-	((AtmosphereEffect*)m_BaseEffect)->SetSpacing(((float)S2));
-	((AtmosphereEffect*)m_BaseEffect)->SetLevel(1.0f / pow(2, m_Level));
-	((AtmosphereEffect*)m_BaseEffect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((AtmosphereEffect*)m_Effect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
+	((AtmosphereEffect*)m_Effect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
+	((AtmosphereEffect*)m_Effect)->SetSpacing(((float)S2));
+	((AtmosphereEffect*)m_Effect)->SetLevel(1.0f / pow(2, m_Level));
+	((AtmosphereEffect*)m_Effect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
 }

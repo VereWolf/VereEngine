@@ -152,7 +152,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(ProjectDir)\Bullet\src;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -260,7 +260,9 @@
     <ClInclude Include="GameObjectsProcess.h" />
     <ClInclude Include="GameObjectsStackManager.h" />
     <ClInclude Include="GameObjectsIDRegistr.h" />
+    <ClInclude Include="GameOutputTexture.h" />
     <ClInclude Include="GamePlanetHelper.h" />
+    <ClInclude Include="GameSkeleton.h" />
     <ClInclude Include="GameStreamingData.h" />
     <ClInclude Include="GameTilePlanetData.h" />
     <ClInclude Include="GamePointLight.h" />
@@ -270,6 +272,8 @@
     <ClInclude Include="GameTexture.h" />
     <ClInclude Include="GameVertex.h" />
     <ClInclude Include="GamePlanetTile.h" />
+    <ClInclude Include="GenerateBlockOfLOD.h" />
+    <ClInclude Include="TreesLOD.h" />
     <ClInclude Include="VereTextureFloat4.h" />
     <ClInclude Include="IDRegistr.h" />
     <ClInclude Include="LuaBinding.h" />
@@ -339,6 +343,8 @@
     <ClCompile Include="GamePlanetKind.cpp" />
     <ClCompile Include="GameResourceObject.cpp" />
     <ClCompile Include="GameResourceObjectsStack.cpp" />
+    <ClCompile Include="GameSkeleton.cpp" />
+    <ClCompile Include="GenerateBlockOfLOD.cpp" />
     <ClCompile Include="IDRegistr.cpp" />
     <ClCompile Include="LoadVMB.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -371,6 +377,7 @@
     <ClCompile Include="StreamingDataManager.cpp" />
     <ClCompile Include="TerrainLOD.cpp" />
     <ClCompile Include="TextRenderDevice.cpp" />
+    <ClCompile Include="TreesLOD.cpp" />
     <ClCompile Include="TreeViewBranch.xaml.cpp">
       <DependentUpon>TreeViewBranch.xaml</DependentUpon>
     </ClCompile>
@@ -449,6 +456,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="VereEngine_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -491,6 +499,21 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\CoordHelper.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\GenerateFloatTexFromFloatTex.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\GenerateBYTE4TexFromBYTE4Tex.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="FX\GenerateBlockOfLOD.fx">
       <FileType>Document</FileType>
     </CustomBuild>
   </ItemGroup>

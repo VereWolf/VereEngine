@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LightHelper.h"
-#include "Vertex.h"
 
 struct VertexOfTransformation
 {

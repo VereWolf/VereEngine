@@ -187,13 +187,16 @@ float4 PS(DomainOut  pin) : SV_Target
 {
 	float3 C1 = float3(0.478f, 0.463f, 0.439f);
 	float3 C2;
+	float3 C3 = float3(0.15f, 0.508f, 0.281);
 	float3 color = float3(1.0f, 1.0f, 1.0f);
 
 	float4 E = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 T = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	if (gIsMap == true)
 	{
 		E = gEnviromentMap.SampleLevel(samNormalMap, float2(pin.TexTess.x, pin.TexTess.y), 0).xyzw;
+		T = gTreesMap.SampleLevel(samNormalMap, float2(pin.TexTess.x, pin.TexTess.y), 0).xyzw;
 
 		int warm = (E.x + 0.125f) * 4.0f;
 		int water = (E.y + 0.125f) * 4.0f;
@@ -271,6 +274,7 @@ float4 PS(DomainOut  pin) : SV_Target
 	{
 		normalT = 2.0f * gNormalMap.SampleLevel(samNormalMap, float2(pin.TexTess.x, pin.TexTess.y), 0).xyz - 1.0f;
 
+		C2 = C2 + T.x * (C3 - C2);
 		color = C1 + E.w * (C2 - C1);
 	}
 
@@ -282,12 +286,12 @@ float4 PS(DomainOut  pin) : SV_Target
 
 	color = d * gFogWColor + (1.0f - d) * color;
 
-	d = CalcFog(gCenterOfPlanet, pin.PosW, float3(0.0f, 0.0f, 0.0f), gRadiusOfAtmosphere);
+	/*d = CalcFog(gCenterOfPlanet, pin.PosW, float3(0.0f, 0.0f, 0.0f), gRadiusOfAtmosphere);
 
-	color = d * gFogAColor + (1.0f - d) * color;
+	color = d * gFogAColor + (1.0f - d) * color;*/
 
 	return float4(color, 1.0f);
-	//return float4(E.xy, 0.0f, 1.0f);
+	//return float4(E.zw, 0.0f, 1.0f);
 }
 
 technique11 LightTech

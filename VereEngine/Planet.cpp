@@ -7,21 +7,21 @@
 
 void QuadScreenWCAMessage::Use()
 {
-	((QuadScreenWCA*)m_BaseEffect)->SetView(m_View);
-	((QuadScreenWCA*)m_BaseEffect)->SetMainDepthMap(m_MainDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetMainTargetMap(m_MainTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterTopDepthMap(m_WaterTopDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterTopTargetMap(m_WaterTopTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterBottomDepthMap(m_WaterBottomDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterBottomTargetMap(m_WaterBottomTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetCloudsDepthMap(m_CloudsDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetCloudsTargetMap(m_CloudsTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetAtmosphereDepthMap(m_AtmosphereDepthSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetAtmosphereTargetMap(m_AtmosphereTargetSRV);
-	((QuadScreenWCA*)m_BaseEffect)->SetDepth(m_Depth);
-	((QuadScreenWCA*)m_BaseEffect)->SetSize(m_Size);
-	((QuadScreenWCA*)m_BaseEffect)->SetWaterRatio(m_WaterRatio);
-	((QuadScreenWCA*)m_BaseEffect)->SetCloudsRatio(m_CloudsRatio);
+	((QuadScreenWCA*)m_Effect)->SetView(m_View);
+	((QuadScreenWCA*)m_Effect)->SetMainDepthMap(m_MainDepthSRV);
+	((QuadScreenWCA*)m_Effect)->SetMainTargetMap(m_MainTargetSRV);
+	((QuadScreenWCA*)m_Effect)->SetWaterTopDepthMap(m_WaterTopDepthSRV);
+	((QuadScreenWCA*)m_Effect)->SetWaterTopTargetMap(m_WaterTopTargetSRV);
+	((QuadScreenWCA*)m_Effect)->SetWaterBottomDepthMap(m_WaterBottomDepthSRV);
+	((QuadScreenWCA*)m_Effect)->SetWaterBottomTargetMap(m_WaterBottomTargetSRV);
+	((QuadScreenWCA*)m_Effect)->SetCloudsDepthMap(m_CloudsDepthSRV);
+	((QuadScreenWCA*)m_Effect)->SetCloudsTargetMap(m_CloudsTargetSRV);
+	((QuadScreenWCA*)m_Effect)->SetAtmosphereDepthMap(m_AtmosphereDepthSRV);
+	((QuadScreenWCA*)m_Effect)->SetAtmosphereTargetMap(m_AtmosphereTargetSRV);
+	((QuadScreenWCA*)m_Effect)->SetDepth(m_Depth);
+	((QuadScreenWCA*)m_Effect)->SetSize(m_Size);
+	((QuadScreenWCA*)m_Effect)->SetWaterRatio(m_WaterRatio);
+	((QuadScreenWCA*)m_Effect)->SetCloudsRatio(m_CloudsRatio);
 }
 
 Planet::Planet()
@@ -53,12 +53,12 @@ void Planet::Render()
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetWaterBottomDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetPlanetDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	m_PP = m_CP;
+	/*m_PP = m_CP;
 	m_CP = GameObjectStackHandle->GetMainCamera()->GetLocalPosition();
 
 	btVector3 CH = m_CP - m_PP;
 
-	SetCurrentMaxLevel(VereMath::Clamp(GetMaxLevel() - 5 * CH.length() * GetScaling().getRow(0).getX() / pow(GetMaxLevel(), 2), 1, GetMaxLevel()));
+	SetCurrentMaxLevel(VereMath::Clamp(GetMaxLevel() - 5 * CH.length() * GetScaling().getRow(0).getX() / pow(GetMaxLevel(), 2), 1, GetMaxLevel()));*/
 
 	if (m_planetElementsInProcess.GetSize() > 0)
 	{
@@ -69,6 +69,7 @@ void Planet::Render()
 			((PlanetLOD*)m_planetElements[id])->CreateNewLevelOfLoD();
 		}
 	}
+
 	m_resources->GetD3DDeviceContext()->RSSetState(RenderStates::SolidRS);
 
 	float blendFactor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -80,7 +81,7 @@ void Planet::Render()
 
 	GameComponentsManagerHandle->DeleteUselessElement(KT_TERRAIN_LOD0, KT_TERRAIN_LOD2);
 
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		if (m_interator >= m_planetElementID->GetRangeOfElement()) m_interator = 0;
 
@@ -174,7 +175,7 @@ void Planet::DrawPlanet()
 	GameRenderDeviceHandle->Render(&message);
 }
 
-void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int loadTilesLvl, int loadDataPer,
+void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int generateTreesLvl, int loadTilesLvl, int loadDataPer,
 	XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
 	int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock)
 {
@@ -183,9 +184,11 @@ void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int
 	SetNumPointInRowInCell(cellSize);
 	SetNumPointInRowInBigCell(sizeOfBigTile);
 	SetMaxLevel(maxLevel);
+	SetCurrentMaxLevel(maxLevel);
 	SetLoadDataMaxLvl(loadDataMaxLvl);
 	SetLoadTilesLvl(loadTilesLvl);
 	SetLoadDataPer(loadDataPer);
+	SetGenerateTreesLvl(generateTreesLvl);
 
 	SetFogAColor(fogColor);
 	SetFogWColor(waterColor);
@@ -296,7 +299,8 @@ void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int
 
 	for (int i = 0; i < 6; ++i)
 	{
-		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, 0, XMINT2(0, 0), 0.0f, 1.0f, XMINT2(0, 0), 1.0f, false, -1, -1, -1, -1);
+		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, 0, XMINT2(0, 0), 0.0f, 1.0f, XMINT2(0, 0), 1.0f, false, -1, -1, -1, -1,
+			-1, NULL, btTransform(btMatrix3x3::getIdentity(), btVector3(0.0, 0.0, 0.0)), -1);
 		m_PlanetLOD[i].SetValueOfLODSmall(1);
 		m_PlanetLOD[i].SetValueOfLODBig(1);
 		while (m_PlanetLOD[i].ComponentProccess() == false);

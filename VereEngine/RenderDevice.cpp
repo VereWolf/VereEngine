@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "DeviceResources.h"
 #include "GameTexture.h"
+#include "GameOutputTexture.h"
 #include "GameModel.h"
 #include "GameVertex.h"
 #include "GameEffect.h"
@@ -32,57 +33,57 @@ void RenderMessage::Use()
 		btVector3 dir = -(m_PlanetData->GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition());
 		dir = m_PlanetData->GetWorldTransform().getBasis().inverse() * dir;
 
-		((BaseEffect*)m_BaseEffect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3((m_CameraOffset * m_PlanetData->GetWorldTransform()).getOrigin()));
-		((BaseEffect*)m_BaseEffect)->SetDirectOfPlanet(VereMath::ConvertToXMFLOAT3(dir));
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfTerrain(m_PlanetData->GetRadiusOfTerrain());
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfWater(m_PlanetData->GetRadiusOfWater());
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfClouds(m_PlanetData->GetRadiusOfClouds());
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfAtmosphere(m_PlanetData->GetRadiusOfAtmosphere());
-		((BaseEffect*)m_BaseEffect)->SetFogAColor(m_PlanetData->GetFogAColor());
-		((BaseEffect*)m_BaseEffect)->SetFogAStart(m_PlanetData->GetFogAStart());
-		((BaseEffect*)m_BaseEffect)->SetFogARange(m_PlanetData->GetFogARange());
-		((BaseEffect*)m_BaseEffect)->SetFogWColor(m_PlanetData->GetFogWColor());
-		((BaseEffect*)m_BaseEffect)->SetFogWStart(m_PlanetData->GetFogWStart());
-		((BaseEffect*)m_BaseEffect)->SetFogWRange(m_PlanetData->GetFogWRange());
+		((BaseEffect*)m_Effect)->SetCenterOfPlanet(VereMath::ConvertToXMFLOAT3((m_CameraOffset * m_PlanetData->GetWorldTransform()).getOrigin()));
+		((BaseEffect*)m_Effect)->SetDirectOfPlanet(VereMath::ConvertToXMFLOAT3(dir));
+		((BaseEffect*)m_Effect)->SetRadiusOfTerrain(m_PlanetData->GetRadiusOfTerrain());
+		((BaseEffect*)m_Effect)->SetRadiusOfWater(m_PlanetData->GetRadiusOfWater());
+		((BaseEffect*)m_Effect)->SetRadiusOfClouds(m_PlanetData->GetRadiusOfClouds());
+		((BaseEffect*)m_Effect)->SetRadiusOfAtmosphere(m_PlanetData->GetRadiusOfAtmosphere());
+		((BaseEffect*)m_Effect)->SetFogAColor(m_PlanetData->GetFogAColor());
+		((BaseEffect*)m_Effect)->SetFogAStart(m_PlanetData->GetFogAStart());
+		((BaseEffect*)m_Effect)->SetFogARange(m_PlanetData->GetFogARange());
+		((BaseEffect*)m_Effect)->SetFogWColor(m_PlanetData->GetFogWColor());
+		((BaseEffect*)m_Effect)->SetFogWStart(m_PlanetData->GetFogWStart());
+		((BaseEffect*)m_Effect)->SetFogWRange(m_PlanetData->GetFogWRange());
 	}
 	else
 	{
-		((BaseEffect*)m_BaseEffect)->SetCenterOfPlanet(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfTerrain(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfWater(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfClouds(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetRadiusOfAtmosphere(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetFogAColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
-		((BaseEffect*)m_BaseEffect)->SetFogAStart(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetFogARange(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetFogWColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
-		((BaseEffect*)m_BaseEffect)->SetFogWStart(-1.0f);
-		((BaseEffect*)m_BaseEffect)->SetFogWRange(-1.0f);
+		((BaseEffect*)m_Effect)->SetCenterOfPlanet(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		((BaseEffect*)m_Effect)->SetRadiusOfTerrain(-1.0f);
+		((BaseEffect*)m_Effect)->SetRadiusOfWater(-1.0f);
+		((BaseEffect*)m_Effect)->SetRadiusOfClouds(-1.0f);
+		((BaseEffect*)m_Effect)->SetRadiusOfAtmosphere(-1.0f);
+		((BaseEffect*)m_Effect)->SetFogAColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
+		((BaseEffect*)m_Effect)->SetFogAStart(-1.0f);
+		((BaseEffect*)m_Effect)->SetFogARange(-1.0f);
+		((BaseEffect*)m_Effect)->SetFogWColor(XMFLOAT3(-1.0f, -1.0f, -1.0f));
+		((BaseEffect*)m_Effect)->SetFogWStart(-1.0f);
+		((BaseEffect*)m_Effect)->SetFogWRange(-1.0f);
 	}
 
 	XMMATRIX mesh = XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(m_CameraOffset * m_Transform * m_Scaling));
 	XMMATRIX viewProj = m_View * m_Proj;
-	btMatrix3x3 transformN = m_Transform.getBasis();
+	btMatrix3x3 transformN = m_Transform.getBasis().inverse();
 
 	XMMATRIX meshN = XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(transformN.inverse()));
 
-	((BaseEffect*)m_BaseEffect)->SetEyePosW(EyePos);
-	((BaseEffect*)m_BaseEffect)->SetMaterial(*m_Material);
-	((BaseEffect*)m_BaseEffect)->SetView(m_View);
-	((BaseEffect*)m_BaseEffect)->SetProj(m_Proj);
-	((BaseEffect*)m_BaseEffect)->SetViewProj(viewProj);
-	((BaseEffect*)m_BaseEffect)->SetWorld(mesh);
-	((BaseEffect*)m_BaseEffect)->SetWorldN(meshN);
-	((BaseEffect*)m_BaseEffect)->SetFarZ(m_FarZ);
-	((BaseEffect*)m_BaseEffect)->SetFarRangeMod(m_FarRangeMod);
-	((BaseEffect*)m_BaseEffect)->SetFarModifier(m_FarModifier);
+	((BaseEffect*)m_Effect)->SetEyePosW(EyePos);
+	((BaseEffect*)m_Effect)->SetMaterial(*m_Material);
+	((BaseEffect*)m_Effect)->SetView(m_View);
+	((BaseEffect*)m_Effect)->SetProj(m_Proj);
+	((BaseEffect*)m_Effect)->SetViewProj(viewProj);
+	((BaseEffect*)m_Effect)->SetWorld(mesh);
+	((BaseEffect*)m_Effect)->SetWorldN(meshN);
+	((BaseEffect*)m_Effect)->SetFarZ(m_FarZ);
+	((BaseEffect*)m_Effect)->SetFarRangeMod(m_FarRangeMod);
+	((BaseEffect*)m_Effect)->SetFarModifier(m_FarModifier);
 }
 
 void RenderToScreenMessage::Use()
 {
-	((RenderToScreen*)m_BaseEffect)->SetView(m_View);
-	((RenderToScreen*)m_BaseEffect)->SetTargetMap(m_TargetSRV);
-	((RenderToScreen*)m_BaseEffect)->SetDepthMap(m_DepthSRV);
+	((RenderToScreen*)m_Effect)->SetView(m_View);
+	((RenderToScreen*)m_Effect)->SetTargetMap(m_TargetSRV);
+	((RenderToScreen*)m_Effect)->SetDepthMap(m_DepthSRV);
 }
 
 RenderDevice::RenderDevice()
@@ -127,6 +128,7 @@ void RenderDevice::Init(DX::DeviceResources *resources)
 	GetRenderAssetsStacks()->m_gameMeshBuffers.Init(resources);
 	GetRenderAssetsStacks()->m_gameModels.Init(resources);
 	GetRenderAssetsStacks()->m_gameTextures.Init(resources);
+	GetRenderAssetsStacks()->m_gameOutputTextures.Init(resources);
 	
 	{
 		D3D11_TEXTURE2D_DESC texDesc;
@@ -168,7 +170,7 @@ void RenderDevice::Init(DX::DeviceResources *resources)
 		texDesc.Height = m_mainViewPort.Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -254,13 +256,17 @@ void RenderDevice::Render(RenderMessage *message)
 	UINT stride = model->sizeOfVertex;
 
 	message->m_Material = &model->material;
-	message->m_BaseEffect = BE;
+	message->m_Effect = BE;
 
 	int M = 3;
 
 	if (model->topology == D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST)
 	{
 		M = 4;
+	}
+	else if (model->topology == D3D11_PRIMITIVE_TOPOLOGY_POINTLIST)
+	{
+		M = 1;
 	}
 
 	if (true)
@@ -273,7 +279,10 @@ void RenderDevice::Render(RenderMessage *message)
 			UINT offset = 0;
 			m_resources->GetD3DDeviceContext()->IASetVertexBuffers(0, 1, &VB, &stride, &offset);
 
-			m_resources->GetD3DDeviceContext()->IASetIndexBuffer(IB, DXGI_FORMAT_R32_UINT, 0);
+			if (model->topology != D3D11_PRIMITIVE_TOPOLOGY_POINTLIST)
+			{
+				m_resources->GetD3DDeviceContext()->IASetIndexBuffer(IB, DXGI_FORMAT_R32_UINT, 0);
+			}
 
 			ID3DX11EffectTechnique* activeTech = BE->Light1Tech;
 
@@ -285,7 +294,14 @@ void RenderDevice::Render(RenderMessage *message)
 			for (UINT p = 0; p < techDesc.Passes; ++p)
 			{
 				activeTech->GetPassByIndex(p)->Apply(0, m_resources->GetD3DDeviceContext());
-				m_resources->GetD3DDeviceContext()->DrawIndexed(M * model->faceCount, 0, 0);
+				if (model->topology == D3D11_PRIMITIVE_TOPOLOGY_POINTLIST)
+				{
+					m_resources->GetD3DDeviceContext()->Draw(message->m_CountIndex, message->m_StartIndex);
+				}
+				else
+				{
+					m_resources->GetD3DDeviceContext()->DrawIndexed(M * model->faceCount, M * model->faceStart, 0);
+				}
 			}
 		}
 	}
@@ -313,6 +329,25 @@ void RenderDevice::RenderToScreen()
 	BindRenderTarget(m_resources->GetBackBufferRenderTargetView(), m_resources->GetDepthStencilView());
 
 	GameRenderDeviceHandle->Render(&message);
+}
+
+void RenderDevice::ComputeShader(ComputeMessage *message)
+{
+	Effect *effect = message->m_Effect;
+
+	D3DX11_TECHNIQUE_DESC techDesc;
+	effect->Light1Tech->GetDesc(&techDesc);
+	for (UINT p = 0; p < techDesc.Passes; ++p)
+	{
+		message->Use();
+		effect->Light1Tech->GetPassByIndex(p)->Apply(0, m_resources->GetD3DDeviceContext());
+
+		XMINT2 ThreadGroup = XMINT2(ceilf(message->m_Width / message->Thread.x), ceilf(message->m_Height / message->Thread.y));
+
+		m_resources->GetD3DDeviceContext()->Dispatch(ThreadGroup.x, ThreadGroup.y, 1);
+	}
+
+	m_resources->GetD3DDeviceContext()->CSSetShader(0, 0, 0);
 }
 
 void RenderDevice::ClearMainRenderTarget()
@@ -510,6 +545,21 @@ int RenderDevice::CreateTexture(void *map, UINT height, UINT width, UINT format,
 	return m_renderAssetsStacks.m_gameTextures.CreateGameObject(texture);
 }
 
+int RenderDevice::AddTexture(ID3D11ShaderResourceView * srv)
+{
+
+	if (!srv)
+	{
+		return -1;
+	}
+
+	GameTexture *texture = new GameTexture;
+	texture->PreInit(m_resources);
+	texture->SetTexture(srv);
+
+	return m_renderAssetsStacks.m_gameTextures.CreateGameObject(texture);
+}
+
 void RenderDevice::DeleteTexture(int id)
 {
 	m_renderAssetsStacks.m_gameTextures.DeleteGameObject(id);
@@ -525,10 +575,77 @@ ID3D11ShaderResourceView* RenderDevice::GetTexture(int id)
 	return NULL;
 }
 
+int RenderDevice::CreateOutputTexture(UINT width, UINT height, DXGI_FORMAT format, UINT mipLevels)
+{
+	ID3D11ShaderResourceView *outputSRV;
+	ID3D11UnorderedAccessView *outputUAV;
+
+	D3D11_TEXTURE2D_DESC outputTexDesc;
+	outputTexDesc.Width = width;
+	outputTexDesc.Height = height;
+	outputTexDesc.MipLevels = mipLevels;
+	outputTexDesc.ArraySize = 1;
+	outputTexDesc.Format = format;
+	outputTexDesc.SampleDesc.Count = 1;
+	outputTexDesc.SampleDesc.Quality = 0;
+	outputTexDesc.Usage = D3D11_USAGE_DEFAULT;
+	outputTexDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
+	outputTexDesc.CPUAccessFlags = 0;
+	outputTexDesc.MiscFlags = 0;
+
+	ID3D11Texture2D* outputTex = 0;
+	HR(m_resources->GetD3DDevice()->CreateTexture2D(&outputTexDesc, 0, &outputTex));
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC osrvDesc;
+	osrvDesc.Format = format;
+	osrvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	osrvDesc.Texture2D.MostDetailedMip = 0;
+	osrvDesc.Texture2D.MipLevels = 1;
+	HR(m_resources->GetD3DDevice()->CreateShaderResourceView(outputTex, &osrvDesc, &outputSRV));
+
+	D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+	uavDesc.Format = format;
+	uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+	uavDesc.Texture2D.MipSlice = 0;
+	HR(m_resources->GetD3DDevice()->CreateUnorderedAccessView(outputTex, &uavDesc, &outputUAV));
+
+	ReleaseCOM(outputTex);
+
+	GameOutputTexture *tex = new GameOutputTexture;
+	tex->PreInit(m_resources);
+	tex->SetTexture(outputSRV, outputUAV);
+
+	return m_renderAssetsStacks.m_gameOutputTextures.CreateGameObject(tex);
+}
+
+void RenderDevice::DeleteOutputTexture(int id)
+{
+	delete ((GameOutputTexture*)m_renderAssetsStacks.m_gameOutputTextures.GetGameObject(id))->GetTextureSRV();
+	m_renderAssetsStacks.m_gameOutputTextures.DeleteGameObject(id);
+}
+
+int RenderDevice::DeleteOutputTextureButSRVToTextureStack(int id)
+{
+	int texID = AddTexture(((GameOutputTexture*)m_renderAssetsStacks.m_gameOutputTextures.GetGameObject(id))->GetTextureSRV());
+	m_renderAssetsStacks.m_gameOutputTextures.DeleteGameObject(id);
+
+	return texID;
+}
+
+ID3D11ShaderResourceView* RenderDevice::GetOutputTextureSRV(int id)
+{
+	return ((GameOutputTexture*)m_renderAssetsStacks.m_gameOutputTextures.GetGameObject(id))->GetTextureSRV();
+}
+
+ID3D11UnorderedAccessView* RenderDevice::GetOutputTextureUAV(int id)
+{
+	return ((GameOutputTexture*)m_renderAssetsStacks.m_gameOutputTextures.GetGameObject(id))->GetTextureUAV();
+}
+
 int RenderDevice::CreateInputLayouts(int idVertices, int idEffect)
 {
 	ElementsVertex *gameVertices = ((GameVertex*)m_renderAssetsStacks.m_gameVertices.GetGameObject(idVertices))->GetVertex();
-	Effect *baseEffect = ((GameEffect*)m_renderAssetsStacks.m_gameEffects.GetGameObject(idVertices))->GetEffect();
+	Effect *baseEffect = ((GameEffect*)m_renderAssetsStacks.m_gameEffects.GetGameObject(idEffect))->GetEffect();
 
 	ID3D11InputLayout* inputLayouts = 0;
 
@@ -601,10 +718,16 @@ int RenderDevice::CreateMeshBuffer(void *vertices, UINT vertexSize, UINT numElem
 	{
 		return -1;
 	}
-	ID3D11Buffer * IB = BuildIndicesBuffer(indices);
-	if (!IB)
+	ID3D11Buffer * IB = NULL;
+
+	if (indices != NULL)
 	{
-		return -1;
+		IB = BuildIndicesBuffer(indices);
+
+		if (!IB)
+		{
+			return -1;
+		}
 	}
 
 	std::vector<char> V(S);
@@ -645,6 +768,11 @@ ID3D11Buffer* RenderDevice::GetVerticesBuffer(int id)
 
 ID3D11Buffer* RenderDevice::GetIndicesBuffer(int id)
 {
+	if (id < 0)
+	{
+		return NULL;
+	}
+
 	return ((GameMeshBuffer*)m_renderAssetsStacks.m_gameMeshBuffers.GetGameObject(id))->GetIndexBuffer();
 }
 

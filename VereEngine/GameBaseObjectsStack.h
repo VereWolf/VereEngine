@@ -49,6 +49,7 @@ struct RenderAssetsStacks
 	GameBaseObjectsStack m_gameVertices;
 	GameBaseObjectsStack m_gameModels;
 	GameBaseObjectsStack m_gameTextures;
+	GameBaseObjectsStack m_gameOutputTextures;
 	GameBaseObjectsStack m_gameMeshBuffers;
 	GameBaseObjectsStack m_gameAnimations;
 	GameBaseObjectsStack m_gameAmbientLight;

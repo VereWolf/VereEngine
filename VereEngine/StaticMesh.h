@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Vertex.h"
 #include "LoadVMB.h"
 #include "LoadVMS.h"
 #include "GameBaseObject.h"

@@ -126,6 +126,8 @@ public:
 	inline void SetLoadDataPer(int16_t d) { m_loadDataPer = d; }
 	inline int16_t GetLoadDataMaxLvl() { return m_loadDataMaxLvl; }
 	inline void SetLoadDataMaxLvl(int16_t d) { m_loadDataMaxLvl = d; }
+	inline int16_t GetGenerateTreesLvl() { return m_generateTreesLvl; }
+	inline void SetGenerateTreesLvl(int16_t d) { m_generateTreesLvl = d; }
 	inline int16_t GetLoadTilesLvl() { return m_loadTilesLvl; }
 	inline void SetLoadTilesLvl(int16_t d) { m_loadTilesLvl = d; }
 	inline string GetPosFix(int side) { return m_posfix[side]; }
@@ -174,6 +176,7 @@ private:
 	int16_t m_currentMaxLevel;
 	int16_t m_loadDataPer;
 	int16_t m_loadDataMaxLvl;
+	int16_t m_generateTreesLvl;
 	int16_t m_loadTilesLvl;
 	int16_t m_maxNumBlockBig;
 	int16_t m_currentNumBlockBig;

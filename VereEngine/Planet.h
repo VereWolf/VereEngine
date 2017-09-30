@@ -39,7 +39,7 @@ public:
 	void DrawWCA();
 	void DrawPlanet();
 
-	void BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int loadTilesLvl, int loadDataPer,
+	void BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int generateTreesLvl, int loadTilesLvl, int loadDataPer,
 		XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
 		int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock);
 

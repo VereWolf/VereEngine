@@ -19,23 +19,23 @@ void TerrainRenderMessage::Use()
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
-	((TerrainLODEffect*)m_BaseEffect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
-	((TerrainLODEffect*)m_BaseEffect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
-	((TerrainLODEffect*)m_BaseEffect)->SetSpacing(((float)S2));
-	((TerrainLODEffect*)m_BaseEffect)->SetLevel(1.0f / pow(2, m_Level));
-	((TerrainLODEffect*)m_BaseEffect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
-	((TerrainLODEffect*)m_BaseEffect)->SetTang(XMFLOAT3(m_Tangent.getX(), m_Tangent.getY(), m_Tangent.getZ()));
+	((TerrainLODEffect*)m_Effect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
+	((TerrainLODEffect*)m_Effect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
+	((TerrainLODEffect*)m_Effect)->SetSpacing(((float)S2));
+	((TerrainLODEffect*)m_Effect)->SetLevel(1.0f / pow(2, m_Level));
+	((TerrainLODEffect*)m_Effect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((TerrainLODEffect*)m_Effect)->SetTang(XMFLOAT3(m_Tangent.getX(), m_Tangent.getY(), m_Tangent.getZ()));
 
-	((TerrainLODEffect*)m_BaseEffect)->SetInverseSide(XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(m_InverseSide)));
-	((TerrainLODEffect*)m_BaseEffect)->SetSide(m_Side);
+	((TerrainLODEffect*)m_Effect)->SetInverseSide(XMLoadFloat3x3(&VereMath::ConvertToXMFLOAT3X3(m_InverseSide)));
+	((TerrainLODEffect*)m_Effect)->SetSide(m_Side);
 
-	((TerrainLODEffect*)m_BaseEffect)->SetIsMap(m_IsMap);
+	((TerrainLODEffect*)m_Effect)->SetIsMap(m_IsMap);
 
 	if (m_IsMap)
 	{
-		((TerrainLODEffect*)m_BaseEffect)->SetHeightMap(m_HeightSRV);
-		((TerrainLODEffect*)m_BaseEffect)->SetNormalMap(m_NormalSRV);
-		((TerrainLODEffect*)m_BaseEffect)->SetEnviromentMap(m_EnviromentSRV);
-		((TerrainLODEffect*)m_BaseEffect)->SetTreesMap(m_TreesSRV);
+		((TerrainLODEffect*)m_Effect)->SetHeightMap(m_HeightSRV);
+		((TerrainLODEffect*)m_Effect)->SetNormalMap(m_NormalSRV);
+		((TerrainLODEffect*)m_Effect)->SetEnviromentMap(m_EnviromentSRV);
+		((TerrainLODEffect*)m_Effect)->SetTreesMap(m_TreesSRV);
 	}
 }

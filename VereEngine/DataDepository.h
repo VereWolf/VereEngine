@@ -12,6 +12,18 @@ enum
 	e_float4
 };
 
+class CreateTextureFromTextureMessage : public ComputeMessage
+{
+public:
+	void Use();
+
+	XMFLOAT2 m_startPos;
+	XMFLOAT2 m_stepSize;
+
+	ID3D11ShaderResourceView *m_inputSRV;
+	ID3D11UnorderedAccessView *m_outputUAV;
+};
+
 class DataDepository
 {
 public:
@@ -20,6 +32,9 @@ public:
 	~DataDepository();
 
 	void Init(int level, int width, int height, int elementTypeInVector);
+
+	bool CreateTexturesForInput(DX::DeviceResources* resources, int id, ID3D11ShaderResourceView **inputSRV, DXGI_FORMAT format);
+	bool CreateTexturesForOutput(DX::DeviceResources* resources, ID3D11ShaderResourceView **outputSRV, ID3D11UnorderedAccessView **outputUAV, DXGI_FORMAT format);
 
 	int CreateNewBlock(void *data);
 	void ReleaseBlock(int id) { m_idStack->ReturnElement(id); }
