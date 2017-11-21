@@ -15,8 +15,11 @@ public:
 	ID3D11ShaderResourceView *m_inputEnviromentMapSRV;
 	ID3D11ShaderResourceView *m_inputTreesMapSRV;
 	ID3D11ShaderResourceView *m_tileSRV;
+<<<<<<< HEAD
 	ID3D11UnorderedAccessView *m_outputHeightMapUAV;
 	ID3D11UnorderedAccessView *m_outputNormalMapUAV;
+=======
+>>>>>>> master
 	ID3D11UnorderedAccessView *m_outputAngleMapUAV;
 	ID3D11UnorderedAccessView *m_outputEnviromentMapUAV;
 	ID3D11UnorderedAccessView *m_outputTreesMapUAV;

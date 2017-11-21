@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "RecalculationMapFromCoord.h"
 #include "GenerateTrees.h"
+<<<<<<< HEAD
+=======
+#include "GenerateRiver.h"
+>>>>>>> master
 
 
 int main()
@@ -18,6 +22,12 @@ int main()
 
 	//GT.Generate(17983);
 
+<<<<<<< HEAD
+=======
+	/*GenerateRiver RG;
+	RG.Generate(8192, 8192);*/
+
+>>>>>>> master
     return 0;
 }
 

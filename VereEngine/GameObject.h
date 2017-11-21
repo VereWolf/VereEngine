@@ -21,10 +21,6 @@ public:
 		m_master = NULL;
 		m_RenderId = -1;
 	}
-	/*GameObject(const btRigidBodyConstructionInfo& constructionInfo)
-	{
-
-	}*/
 
 	GameObject(GameObject& other)
 	{
@@ -74,6 +70,9 @@ public:
 	void SetRangeForFullProcess(btScalar r) { m_rangeForFullProcess = r; }
 	btScalar GetRangeForFullProcess() { return m_rangeForFullProcess; }
 
+	GameObject * GetMainCamera() { return m_mainCamera; }
+	void SetMainCamera(GameObject *cam) { m_mainCamera = cam; }
+
 protected:
 	btMatrix3x3 m_scaling;
 
@@ -84,6 +83,8 @@ protected:
 	int m_RenderId;
 
 	btScalar m_rangeForFullProcess;
+
+	GameObject *m_mainCamera;
 
 	double  m_SecondsPerCount;
 	double  m_DeltaTime;

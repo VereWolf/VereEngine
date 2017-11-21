@@ -27,6 +27,20 @@ struct Float2
 	Float2();
 	Float2(float itsX, float itsY);
 
+	float Length() { return pow(pow(x, 2.0f) + pow(y, 2.0f), 0.5f); }
+
+	Float2 Normalize()
+	{
+		float l = 1.0f / Length();
+
+		return Float2(x * l, y * l);		
+	}
+
+	float Dot(Float2 V)
+	{
+		return x * V.x + y * V.y;
+	}
+
 	float x;
 	float y;
 };

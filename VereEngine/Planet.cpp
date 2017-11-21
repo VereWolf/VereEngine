@@ -53,6 +53,7 @@ void Planet::Render()
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetWaterBottomDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_resources->GetD3DDeviceContext()->ClearDepthStencilView(GetPlanetDeepMapDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+<<<<<<< HEAD
 	/*m_PP = m_CP;
 	m_CP = GameObjectStackHandle->GetMainCamera()->GetLocalPosition();
 
@@ -60,6 +61,8 @@ void Planet::Render()
 
 	SetCurrentMaxLevel(VereMath::Clamp(GetMaxLevel() - 5 * CH.length() * GetScaling().getRow(0).getX() / pow(GetMaxLevel(), 2), 1, GetMaxLevel()));*/
 
+=======
+>>>>>>> master
 	if (m_planetElementsInProcess.GetSize() > 0)
 	{
 		int id = m_planetElementsInProcess.TakeElement();
@@ -175,6 +178,7 @@ void Planet::DrawPlanet()
 	GameRenderDeviceHandle->Render(&message);
 }
 
+<<<<<<< HEAD
 void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int generateTreesLvl, int loadTilesLvl, int loadDataPer,
 	XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
 	int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock)
@@ -203,6 +207,49 @@ void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int
 	m_idNormalMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
 	m_idEnviromentMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
 	m_idTreesMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(levelOfSmallBlock, cellSize + 2, cellSize + 2);
+=======
+void Planet::BuildPlanet(BuildPlanetMessage message)
+{
+	m_planetPath = message.planetPath;
+
+	SetNumPointInRowInCell(message.cellSize);
+	SetNumPointInRowInBigCell(message.sizeOfBigTile);
+	SetMaxLevel(message.maxLevel);
+	SetCurrentMaxLevel(message.maxLevel);
+	SetLoadDataMaxLvl(message.loadDataMaxLvl);
+	SetLoadTilesLvl(message.loadTilesLvl);
+	SetLoadDataPer(message.loadDataPer);
+	SetGenerateTreesLvl(message.generateTreesLvl);
+
+	SetFogAColor(message.fogColor);
+	SetFogWColor(message.waterColor);
+	SetFogWRange(message.waterDeep);
+
+	m_idHeightMapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idNormalMapBig = GameStreamingDataHandle->CreateBYTE4Depository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idEnviromentMapBig = GameStreamingDataHandle->CreateBYTE4Depository(3, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idTreesMapBig = GameStreamingDataHandle->CreateBYTE4Depository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverWidth1MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverWidth2MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverLength1MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverLength2MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverType1MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverType2MapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+	m_idRiverHeightMapBig = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfBigBlock, message.sizeOfBigTile, message.sizeOfBigTile);
+
+
+	m_idHeightMapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idNormalMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idEnviromentMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idTreesMapSmall = GameStreamingDataHandle->CreateBYTE4Depository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverWidth1MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverWidth2MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverLength1MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverLength2MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverType1MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverType2MapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+	m_idRiverHeightMapSmall = GameStreamingDataHandle->CreateFLOATDepository(message.levelOfSmallBlock, message.cellSize + 2, message.cellSize + 2);
+>>>>>>> master
 
 	{
 		std::vector<D3D11_INPUT_ELEMENT_DESC> *terrainLOD = new std::vector<D3D11_INPUT_ELEMENT_DESC>(2);
@@ -288,19 +335,57 @@ void Planet::BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int
 		m_RenderIdWCAQuadScreen = GameRenderDeviceHandle->CreateModel(modelWCAQS);
 	}
 
-	SetMaxNumBlockBig(pow(2, levelOfBigBlock));
+	SetMaxNumBlockBig(pow(2, message.levelOfBigBlock));
 	SetCurrentNumBlockBig(6);
-	SetMaxNumBlockSmall(pow(2, levelOfSmallBlock));
+	SetMaxNumBlockSmall(pow(2, message.levelOfSmallBlock));
 	SetCurrentNumBlockSmall(6);
 
-	IDRegistr *IDR = new IDRegistr(levelOfSmallBlock);
+	IDRegistr *IDR = new IDRegistr(message.levelOfSmallBlock);
 	m_planetElementID = IDR;
 	m_planetElements.resize(GetMaxNumBlockSmall(), NULL);
 
+	PlanetLODInitMeessage initMessage;
+
+	initMessage.master = this;
+	initMessage.level = 0;
+	initMessage.coord = XMINT2(0, 0);
+	initMessage.position = btVector3(0.0, 0.0, 0.0);
+	initMessage.scaling = 1.0;
+	initMessage.levelFromLastLoadData = 0;
+	initMessage.coordFromLastLoadData = XMINT2(0, 0);
+	initMessage.scalingFromLastLoadData = 0.0f;
+	initMessage.levelFromLoadTile = 1.0f;
+	initMessage.coordFromLoadTile = XMINT2(0, 0);
+	initMessage.scalingFromLoadTile = 1.0f;
+	initMessage.isMap = false;
+	initMessage.isMap1 = false;
+	initMessage.isMap2 = false;
+	initMessage.idHeightMapBig = XMINT2(-1, -1);
+	initMessage.idNormalMapBig = XMINT2(-1, -1);
+	initMessage.idEnviromentMapBig = XMINT2(-1, -1);
+	initMessage.idTreesMapBig = XMINT2(-1, -1);
+	initMessage.idRiverWidth1MapBig = XMINT2(-1, -1);
+	initMessage.idRiverWidth2MapBig = XMINT2(-1, -1);
+	initMessage.idRiverLength1MapBig = XMINT2(-1, -1);
+	initMessage.idRiverLength2MapBig = XMINT2(-1, -1);
+	initMessage.idRiverType1MapBig = XMINT2(-1, -1);
+	initMessage.idRiverType2MapBig = XMINT2(-1, -1);
+	initMessage.idRiverHeightMapBig = XMINT2(-1, -1);
+	initMessage.idBillboardTreesVertex = -1;
+	initMessage.billboardTreesIndex = NULL;
+	initMessage.billboardMatrix = btTransform(btMatrix3x3::getIdentity(), btVector3(0.0, 0.0, 0.0));
+	initMessage.idBillboardTrees = -1;
+
 	for (int i = 0; i < 6; ++i)
 	{
+<<<<<<< HEAD
 		m_PlanetLOD[i].Init(this, i, 0, XMINT2(0, 0), btVector3(0.0, 0.0, 0.0), 1.0, 0, XMINT2(0, 0), 0.0f, 1.0f, XMINT2(0, 0), 1.0f, false, -1, -1, -1, -1,
 			-1, NULL, btTransform(btMatrix3x3::getIdentity(), btVector3(0.0, 0.0, 0.0)), -1);
+=======
+		initMessage.side = i;
+
+		m_PlanetLOD[i].Init(initMessage);
+>>>>>>> master
 		m_PlanetLOD[i].SetValueOfLODSmall(1);
 		m_PlanetLOD[i].SetValueOfLODBig(1);
 		while (m_PlanetLOD[i].ComponentProccess() == false);

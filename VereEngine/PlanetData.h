@@ -46,7 +46,7 @@ public:
 	DX::DeviceResources *GetDeviceResources() { return m_resources; }
 
 	int BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount);
-
+	
 	void SetRenderIdWater(int n) { m_RenderIdWater = n; }
 	int GetRenderIdWater() { return m_RenderIdWater; }
 	void SetRenderIdAtmosphere(int n) { m_RenderIdAtmosphere = n; }
@@ -149,11 +149,25 @@ public:
 	int GetIDNormalMapBig() { return m_idNormalMapBig; }
 	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
 	int GetIDTreesMapBig() { return m_idTreesMapBig; }
-
+	int GetIDRiverWidth1MapBig() { return m_idRiverWidth1MapBig; }
+	int GetIDRiverWidth2MapBig() { return m_idRiverWidth2MapBig; }
+	int GetIDRiverLength1MapBig() { return m_idRiverLength1MapBig; }
+	int GetIDRiverLength2MapBig() { return m_idRiverLength2MapBig; }
+	int GetIDRiverType1MapBig() { return m_idRiverType1MapBig; }
+	int GetIDRiverType2MapBig() { return m_idRiverType2MapBig; }
+	int GetIDRiverHeightMapBig() { return m_idRiverHeightMapBig; }
+	
 	int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
 	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
 	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
 	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }
+	int GetIDRiverWidth1MapSmall() { return m_idRiverWidth1MapSmall; }
+	int GetIDRiverWidth2MapSmall() { return m_idRiverWidth2MapSmall; }
+	int GetIDRiverLength1MapSmall() { return m_idRiverLength1MapSmall; }
+	int GetIDRiverLength2MapSmall() { return m_idRiverLength2MapSmall; }
+	int GetIDRiverType1MapSmall() { return m_idRiverType1MapSmall; }
+	int GetIDRiverType2MapSmall() { return m_idRiverType2MapSmall; }
+	int GetIDRiverHeightMapSmall() { return m_idRiverHeightMapSmall; }
 
 	void GenerateCoord(float height, float width, float level);
 private:
@@ -237,11 +251,26 @@ protected:
 	int m_idNormalMapBig;
 	int m_idEnviromentMapBig;
 	int m_idTreesMapBig;
+	int m_idRiverWidth1MapBig;
+	int m_idRiverWidth2MapBig;
+	int m_idRiverLength1MapBig;
+	int m_idRiverLength2MapBig;
+	int m_idRiverType1MapBig;
+	int m_idRiverType2MapBig;
+	int m_idRiverHeightMapBig;
 
 	int m_idHeightMapSmall;
 	int m_idNormalMapSmall;
 	int m_idEnviromentMapSmall;
 	int m_idTreesMapSmall;
+	int m_idRiverWidth1MapSmall;
+	int m_idRiverWidth2MapSmall;
+	int m_idRiverLength1MapSmall;
+	int m_idRiverLength2MapSmall;
+	int m_idRiverType1MapSmall;
+	int m_idRiverType2MapSmall;
+	int m_idRiverHeightMapSmall;
+
 public:
 	std::vector<GameComponent*> m_planetElements;
 	IDRegistr *m_planetElementID;

@@ -33,9 +33,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -134,6 +131,15 @@
     <ClCompile Include="GenerateBlockOfLOD.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="Camera.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateHeightAndNormalMapWithNoise.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -196,9 +202,6 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="d3dx11effect.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
@@ -380,6 +383,15 @@
     <ClInclude Include="GameOutputTexture.h">
       <Filter>RenderDevice</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="Camera.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateHeightAndNormalMapWithNoise.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -430,6 +442,12 @@
     <CustomBuild Include="FX\GenerateBlockOfLOD.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+<<<<<<< HEAD
+=======
+    <CustomBuild Include="FX\GenerateHeightAndNormalMapWithNoise.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -494,9 +512,6 @@
     <Filter Include="Planet">
       <UniqueIdentifier>{51df08ec-c8c4-47d4-b52a-ab8ac9892ad6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TextRenderDevice">
       <UniqueIdentifier>{bbef4d64-23ea-493e-adb8-7253b3484b36}</UniqueIdentifier>
     </Filter>
@@ -514,6 +529,9 @@
     </Filter>
     <Filter Include="Editor\Atmosphere">
       <UniqueIdentifier>{140311eb-5e7a-4ab2-8162-264b1102d71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

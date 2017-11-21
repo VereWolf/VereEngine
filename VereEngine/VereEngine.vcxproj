@@ -273,6 +273,10 @@
     <ClInclude Include="GameVertex.h" />
     <ClInclude Include="GamePlanetTile.h" />
     <ClInclude Include="GenerateBlockOfLOD.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="GenerateHeightAndNormalMapWithNoise.h" />
+>>>>>>> master
     <ClInclude Include="TreesLOD.h" />
     <ClInclude Include="VereTextureFloat4.h" />
     <ClInclude Include="IDRegistr.h" />
@@ -345,6 +349,10 @@
     <ClCompile Include="GameResourceObjectsStack.cpp" />
     <ClCompile Include="GameSkeleton.cpp" />
     <ClCompile Include="GenerateBlockOfLOD.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="GenerateHeightAndNormalMapWithNoise.cpp" />
+>>>>>>> master
     <ClCompile Include="IDRegistr.cpp" />
     <ClCompile Include="LoadVMB.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -517,6 +525,14 @@
       <FileType>Document</FileType>
     </CustomBuild>
   </ItemGroup>
+<<<<<<< HEAD
+=======
+  <ItemGroup>
+    <CustomBuild Include="FX\GenerateHeightAndNormalMapWithNoise.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+>>>>>>> master
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />

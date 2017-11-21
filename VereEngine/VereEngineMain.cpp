@@ -25,7 +25,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	m_deviceResources->RegisterDeviceNotify(this);
 
 	// TODO: Replace this with your app's content initialization.
-	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get(), 0, 0, 1, 3, 0, 0));
+	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get(), 0, 0, 4, 3, 0, 0));
 
 	m_gameComponentsManager = std::unique_ptr<GameComponentsManager>(new GameComponentsManager(m_deviceResources.get(), 3));
 
@@ -75,8 +75,29 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
+<<<<<<< HEAD
 	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 10, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
 		528, 10, 8);
+=======
+
+	BuildPlanetMessage buildPlanetMessage;
+
+	buildPlanetMessage.planetPath = "Vaelhad/";
+	buildPlanetMessage.cellSize = 64;
+	buildPlanetMessage.maxLevel = 12;
+	buildPlanetMessage.loadDataMaxLvl = 5;
+	buildPlanetMessage.generateTreesLvl = 10;
+	buildPlanetMessage.loadTilesLvl = 4;
+	buildPlanetMessage.loadDataPer = 4;
+	buildPlanetMessage.fogColor = XMFLOAT3(0.0f, 0.698f, 0.894f);
+	buildPlanetMessage.waterColor = XMFLOAT3(0.0f, 0.506f, 0.725f);
+	buildPlanetMessage.waterDeep = 200.0f;
+	buildPlanetMessage.sizeOfBigTile = 528;
+	buildPlanetMessage.levelOfSmallBlock = 10;
+	buildPlanetMessage.levelOfBigBlock = 8;
+
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(buildPlanetMessage);
+>>>>>>> master
 
 	GameObjectSpace *circleMoonSpace = new GameObjectSpace;
 

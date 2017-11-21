@@ -11,8 +11,7 @@ public:
 	GamePlanetHelper(DX::DeviceResources *resources);
 	~GamePlanetHelper()
 	{
-		delete m_Tile1;
-		delete m_Tile2;
+		GameRenderDeviceHandle->DeleteTexture(m_TileNoiseSRV);
 	}
 
 	void Init(DX::DeviceResources *resources);
@@ -25,8 +24,12 @@ public:
 	
 	PlanetAssetsStacks *GetPlanetAssetsStacks() { return &m_planetAssetsStacks; }
 
+<<<<<<< HEAD
 	VereTextureFloat *GetTile1() { return m_Tile1; }
 	VereTextureFloat *GetTile2() { return m_Tile2; }
+=======
+	ID3D11ShaderResourceView *GetTileNoiseSRV() { return GameRenderDeviceHandle->GetTexture(m_TileNoiseSRV); }
+>>>>>>> master
 
 	XMFLOAT2 GetTreesTiles(int i) { return XMFLOAT2(m_TreesTiles[2 * i], m_TreesTiles[2 * i + 1]); }
 	void SetTreesTilesSize(int s) { m_TreesTiles.resize(2 * s); }
@@ -39,8 +42,12 @@ private:
 
 	PlanetAssetsStacks m_planetAssetsStacks;
 
+<<<<<<< HEAD
 	VereTextureFloat *m_Tile1;
 	VereTextureFloat *m_Tile2;
+=======
+	int m_TileNoiseSRV;
+>>>>>>> master
 
 	std::vector<float> m_TreesTiles;
 	std::vector<int> m_TreesIndex;

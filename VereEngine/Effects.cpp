@@ -307,11 +307,45 @@ GenerateBlockOfLODEffect::GenerateBlockOfLODEffect(DX::DeviceResources *resource
 	InputEnviromentMap = mFX->GetVariableByName("gInputE")->AsShaderResource();
 	InputTreesMap = mFX->GetVariableByName("gInputT")->AsShaderResource();
 	InputTileMap = mFX->GetVariableByName("gTile")->AsShaderResource();
+<<<<<<< HEAD
 	OutputHeightMap = mFX->GetVariableByName("gOutputH")->AsUnorderedAccessView();
 	OutputNormalMap = mFX->GetVariableByName("gOutputN")->AsUnorderedAccessView();
 	OutputAngleMap = mFX->GetVariableByName("gOutputA")->AsUnorderedAccessView();
 	OutputEnviromentMap = mFX->GetVariableByName("gOutputE")->AsUnorderedAccessView();
 	OutputTreesMap = mFX->GetVariableByName("gOutputT")->AsUnorderedAccessView();
+=======
+	OutputAngleMap = mFX->GetVariableByName("gOutputA")->AsUnorderedAccessView();
+	OutputEnviromentMap = mFX->GetVariableByName("gOutputE")->AsUnorderedAccessView();
+	OutputTreesMap = mFX->GetVariableByName("gOutputT")->AsUnorderedAccessView();
+}
+#pragma endregion
+
+#pragma region GenerateHeightAndNormalMapWithNoise
+GenerateHeightAndNormalMapWithNoiseEffect::GenerateHeightAndNormalMapWithNoiseEffect(DX::DeviceResources *resources, const std::string& filename)
+	: Effect(resources, filename)
+{
+	StartPos = mFX->GetVariableByName("gStartPos")->AsVector();
+	StepSize = mFX->GetVariableByName("gStepSize")->AsVector();
+	SpacingMap = mFX->GetVariableByName("gSpacingMap");
+	SpacingWorld = mFX->GetVariableByName("gSpacingWorld");
+	RangeNoise = mFX->GetVariableByName("gRangeNoise");
+	IsMap1 = mFX->GetVariableByName("gIsMap1");
+	IsMap2 = mFX->GetVariableByName("gIsMap2");
+
+	InputHeightMap = mFX->GetVariableByName("gInputHeight")->AsShaderResource();
+	InputNormalMap = mFX->GetVariableByName("gInputNormal")->AsShaderResource();
+	InputRiverWidth1Map = mFX->GetVariableByName("gInputRiverWidth1")->AsShaderResource();
+	InputRiverWidth2Map = mFX->GetVariableByName("gInputRiverWidth2")->AsShaderResource();
+	InputRiverLength1Map = mFX->GetVariableByName("gInputRiverLength1")->AsShaderResource();
+	InputRiverLength2Map = mFX->GetVariableByName("gInputRiverLength2")->AsShaderResource();
+	InputRiverType1Map = mFX->GetVariableByName("gInputRiverType1")->AsShaderResource();
+	InputRiverType2Map = mFX->GetVariableByName("gInputRiverType2")->AsShaderResource();
+	InputRiverHeightMap = mFX->GetVariableByName("gInputRiverHeight")->AsShaderResource();
+	TileMap = mFX->GetVariableByName("gTile")->AsShaderResource();
+	OutputHeightMap = mFX->GetVariableByName("gOutputHeight")->AsUnorderedAccessView();
+	OutputNormalMap = mFX->GetVariableByName("gOutputNormal")->AsUnorderedAccessView();
+
+>>>>>>> master
 }
 #pragma endregion
 
@@ -331,6 +365,10 @@ BillboardEffect* Effects::BillboardFX = 0;
 GenerateTexturesFromTextureEffect* Effects::GenerateFloatTexFromFloatTexFX = 0;
 GenerateTexturesFromTextureEffect* Effects::GenerateBYTE4TexFromBYTE4TexFX = 0;
 GenerateBlockOfLODEffect* Effects::GenerateBlockOfLODFX = 0;
+<<<<<<< HEAD
+=======
+GenerateHeightAndNormalMapWithNoiseEffect* Effects::GenerateHeightAndNormalMapWithNoiseEffectFX = 0;
+>>>>>>> master
 
 void Effects::InitAll(DX::DeviceResources *resources)
 {
@@ -348,6 +386,10 @@ void Effects::InitAll(DX::DeviceResources *resources)
 	GenerateFloatTexFromFloatTexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateFloatTexFromFloatTex.fxo");
 	GenerateBYTE4TexFromBYTE4TexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateBYTE4TexFromBYTE4Tex.fxo");
 	GenerateBlockOfLODFX = new GenerateBlockOfLODEffect(resources, "FX/GenerateBlockOfLOD.fxo");
+<<<<<<< HEAD
+=======
+	GenerateHeightAndNormalMapWithNoiseEffectFX = new GenerateHeightAndNormalMapWithNoiseEffect(resources, "FX/GenerateHeightAndNormalMapWithNoise.fxo");
+>>>>>>> master
 };
 
 void Effects::DestroyAll()
@@ -366,5 +408,9 @@ void Effects::DestroyAll()
 	delete GenerateFloatTexFromFloatTexFX;
 	delete GenerateBYTE4TexFromBYTE4TexFX;
 	delete GenerateBlockOfLODFX;
+<<<<<<< HEAD
+=======
+	delete GenerateHeightAndNormalMapWithNoiseEffectFX;
+>>>>>>> master
 }
 #pragma endregion

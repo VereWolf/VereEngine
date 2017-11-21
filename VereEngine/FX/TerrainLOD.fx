@@ -292,6 +292,10 @@ float4 PS(DomainOut  pin) : SV_Target
 
 	return float4(color, 1.0f);
 	//return float4(E.zw, 0.0f, 1.0f);
+<<<<<<< HEAD
+=======
+	//return float4(N, 1.0f);
+>>>>>>> master
 }
 
 technique11 LightTech
