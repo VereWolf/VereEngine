@@ -43,14 +43,6 @@ void GameComponentsManager::Update()
 			{
 				int id2 = m_componentThread[i].m_proccessQueue.GetCurrentElement();
 
-<<<<<<< HEAD
-	if (!m_gameComponents[id]->IsDestroy())
-	{
-		m_gameComponents[id]->ComponentProccess();
-	}
-	m_gameComponents[id]->SetProccessed(2);
-	m_gameComponents[id] = NULL;
-=======
 				if (m_componentThread[i].m_gameComponents[id2]->IsDestroy() == true)
 				{
 					m_componentThread[i].m_gameComponents[id2]->SetProccessed(2);
@@ -76,7 +68,6 @@ void GameComponentsManager::Update()
 
 void GameComponentsManager::DeleteUselessElement(int fromQues, int toQues)
 {
->>>>>>> VereEngine-Planet
 }
 
 bool GameComponentsManager::InsertToProccess(GameComponent * C, int kindOfThread)
@@ -86,11 +77,7 @@ bool GameComponentsManager::InsertToProccess(GameComponent * C, int kindOfThread
 	if (id < 0) return false;
 
 	C->SetComponentID(id);
-<<<<<<< HEAD
-	//C->SetProccessed(0);
-=======
 	C->SetProccessed(1);
->>>>>>> VereEngine-Planet
 
 	m_componentThread[kindOfThread].m_gameComponents[id] = C;
 	m_componentThread[kindOfThread].m_proccessQueue.GiveElement(id);

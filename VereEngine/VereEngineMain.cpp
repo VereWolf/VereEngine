@@ -3,8 +3,6 @@
 #include "VereEngineMain.h"
 #include "DirectXHelper.h"
 #include "RenderState.h"
-#include "Effects.h"
-#include "Vertex.h"
 #include "GenerateMesh.h"
 
 using namespace VereEngine;
@@ -27,7 +25,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	m_deviceResources->RegisterDeviceNotify(this);
 
 	// TODO: Replace this with your app's content initialization.
-	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get(), 0, 0, 1, 3, 0, 0));
+	m_gameStreamingData = std::unique_ptr<StreamingDataManager>(new StreamingDataManager(m_deviceResources.get(), 0, 0, 4, 3, 0, 0));
 
 	m_gameComponentsManager = std::unique_ptr<GameComponentsManager>(new GameComponentsManager(m_deviceResources.get(), 3));
 
@@ -37,11 +35,13 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	m_gameObjects = std::unique_ptr<GameObjectsStackManager>(new GameObjectsStackManager(m_deviceResources.get()));
 
-<<<<<<< HEAD
-=======
 	m_gamePlanetHelper = std::unique_ptr<GamePlanetHelper>(new GamePlanetHelper(m_deviceResources.get()));
 
->>>>>>> VereEngine-Planet
+#ifdef DEBUG
+	GameStreamingDataHandle->OpenFileOutput("Debug.txt");
+#endif // DEBUG
+
+
 	int idC1 = GameTextRenderDeviceHandle->CreateColorBrush(D2D1::ColorF(D2D1::ColorF::Purple));
 
 	int idF1 = GameTextRenderDeviceHandle->CreateTextFormat(
@@ -71,27 +71,28 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 	int id2 = GameObjectStackHandle->CreateObjectToReg(likeJ);
 
-<<<<<<< HEAD
-	//Planet *planet = new Planet;
-
-	//int id2 = GameObjectStackHandle->CreateObjectToReg(planet);
-
-=======
->>>>>>> VereEngine-Planet
 	int id1a = GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000.0, 7150000.0, 7150000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000.0, __nullptr);
 
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
-<<<<<<< HEAD
 
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(64, 4, 4, 13, 1, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f);
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512, 512, 0);
+	BuildPlanetMessage buildPlanetMessage;
 
-	//GameObjectStackHandle->CreateObject(id2, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(7150000, 7150000, 7150000), 1000.0, btVector3(1.0, 1.0, 1.0), 715000000, __nullptr);
-=======
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
-		528, 9, 7);
->>>>>>> VereEngine-Planet
+	buildPlanetMessage.planetPath = "Vaelhad/";
+	buildPlanetMessage.cellSize = 64;
+	buildPlanetMessage.maxLevel = 12;
+	buildPlanetMessage.loadDataMaxLvl = 5;
+	buildPlanetMessage.generateTreesLvl = 10;
+	buildPlanetMessage.loadTilesLvl = 4;
+	buildPlanetMessage.loadDataPer = 4;
+	buildPlanetMessage.fogColor = XMFLOAT3(0.0f, 0.698f, 0.894f);
+	buildPlanetMessage.waterColor = XMFLOAT3(0.0f, 0.506f, 0.725f);
+	buildPlanetMessage.waterDeep = 200.0f;
+	buildPlanetMessage.sizeOfBigTile = 528;
+	buildPlanetMessage.levelOfSmallBlock = 10;
+	buildPlanetMessage.levelOfBigBlock = 8;
+
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(buildPlanetMessage);
 
 	GameObjectSpace *circleMoonSpace = new GameObjectSpace;
 
@@ -119,6 +120,10 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 VereEngineMain::~VereEngineMain()
 {
 	// Deregister device notification
+
+#ifdef DEBUG
+	GameStreamingDataHandle->CloseFileOutput();
+#endif // DEBUG
 	m_deviceResources->RegisterDeviceNotify(nullptr);
 }
 

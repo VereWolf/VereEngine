@@ -27,7 +27,7 @@ StreamingDataManager::StreamingDataManager()
 {
 	GameStreamingDataHandle = this;
 
-
+	m_isOpenFileOutput = false;
 }
 
 StreamingDataManager::StreamingDataManager(DX::DeviceResources *resources,
@@ -39,6 +39,8 @@ StreamingDataManager::StreamingDataManager(DX::DeviceResources *resources,
 	Init(resources,
 		levelsOfByteDepository, levelsOfIntDepository, levelsOfFloatDepository,
 		levelsOfByte4Depository, levelsOfInt4Depository, levelsOfFloat4Depository);
+
+	m_isOpenFileOutput = false;
 }
 
 StreamingDataManager::~StreamingDataManager()
@@ -124,6 +126,51 @@ bool StreamingDataManager::SaveData(string nameFile, int id)
 	fout.close();
 
 	return true;
+}
+
+bool StreamingDataManager::OpenFileOutput(std::string nameFile)
+{
+
+	Platform::String^ localfolder = Windows::Storage::ApplicationData::Current->LocalFolder->Path;
+
+	std::wstring folderNameW(localfolder->Begin());
+	std::string folderNameA(folderNameW.begin(), folderNameW.end());
+
+	stringstream ss;
+
+	ss << folderNameA << "\\" << nameFile;
+
+	m_fileOutput.open(ss.str(), std::ios::binary | ios::out);
+
+	if (!m_fileOutput)
+	{
+		m_isOpenFileOutput = false;
+		return m_isOpenFileOutput;
+	}
+
+	m_isOpenFileOutput = true;
+	return m_isOpenFileOutput;
+}
+
+void StreamingDataManager::CloseFileOutput()
+{
+	if (m_fileOutput)
+	{
+		m_fileOutput.close();
+	}
+
+	m_isOpenFileOutput = false;
+}
+
+bool StreamingDataManager::WriteToFileOutput(std::string text)
+{
+	if (!m_fileOutput)
+	{
+		m_isOpenFileOutput = false;
+		return false;
+	}
+
+	m_fileOutput.write(text.c_str(), text.length());
 }
 
 int  StreamingDataManager::CreateStreamingData(void *data, int size)
@@ -303,6 +350,16 @@ int StreamingDataManager::CreateNewBlockInFLOATDepository(int idDepository, void
 	return id;
 }
 
+void StreamingDataManager::GetTextureInputFromFloat(int idDepository, int idBlock, ID3D11ShaderResourceView **SRV)
+{
+	m_dataFloatDepository[idDepository]->CreateTexturesForInput(m_resources, idBlock, SRV, DXGI_FORMAT_R32_FLOAT);
+}
+
+void StreamingDataManager::GetTextureOutputFromFloat(int idDepository, ID3D11ShaderResourceView **SRV, ID3D11UnorderedAccessView **UAV)
+{
+	m_dataFloatDepository[idDepository]->CreateTexturesForOutput(m_resources, SRV, UAV, DXGI_FORMAT_R32_FLOAT);
+}
+
 void StreamingDataManager::ReleaseBlockInFLOATDepository(int idDepository, int idBlock)
 {
 	m_dataFloatDepository[idDepository]->ReleaseBlock(idBlock);
@@ -372,6 +429,16 @@ int StreamingDataManager::CreateNewBlockInBYTE4Depository(int idDepository, void
 	int id = m_dataByte4Depository[idDepository]->CreateNewBlock(data);
 
 	return id;
+}
+
+void StreamingDataManager::GetTextureInputFromBYTE4(int idDepository, int idBlock, ID3D11ShaderResourceView **SRV)
+{
+	m_dataByte4Depository[idDepository]->CreateTexturesForInput(m_resources, idBlock, SRV, DXGI_FORMAT_R8G8B8A8_UNORM);
+}
+
+void StreamingDataManager::GetTextureOutputFromBYTE4(int idDepository, ID3D11ShaderResourceView **SRV, ID3D11UnorderedAccessView **UAV)
+{
+	m_dataByteDepository[idDepository]->CreateTexturesForOutput(m_resources, SRV, UAV, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void StreamingDataManager::ReleaseBlockInBYTE4Depository(int idDepository, int idBlock)

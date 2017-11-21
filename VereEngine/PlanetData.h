@@ -46,7 +46,7 @@ public:
 	DX::DeviceResources *GetDeviceResources() { return m_resources; }
 
 	int BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount);
-
+	
 	void SetRenderIdWater(int n) { m_RenderIdWater = n; }
 	int GetRenderIdWater() { return m_RenderIdWater; }
 	void SetRenderIdAtmosphere(int n) { m_RenderIdAtmosphere = n; }
@@ -83,11 +83,8 @@ public:
 	ID3D11Buffer *const *GetLODVB() { return &m_LODVB; }
 	ID3D11Buffer *GetLODIB() { return m_LODIB; }
 
-<<<<<<< HEAD
-=======
 	std::string GetFullPath();
 
->>>>>>> VereEngine-Planet
 	inline float GetRadiusOfTerrain() { return m_radiusOfTerrain; }
 	inline void SetRadiusOfTerrain(float n) { m_radiusOfTerrain = n; }
 
@@ -129,6 +126,8 @@ public:
 	inline void SetLoadDataPer(int16_t d) { m_loadDataPer = d; }
 	inline int16_t GetLoadDataMaxLvl() { return m_loadDataMaxLvl; }
 	inline void SetLoadDataMaxLvl(int16_t d) { m_loadDataMaxLvl = d; }
+	inline int16_t GetGenerateTreesLvl() { return m_generateTreesLvl; }
+	inline void SetGenerateTreesLvl(int16_t d) { m_generateTreesLvl = d; }
 	inline int16_t GetLoadTilesLvl() { return m_loadTilesLvl; }
 	inline void SetLoadTilesLvl(int16_t d) { m_loadTilesLvl = d; }
 	inline string GetPosFix(int side) { return m_posfix[side]; }
@@ -150,11 +149,25 @@ public:
 	int GetIDNormalMapBig() { return m_idNormalMapBig; }
 	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
 	int GetIDTreesMapBig() { return m_idTreesMapBig; }
-
+	int GetIDRiverWidth1MapBig() { return m_idRiverWidth1MapBig; }
+	int GetIDRiverWidth2MapBig() { return m_idRiverWidth2MapBig; }
+	int GetIDRiverLength1MapBig() { return m_idRiverLength1MapBig; }
+	int GetIDRiverLength2MapBig() { return m_idRiverLength2MapBig; }
+	int GetIDRiverType1MapBig() { return m_idRiverType1MapBig; }
+	int GetIDRiverType2MapBig() { return m_idRiverType2MapBig; }
+	int GetIDRiverHeightMapBig() { return m_idRiverHeightMapBig; }
+	
 	int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
 	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
 	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
 	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }
+	int GetIDRiverWidth1MapSmall() { return m_idRiverWidth1MapSmall; }
+	int GetIDRiverWidth2MapSmall() { return m_idRiverWidth2MapSmall; }
+	int GetIDRiverLength1MapSmall() { return m_idRiverLength1MapSmall; }
+	int GetIDRiverLength2MapSmall() { return m_idRiverLength2MapSmall; }
+	int GetIDRiverType1MapSmall() { return m_idRiverType1MapSmall; }
+	int GetIDRiverType2MapSmall() { return m_idRiverType2MapSmall; }
+	int GetIDRiverHeightMapSmall() { return m_idRiverHeightMapSmall; }
 
 	void GenerateCoord(float height, float width, float level);
 private:
@@ -177,6 +190,7 @@ private:
 	int16_t m_currentMaxLevel;
 	int16_t m_loadDataPer;
 	int16_t m_loadDataMaxLvl;
+	int16_t m_generateTreesLvl;
 	int16_t m_loadTilesLvl;
 	int16_t m_maxNumBlockBig;
 	int16_t m_currentNumBlockBig;
@@ -229,8 +243,6 @@ private:
 
 	D3D11_VIEWPORT m_Viewport;
 
-<<<<<<< HEAD
-=======
 protected:
 	std::string m_planetPath;
 	static std::string m_rootFolder;
@@ -239,12 +251,26 @@ protected:
 	int m_idNormalMapBig;
 	int m_idEnviromentMapBig;
 	int m_idTreesMapBig;
+	int m_idRiverWidth1MapBig;
+	int m_idRiverWidth2MapBig;
+	int m_idRiverLength1MapBig;
+	int m_idRiverLength2MapBig;
+	int m_idRiverType1MapBig;
+	int m_idRiverType2MapBig;
+	int m_idRiverHeightMapBig;
 
 	int m_idHeightMapSmall;
 	int m_idNormalMapSmall;
 	int m_idEnviromentMapSmall;
 	int m_idTreesMapSmall;
->>>>>>> VereEngine-Planet
+	int m_idRiverWidth1MapSmall;
+	int m_idRiverWidth2MapSmall;
+	int m_idRiverLength1MapSmall;
+	int m_idRiverLength2MapSmall;
+	int m_idRiverType1MapSmall;
+	int m_idRiverType2MapSmall;
+	int m_idRiverHeightMapSmall;
+
 public:
 	std::vector<GameComponent*> m_planetElements;
 	IDRegistr *m_planetElementID;

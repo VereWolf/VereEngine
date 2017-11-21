@@ -4,6 +4,7 @@
 #include "DeviceResources.h"
 #include "GameBaseObjectsStack.h"
 #include "GameTexture.h"
+#include "GameOutputTexture.h"
 #include "GameModel.h"
 #include "GameVertex.h"
 #include "GameEffect.h"
@@ -26,14 +27,14 @@ struct RenderVariables
 	std::vector<Material> material;
 };
 
-class RenderMessage
+
+class RenderMessage: public BaseMessage
 {
 public:
 	virtual void Use();
 
 	UINT m_ModelID;
 	Material *m_Material;
-	Effect *m_BaseEffect;
 	PlanetData *m_PlanetData;
 	btTransform m_Transform;
 	btTransform m_Scaling;
@@ -45,10 +46,12 @@ public:
 	static float m_FarModifier;
 	static float m_HeightFar;
 	static float m_Aspect;
+	int m_StartIndex;
+	int m_CountIndex;
 	ID3D11RasterizerState* m_RasterizeState;
 	ID3D11BlendState * m_BlendState;
 	static D3D11_VIEWPORT * m_ViewPort;
-	};
+};
 
 class RenderToScreenMessage : public RenderMessage
 {
@@ -69,6 +72,7 @@ public:
 
 	void Render(RenderMessage *message);
 	void RenderToScreen();
+	void ComputeShader(ComputeMessage *message);
 
 	void ClearMainRenderTarget();
 
@@ -94,8 +98,15 @@ public:
 	Model* GetModel(int id);
 
 	int CreateTexture(void *map, UINT height, UINT width, UINT format, UINT mipLevels);
+	int AddTexture(ID3D11ShaderResourceView * srv);
 	void DeleteTexture(int id);
 	ID3D11ShaderResourceView* GetTexture(int id);
+
+	int CreateOutputTexture(UINT width, UINT height, DXGI_FORMAT format, UINT mipLevels);
+	void DeleteOutputTexture(int id);
+	int DeleteOutputTextureButSRVToTextureStack(int id);// UAV is deleted and SRV is moved to texture stack
+	ID3D11ShaderResourceView* GetOutputTextureSRV(int id);
+	ID3D11UnorderedAccessView* GetOutputTextureUAV(int id);
 
 	int CreateInputLayouts(int idVertex, int idEffect);
 	void DeleteInputLayouts(int id);

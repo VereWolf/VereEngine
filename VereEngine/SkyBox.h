@@ -1,8 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include "Vertex.h"
-#include "Effects.h"
 #include "DeviceResources.h"
 #include "Sun.h"
 

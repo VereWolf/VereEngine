@@ -1,6 +1,4 @@
 #include "pch.h"
-#include "Vertex.h"
-#include "Effects.h"
 #include "LoadVMS.h"
 #include "GenerateMesh.h"
 #include "DeviceResources.h"

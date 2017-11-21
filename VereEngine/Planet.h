@@ -27,6 +27,23 @@ public:
 	float m_CloudsRatio;
 };
 
+struct BuildPlanetMessage
+{
+	std::string planetPath;
+	int cellSize;
+	int maxLevel;
+	int loadDataMaxLvl;
+	int generateTreesLvl;
+	int loadTilesLvl;
+	int loadDataPer;
+	XMFLOAT3 fogColor;
+	XMFLOAT3 waterColor;
+	float waterDeep;
+	int sizeOfBigTile;
+	int levelOfSmallBlock;
+	int levelOfBigBlock;
+};
+
 class Planet: public PlanetData
 {
 public:
@@ -39,21 +56,7 @@ public:
 	void DrawWCA();
 	void DrawPlanet();
 
-<<<<<<< HEAD
-	void BuildPlanet(int cellSize, int maxLevel, int maxRenderLevel, UINT loadDataAfterAgain, UINT maxLevelOfStreaming,
-		XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep);
-
-	GameObject* Clone() { return new Planet(*this); }
-	PlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }
-private:
-	PlanetLOD m_PlanetLOD[6];
-	int m_RenderIdWCAQuadScreen;
-};
-
-=======
-	void BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int loadTilesLvl, int loadDataPer,
-		XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
-		int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock);
+	void BuildPlanet(BuildPlanetMessage message);
 
 	GameObject* Clone() { return new Planet(*this); }
 	PlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }
@@ -69,4 +72,3 @@ private:
 	int m_RenderIdWCAQuadScreen;
 };
 
->>>>>>> VereEngine-Planet

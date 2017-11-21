@@ -42,8 +42,8 @@ namespace Vertex
 	struct Billboard
 	{
 		XMFLOAT3 Position;
+		XMFLOAT3 Direct;
 		XMFLOAT2 Size;
-		XMFLOAT2 Tex;
 	};
 }
 

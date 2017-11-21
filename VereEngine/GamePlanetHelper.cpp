@@ -20,17 +20,48 @@ void GamePlanetHelper::Init(DX::DeviceResources *resources)
 
 	GetPlanetAssetsStacks()->m_gamePlanetTiles.Init(resources);
 
-	int idTile1 = GameStreamingDataHandle->LoadData("planet/Tiles/Tile_1.raw");
-	int idTile2 = GameStreamingDataHandle->LoadData("planet/Tiles/Tile_2.raw");
 
-	m_Tile1 = new VereTextureFloat;
-	m_Tile2 = new VereTextureFloat;
+	srand(514731);
+	float noise[4356];
 
-	m_Tile1->Init(GameStreamingDataHandle->GetStreamingData(idTile1), 512, 512);
-	m_Tile2->Init(GameStreamingDataHandle->GetStreamingData(idTile2), 512, 512);
+	for (int y=1; y < 65; ++y)
+	{
+		for (int x=1; x < 65; ++x)
+		{
+			noise[y * 66 + x] = (float)(rand() % 501) * 0.002f;
+		}
+	}
 
-	GameStreamingDataHandle->DeleteStreamingData(idTile1);
-	GameStreamingDataHandle->DeleteStreamingData(idTile2);
+	for (int x = 1; x < 65; ++x)
+	{
+		noise[x] = noise[4224 + x];
+		noise[4290 + x] = noise[66 + x];
+	}
+
+	for (int y = 1; y < 65; ++y)
+	{
+		noise[y * 66] = noise[y * 66 + 64];
+		noise[y * 66 + 65] = noise[y * 66 + 1];
+	}
+
+	noise[0] = noise[4288];
+	noise[65] = noise[4225];
+	noise[4290] = noise[130];
+	noise[4355] = noise[67];
+
+	m_TileNoiseSRV = GameRenderDeviceHandle->CreateTexture(&noise[0], 66, 66, DXGI_FORMAT_R32_FLOAT, 1);
+
+	int idTreesTiles = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_tiles.raw");
+	int idTreesIndex = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_index.raw");
+
+	m_TreesTiles.resize(GameStreamingDataHandle->GetSizeOfStreamingData(idTreesTiles) / sizeof(float));
+	m_TreesIndex.resize(GameStreamingDataHandle->GetSizeOfStreamingData(idTreesIndex) / sizeof(int));
+
+	memcpy(&m_TreesTiles[0], GameStreamingDataHandle->GetStreamingData(idTreesTiles), GameStreamingDataHandle->GetSizeOfStreamingData(idTreesTiles));
+	memcpy(&m_TreesIndex[0], GameStreamingDataHandle->GetStreamingData(idTreesIndex), GameStreamingDataHandle->GetSizeOfStreamingData(idTreesIndex));
+
+	GameStreamingDataHandle->DeleteStreamingData(idTreesTiles);
+	GameStreamingDataHandle->DeleteStreamingData(idTreesIndex);
 }
 
 int GamePlanetHelper::CreatePlanetTile(std::string nameNormalFlat, std::string nameHeightFlat,

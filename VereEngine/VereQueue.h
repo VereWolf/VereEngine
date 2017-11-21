@@ -1,8 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-
-=======
->>>>>>> VereEngine-Planet
 
 template<class T>
 class VereQueue
@@ -97,8 +93,6 @@ void VereQueue<T>::GiveElement(T E)
 	}
 
 	++m_size;
-<<<<<<< HEAD
-=======
 }
 
 template<class T>
@@ -180,5 +174,4 @@ bool VereQueue<T>::DeleteCurrentElementAndSetToBack()
 	delete CE;
 
 	return true;
->>>>>>> VereEngine-Planet
 }

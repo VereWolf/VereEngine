@@ -33,9 +33,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -113,8 +110,6 @@
     <ClCompile Include="Clouds.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
     <ClCompile Include="GamePlanetKind.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
@@ -127,7 +122,21 @@
     <ClCompile Include="DataDepository.cpp">
       <Filter>StreamingData</Filter>
     </ClCompile>
->>>>>>> VereEngine-Planet
+    <ClCompile Include="GameSkeleton.cpp">
+      <Filter>RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="TreesLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateBlockOfLOD.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Object%27s Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateHeightAndNormalMapWithNoise.cpp">
+      <Filter>Planet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -190,9 +199,6 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="d3dx11effect.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
@@ -347,8 +353,6 @@
     <ClInclude Include="Clouds.h">
       <Filter>Planet</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="GamePlanetKind.h">
       <Filter>Planet</Filter>
     </ClInclude>
@@ -364,7 +368,24 @@
     <ClInclude Include="DataDepository.h">
       <Filter>StreamingData</Filter>
     </ClInclude>
->>>>>>> VereEngine-Planet
+    <ClInclude Include="GameSkeleton.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="TreesLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateBlockOfLOD.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOutputTexture.h">
+      <Filter>RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Object%27s Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateHeightAndNormalMapWithNoise.h">
+      <Filter>Planet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -389,19 +410,11 @@
       <Filter>FX</Filter>
     </CustomBuild>
     <CustomBuild Include="FX\Clouds.fx">
-<<<<<<< HEAD
       <Filter>FX</Filter>
     </CustomBuild>
     <CustomBuild Include="FX\RenderToScreen.fx">
       <Filter>FX</Filter>
     </CustomBuild>
-=======
-      <Filter>FX</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FX\RenderToScreen.fx">
-      <Filter>FX</Filter>
-    </CustomBuild>
->>>>>>> VereEngine-Planet
     <CustomBuild Include="FX\QuadScreenWCA.fx">
       <Filter>FX</Filter>
     </CustomBuild>
@@ -412,6 +425,18 @@
       <Filter>FX</Filter>
     </CustomBuild>
     <CustomBuild Include="FX\CoordHelper.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateFloatTexFromFloatTex.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateBYTE4TexFromBYTE4Tex.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateBlockOfLOD.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FX\GenerateHeightAndNormalMapWithNoise.fx">
       <Filter>FX</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -449,6 +474,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="VereEngine_TemporaryKey.pfx" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -477,9 +503,6 @@
     <Filter Include="Planet">
       <UniqueIdentifier>{51df08ec-c8c4-47d4-b52a-ab8ac9892ad6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TextRenderDevice">
       <UniqueIdentifier>{bbef4d64-23ea-493e-adb8-7253b3484b36}</UniqueIdentifier>
     </Filter>
@@ -495,12 +518,12 @@
     <Filter Include="RenderDevice">
       <UniqueIdentifier>{957b3035-b0d1-4741-be7f-5ecf321809e3}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
-=======
     <Filter Include="Editor\Atmosphere">
       <UniqueIdentifier>{140311eb-5e7a-4ab2-8162-264b1102d71d}</UniqueIdentifier>
     </Filter>
->>>>>>> VereEngine-Planet
+    <Filter Include="Utility">
+      <UniqueIdentifier>{b9ef58ef-7b0d-4f3a-bfc1-5dffb6a5514d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VereEngine.rc">

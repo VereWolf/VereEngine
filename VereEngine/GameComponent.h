@@ -15,10 +15,7 @@ public:
 private:
 	int m_componentID;
 	int m_isProccessed;
-<<<<<<< HEAD
-=======
 
 protected:
 	XMFLOAT4 m_progress;
->>>>>>> VereEngine-Planet
 };

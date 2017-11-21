@@ -4,11 +4,8 @@
 #include "PlanetData.h"
 #include "IDRegistr.h"
 
-<<<<<<< HEAD
-=======
 std::string PlanetData::m_rootFolder = "planet/";
 
->>>>>>> VereEngine-Planet
 PlanetData::PlanetData()
 {
 	m_planetElementID = NULL;
@@ -22,13 +19,6 @@ void PlanetData::Init()
 	btMatrix3x3 M1 = btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
 	btMatrix3x3 M2 = btMatrix3x3(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 
-<<<<<<< HEAD
-	IDRegistr *IDR = new IDRegistr(10);
-	m_planetElementID = IDR;
-	m_planetElements.resize(pow(2, 10), NULL);
-
-=======
->>>>>>> VereEngine-Planet
 	for (int i = 0; i < 12; ++i)
 	{
 		m_blockMatrixs[i].setIdentity();
@@ -304,7 +294,7 @@ void PlanetData::Init()
 		texDesc.Height = m_Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -339,7 +329,7 @@ void PlanetData::Init()
 		texDesc.Height = m_Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -374,7 +364,7 @@ void PlanetData::Init()
 		texDesc.Height = m_Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -409,7 +399,7 @@ void PlanetData::Init()
 		texDesc.Height = m_Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -444,7 +434,7 @@ void PlanetData::Init()
 		texDesc.Height = m_Height;
 		texDesc.MipLevels = 1;
 		texDesc.ArraySize = 1;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.SampleDesc.Count = 1;
 		texDesc.SampleDesc.Quality = 0;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -527,8 +517,6 @@ int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVert
 	return GameRenderDeviceHandle->CreateMeshBuffer(&vertices[0], sizeOfVertex, verticesCount, &indices);
 }
 
-<<<<<<< HEAD
-=======
 std::string PlanetData::GetFullPath()
 {
 	std::stringstream P;
@@ -538,7 +526,6 @@ std::string PlanetData::GetFullPath()
 	return P.str();
 }
 
->>>>>>> VereEngine-Planet
 void PlanetData::GenerateCoord(float height, float width, float level)
 {
 	int PL = pow(2, level);
@@ -560,13 +547,8 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 		{
 			for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
 			{
-<<<<<<< HEAD
-				H = ((float)(y - HE2)) / height;
-				W = ((float)(x - WE2)) / width;
-=======
 				H = ((float)(y - HE2)) / (height - 1.0f) - 0.5;
 				W = ((float)(x - WE2)) / (width - 1.0f) - 0.5;
->>>>>>> VereEngine-Planet
 				V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
 				map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
 				map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
@@ -583,7 +565,6 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 
 		GameStreamingDataHandle->SaveData(str.str(), id);
 		GameStreamingDataHandle->DeleteStreamingData(id);
-<<<<<<< HEAD
 	}
 }
 
@@ -632,56 +613,6 @@ int PlanetData::GetNearestSide(bool withOffset)
 	{
 		S = S3[0];
 	}
-=======
-	}
-}
-
-int PlanetData::GetNearestSide(bool withOffset)
-{
-	int O = 0;
-	if (withOffset) O = 6;
-
-	btVector3 V = (GetWorldPosition() - GameObjectStackHandle->GetMainCamera()->GetWorldPosition()).normalize();
-
-	btVector3 V6[] = { m_blockMatrixs[O + 0] * btVector3(0.0,1.0,0.0),m_blockMatrixs[O + 1] * btVector3(0.0,1.0,0.0),m_blockMatrixs[O + 2] * btVector3(0.0,1.0,0.0),
-		m_blockMatrixs[O + 3] * btVector3(0.0,1.0,0.0) ,m_blockMatrixs[O + 4] * btVector3(0.0,1.0,0.0) ,m_blockMatrixs[O + 5] * btVector3(0.0,1.0,0.0) };
-
-	int S3[] = { 0,0,0 };
-
-	if (V.dot(V6[0]) > V.dot(V6[3]))
-	{
-		S3[0] = 0;
-	}
-	else
-	{
-		S3[0] = 3;
-	}
-
-	if (V.dot(V6[1]) > V.dot(V6[4]))
-	{
-		S3[1] = 1;
-	}
-	else
-	{
-		S3[1] = 4;
-	}
-
-	if (V.dot(V6[2]) > V.dot(V6[5]))
-	{
-		S3[2] = 2;
-	}
-	else
-	{
-		S3[2] = 5;
-	}
-
-	int S = 0;
-
-	if (V.dot(V6[S3[0]]) > V.dot(V6[S3[1]]) && V.dot(V6[S3[0]]) > V.dot(V6[S3[2]]))
-	{
-		S = S3[0];
-	}
->>>>>>> VereEngine-Planet
 	else if (V.dot(V6[S3[1]]) > V.dot(V6[S3[2]]) && V.dot(V6[S3[1]]) > V.dot(V6[S3[0]]))
 	{
 		S = S3[1];

@@ -112,8 +112,8 @@ struct Model
 	UINT sizeOfVertex;
 	D3D11_PRIMITIVE_TOPOLOGY topology;
 	//std::vector<UINT> idMap;
-	UINT idMeshBuffer;
-	UINT idEffect;
-	UINT idVertex;
-	UINT idInputLayouts;
+	int idMeshBuffer;
+	int idEffect;
+	int idVertex;
+	int idInputLayouts;
 };

@@ -176,6 +176,7 @@ void GameObjectsStackManager::DrawScene()
 	{
 		if (GetGameObjectByID(i) != NULL && GetGameObjectByID(i)->GetRenderId() >= 0)
 		{
+			GetGameObjectByID(i)->SetMainCamera(GetMainCamera());
 			GetGameObjectByID(i)->Render();
 		}
 	}

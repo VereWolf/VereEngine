@@ -49,6 +49,7 @@ struct RenderAssetsStacks
 	GameBaseObjectsStack m_gameVertices;
 	GameBaseObjectsStack m_gameModels;
 	GameBaseObjectsStack m_gameTextures;
+	GameBaseObjectsStack m_gameOutputTextures;
 	GameBaseObjectsStack m_gameMeshBuffers;
 	GameBaseObjectsStack m_gameAnimations;
 	GameBaseObjectsStack m_gameAmbientLight;
@@ -63,12 +64,9 @@ struct RenderTextAssetsStacks
 	GameBaseObjectsStack  m_gameColorBrushs;
 	GameBaseObjectsStack m_gameTextLayouts;
 	GameBaseObjectsStack m_gameTextFormats;
-<<<<<<< HEAD
-=======
 };
 
 struct PlanetAssetsStacks
 {
 	GameBaseObjectsStack  m_gamePlanetTiles;
->>>>>>> VereEngine-Planet
 };

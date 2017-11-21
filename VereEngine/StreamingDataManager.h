@@ -24,6 +24,10 @@ public:
 	int LoadData(string nameFile);
 	bool SaveData(string nameFile, int id);
 
+	bool OpenFileOutput(std::string nameFile);
+	void CloseFileOutput();
+	bool WriteToFileOutput(std::string text);
+
 	int CreateStreamingData(void *data, int size);
 	void DeleteStreamingData(int id);
 	void  *GetStreamingData(int id);
@@ -56,6 +60,8 @@ public:
 	int CreateFLOATDepository(int level, int width, int height);
 	void DeleteFLOATDepository(int id);
 	int CreateNewBlockInFLOATDepository(int idDepository, void *data);
+	void GetTextureInputFromFloat(int idDepository, int idBlock, ID3D11ShaderResourceView **SRV);
+	void GetTextureOutputFromFloat(int idDepository, ID3D11ShaderResourceView **SRV, ID3D11UnorderedAccessView **UAV);
 	void ReleaseBlockInFLOATDepository(int idDepository, int idBlock);
 	float GetValueFromFLOATDepository(int idDepository, int idBlock, float x, float y);
 	void SetValueFromFLOATDepository(int idDepository, int idBlock, int x, int y, float value);
@@ -68,6 +74,8 @@ public:
 	int CreateBYTE4Depository(int level, int width, int height);
 	void DeleteBYTE4Depository(int id);
 	int CreateNewBlockInBYTE4Depository(int idDepository, void *data);
+	void GetTextureInputFromBYTE4(int idDepository, int idBlock, ID3D11ShaderResourceView **SRV);
+	void GetTextureOutputFromBYTE4(int idDepository, ID3D11ShaderResourceView **SRV, ID3D11UnorderedAccessView **UAV);
 	void ReleaseBlockInBYTE4Depository(int idDepository, int idBlock);
 	VBYTE4 GetValueFromBYTE4Depository(int idDepository, int idBlock, float x, float y);
 	void SetValueFromBYTE4Depository(int idDepository, int idBlock, int x, int y, VBYTE4 value);
@@ -124,6 +132,9 @@ private:
 	std::vector<DataDepositoryFLOAT4*> m_dataFloat4Depository;
 
 	Windows::Foundation::IAsyncAction^ m_Worker;
+
+	std::ofstream m_fileOutput;
+	bool m_isOpenFileOutput;
 };
 
 __declspec(selectany) StreamingDataManager *GameStreamingDataHandle = 0;
