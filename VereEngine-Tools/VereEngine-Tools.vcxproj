@@ -147,7 +147,10 @@
     <ClInclude Include="CalcCoordForMap.h" />
     <ClInclude Include="ConvertMap.h" />
     <ClInclude Include="DataStreaming.h" />
+    <ClInclude Include="GenerateRiver.h" />
+    <ClInclude Include="GenerateTrees.h" />
     <ClInclude Include="RecalculationMapFromCoord.h" />
+    <ClInclude Include="RecalculationRiverMapFromCoord.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="VecMath.h" />
@@ -157,7 +160,10 @@
     <ClCompile Include="BaseForTool.cpp" />
     <ClCompile Include="CalcCoordForMap.cpp" />
     <ClCompile Include="DataStreaming.cpp" />
+    <ClCompile Include="GenerateRiver.cpp" />
+    <ClCompile Include="GenerateTrees.cpp" />
     <ClCompile Include="RecalculationMapFromCoord.cpp" />
+    <ClCompile Include="RecalculationRiverMapFromCoord.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

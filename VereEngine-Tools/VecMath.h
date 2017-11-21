@@ -1,8 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-
-#include <math.h>
-=======
 
 #include <math.h>
 
@@ -16,7 +12,6 @@ struct BYTE4
 	BYTE z;
 	BYTE w;
 };
->>>>>>> VereEngine-Planet
 
 struct INT2
 {
@@ -31,6 +26,20 @@ struct Float2
 {
 	Float2();
 	Float2(float itsX, float itsY);
+
+	float Length() { return pow(pow(x, 2.0f) + pow(y, 2.0f), 0.5f); }
+
+	Float2 Normalize()
+	{
+		float l = 1.0f / Length();
+
+		return Float2(x * l, y * l);		
+	}
+
+	float Dot(Float2 V)
+	{
+		return x * V.x + y * V.y;
+	}
 
 	float x;
 	float y;
@@ -67,6 +76,7 @@ public:
 	static float Dot(Float3 v0, Float3 v1);
 	static Float3 Cross(Float3 v0, Float3 v1);
 	static float Clamp(float i, float min, float max);
+	static float Wrap(float i, float max);
 	static float GetMax(float v1, float v2);
 	static float GetMin(float v1, float v2);
 	static Float2 Normalize(Float2 v);

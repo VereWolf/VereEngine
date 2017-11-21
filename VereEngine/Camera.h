@@ -21,8 +21,6 @@ public:
 	void SetMainCamera(bool index) { mMainCamera = index; }
 	bool GetMainCamera() { return mMainCamera; }
 
-	//btTransform GetWorldTransform();
-
 	btVector3 GetRight();
 	btVector3 GetUp();
 	btVector3 GetLook();

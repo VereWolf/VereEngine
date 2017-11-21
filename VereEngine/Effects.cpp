@@ -173,11 +173,6 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 
 	InverseSide = mFX->GetVariableByName("gInverseSide")->AsMatrix();
 	Side = mFX->GetVariableByName("gSide");
-<<<<<<< HEAD
-
-	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
-	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
-=======
 
 	IsMap = mFX->GetVariableByName("gIsMap");
 
@@ -185,7 +180,6 @@ TerrainLODEffect::TerrainLODEffect(DX::DeviceResources *resources, const std::st
 	NormalMap = mFX->GetVariableByName("gNormalMap")->AsShaderResource();
 	EnviromentMap = mFX->GetVariableByName("gEnviromentMap")->AsShaderResource();
 	TreesMap = mFX->GetVariableByName("gTreesMap")->AsShaderResource();
->>>>>>> VereEngine-Planet
 }
 #pragma endregion
 
@@ -273,7 +267,7 @@ BodyEffect::BodyEffect(DX::DeviceResources *resources, const std::string& filena
 BillboardEffect::BillboardEffect(DX::DeviceResources *resources, const std::string& filename)
 	: BaseEffect(resources, filename)
 {
-	RenderStart = mFX->GetVariableByName("gRenderStart");
+	/*RenderStart = mFX->GetVariableByName("gRenderStart");
 	RenderEnd = mFX->GetVariableByName("gRenderEnd");
 	Coord = mFX->GetVariableByName("gCoord")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
@@ -284,7 +278,66 @@ BillboardEffect::BillboardEffect(DX::DeviceResources *resources, const std::stri
 	HeightTile_1 = mFX->GetVariableByName("gHeightTile_1")->AsShaderResource();
 	HeightTile_2 = mFX->GetVariableByName("gHeightTile_2")->AsShaderResource();
 	NormalTile_1 = mFX->GetVariableByName("gNormalTile_1")->AsShaderResource();
-	NormalTile_2 = mFX->GetVariableByName("gNormalTile_2")->AsShaderResource();
+	NormalTile_2 = mFX->GetVariableByName("gNormalTile_2")->AsShaderResource();*/
+}
+#pragma endregion
+
+#pragma region GenerateTexturesFromTexture
+GenerateTexturesFromTextureEffect::GenerateTexturesFromTextureEffect(DX::DeviceResources *resources, const std::string& filename)
+	: Effect(resources, filename)
+{
+	StartPos = mFX->GetVariableByName("gStartPos")->AsVector();
+	StepSize = mFX->GetVariableByName("gStepSize")->AsVector();
+
+	InputMap = mFX->GetVariableByName("gInput")->AsShaderResource();
+	OutputMap = mFX->GetVariableByName("gOutput")->AsUnorderedAccessView();
+
+}
+#pragma endregion
+
+#pragma region GenerateBlockOfLODEffect
+GenerateBlockOfLODEffect::GenerateBlockOfLODEffect(DX::DeviceResources *resources, const std::string& filename)
+	: Effect(resources, filename)
+{
+	Offset = mFX->GetVariableByName("gOffset");
+	Scaling = mFX->GetVariableByName("gScaling");
+
+	InputHeightMap = mFX->GetVariableByName("gInputH")->AsShaderResource();
+	InputNormalMap = mFX->GetVariableByName("gInputN")->AsShaderResource();
+	InputEnviromentMap = mFX->GetVariableByName("gInputE")->AsShaderResource();
+	InputTreesMap = mFX->GetVariableByName("gInputT")->AsShaderResource();
+	InputTileMap = mFX->GetVariableByName("gTile")->AsShaderResource();
+	OutputAngleMap = mFX->GetVariableByName("gOutputA")->AsUnorderedAccessView();
+	OutputEnviromentMap = mFX->GetVariableByName("gOutputE")->AsUnorderedAccessView();
+	OutputTreesMap = mFX->GetVariableByName("gOutputT")->AsUnorderedAccessView();
+}
+#pragma endregion
+
+#pragma region GenerateHeightAndNormalMapWithNoise
+GenerateHeightAndNormalMapWithNoiseEffect::GenerateHeightAndNormalMapWithNoiseEffect(DX::DeviceResources *resources, const std::string& filename)
+	: Effect(resources, filename)
+{
+	StartPos = mFX->GetVariableByName("gStartPos")->AsVector();
+	StepSize = mFX->GetVariableByName("gStepSize")->AsVector();
+	SpacingMap = mFX->GetVariableByName("gSpacingMap");
+	SpacingWorld = mFX->GetVariableByName("gSpacingWorld");
+	RangeNoise = mFX->GetVariableByName("gRangeNoise");
+	IsMap1 = mFX->GetVariableByName("gIsMap1");
+	IsMap2 = mFX->GetVariableByName("gIsMap2");
+
+	InputHeightMap = mFX->GetVariableByName("gInputHeight")->AsShaderResource();
+	InputNormalMap = mFX->GetVariableByName("gInputNormal")->AsShaderResource();
+	InputRiverWidth1Map = mFX->GetVariableByName("gInputRiverWidth1")->AsShaderResource();
+	InputRiverWidth2Map = mFX->GetVariableByName("gInputRiverWidth2")->AsShaderResource();
+	InputRiverLength1Map = mFX->GetVariableByName("gInputRiverLength1")->AsShaderResource();
+	InputRiverLength2Map = mFX->GetVariableByName("gInputRiverLength2")->AsShaderResource();
+	InputRiverType1Map = mFX->GetVariableByName("gInputRiverType1")->AsShaderResource();
+	InputRiverType2Map = mFX->GetVariableByName("gInputRiverType2")->AsShaderResource();
+	InputRiverHeightMap = mFX->GetVariableByName("gInputRiverHeight")->AsShaderResource();
+	TileMap = mFX->GetVariableByName("gTile")->AsShaderResource();
+	OutputHeightMap = mFX->GetVariableByName("gOutputHeight")->AsUnorderedAccessView();
+	OutputNormalMap = mFX->GetVariableByName("gOutputNormal")->AsUnorderedAccessView();
+
 }
 #pragma endregion
 
@@ -301,6 +354,11 @@ PosNormalTexTanEffect* Effects::PosNormalTexTanFX = 0;
 BodyEffect* Effects::BodyFX = 0;
 BillboardEffect* Effects::BillboardFX = 0;
 
+GenerateTexturesFromTextureEffect* Effects::GenerateFloatTexFromFloatTexFX = 0;
+GenerateTexturesFromTextureEffect* Effects::GenerateBYTE4TexFromBYTE4TexFX = 0;
+GenerateBlockOfLODEffect* Effects::GenerateBlockOfLODFX = 0;
+GenerateHeightAndNormalMapWithNoiseEffect* Effects::GenerateHeightAndNormalMapWithNoiseEffectFX = 0;
+
 void Effects::InitAll(DX::DeviceResources *resources)
 {
 	RenderToScreenFX = new RenderToScreen(resources, "FX/RenderToScreen.fxo");
@@ -313,6 +371,11 @@ void Effects::InitAll(DX::DeviceResources *resources)
 	PosNormalTexTanFX = new PosNormalTexTanEffect(resources, "FX/PosNormalTexTan.fxo");
 	BodyFX = new BodyEffect(resources, "FX/Body.fxo");
 	BillboardFX = new BillboardEffect(resources, "FX/Billboard.fxo");
+
+	GenerateFloatTexFromFloatTexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateFloatTexFromFloatTex.fxo");
+	GenerateBYTE4TexFromBYTE4TexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateBYTE4TexFromBYTE4Tex.fxo");
+	GenerateBlockOfLODFX = new GenerateBlockOfLODEffect(resources, "FX/GenerateBlockOfLOD.fxo");
+	GenerateHeightAndNormalMapWithNoiseEffectFX = new GenerateHeightAndNormalMapWithNoiseEffect(resources, "FX/GenerateHeightAndNormalMapWithNoise.fxo");
 };
 
 void Effects::DestroyAll()
@@ -327,5 +390,10 @@ void Effects::DestroyAll()
 	delete PosNormalTexTanFX;
 	delete BodyFX;
 	delete BillboardFX;
+
+	delete GenerateFloatTexFromFloatTexFX;
+	delete GenerateBYTE4TexFromBYTE4TexFX;
+	delete GenerateBlockOfLODFX;
+	delete GenerateHeightAndNormalMapWithNoiseEffectFX;
 }
 #pragma endregion

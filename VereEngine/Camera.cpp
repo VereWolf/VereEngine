@@ -29,11 +29,6 @@ void Camera::Render()
 
 void Camera::Update()
 {
-	/*btVector3 R = mRight;
-	btVector3 L = mLook.normalize();
-	btVector3 U = L.cross(R).normalize();
-	R = U.cross(L);*/
-
 	btVector3 U = GetLocalPosition().normalize();
 	btVector3 L = mLook.normalize();
 	btVector3 R = U.cross(L).normalize();
@@ -50,28 +45,19 @@ void Camera::Update()
 	mUp = U;
 	mLook = L;
 
+	btMatrix3x3 M = btMatrix3x3::getIdentity();
+
 	if (m_master)
 	{
-		btMatrix3x3 M = m_master->GetWorldTransform().getBasis().inverse();
-
-		R = R * M;
-		L = L * M;
-		U = U * M;
+		M = m_master->GetWorldTransform().getBasis();
 	}
 
-	mView = btTransform(btMatrix3x3(R.getX(), R.getY(), R.getZ(), U.getX(), U.getY(), U.getZ(), L.getX(), L.getY(), L.getZ()), btVector3(0.0, 0.0, 0.0))
-		/** btTransform(btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0), btVector3(0.0, 0.0, 0.0))*/;
+	R = M * R;
+	L = M * L;
+	U = M * U;
+
+	mView = btTransform(btMatrix3x3(R.getX(), R.getY(), R.getZ(), U.getX(), U.getY(), U.getZ(), L.getX(), L.getY(), L.getZ()), btVector3(0.0, 0.0, 0.0));
 };
-
-/*btTransform Camera::GetWorldTransform()
-{
-	if (m_master == NULL)
-	{
-		return m_rigidBody->getWorldTransform();
-	}
-
-	return(btTransform(m_master->GetWorldTransform().getBasis().inverse(), m_master->GetWorldTransform().getOrigin()) * m_rigidBody->getWorldTransform());
-}*/
 
 btVector3 Camera::GetRight()
 {
@@ -166,7 +152,6 @@ void Camera::SetLens(float fovY, float aspect, float zn, float zf, float mod)
 	mFovY = fovY;
 	mAspect = aspect;
 	mNearZ = log(mod * zn + 1.0f) / log(mod * zf + 1.0f) * zf;
-	//mNearZ = zn;
 	mFarZ = zf;
 	mFarModifier = mod;
 
@@ -221,22 +206,10 @@ XMMATRIX Camera::Proj()
 	return XMLoadFloat4x4(&mProj);
 }
 
-/*btTransform Camera::btProj()
-{
-	return VereMath::ConvertTobtTransform(mProj);
-}*/
-
 XMMATRIX Camera::ViewProj()
 {
 	return View() * Proj();
 }
-
-/*btTransform Camera::btViewProj()
-{
-	btTransform M;
-	M.mult(btProj(), btView());
-	return M;
-}*/
 
 XMMATRIX Camera::InvViewProj()
 {
@@ -244,13 +217,6 @@ XMMATRIX Camera::InvViewProj()
 
 	return XMMatrixInverse(&XMMatrixDeterminant(M), M);
 }
-
-/*btTransform Camera::btInvViewProj()
-{
-	btTransform M;
-	M.mult(btProj(), btView());
-	return M.inverse();
-}*/
 
 XMMATRIX Camera::Zero()
 {

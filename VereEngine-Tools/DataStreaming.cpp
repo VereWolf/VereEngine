@@ -1,6 +1,36 @@
 #include "stdafx.h"
 #include "DataStreaming.h"
 
+void DataStreaming::SaveImage(std::wstring nameFile, std::vector<BYTE4> *dataBuffer, int height, int width)
+{
+	GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR gdiplusToken;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+	int S = height * width;
+
+	std::vector<BYTE> vImageData(4 * S);
+
+	for (int i = 0; i < S; ++i)
+	{
+		vImageData[4 * i] = dataBuffer->at(i).z;
+		vImageData[4 * i + 1] = dataBuffer->at(i).y;
+		vImageData[4 * i + 2] = dataBuffer->at(i).x;
+		vImageData[4 * i + 3] = 0xFF;
+	}
+
+	Bitmap *bmp = new Bitmap(width, height, 4 * width, PixelFormat32bppARGB, &vImageData[0]);
+	Gdiplus::Graphics *g = Gdiplus::Graphics::FromImage(bmp);
+
+	CLSID bmpClsid = { 0x557cf400, 0x1a04, 0x11d3,{ 0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e } };
+
+	int b = bmp->Save(nameFile.c_str(), &bmpClsid, NULL);
+
+	delete bmp;
+
+	GdiplusShutdown(gdiplusToken);
+};
+
 void DataStreaming::SaveImage(std::wstring nameFile, std::vector<Float4> *dataBuffer, int height, int width)
 {
 	GdiplusStartupInput gdiplusStartupInput;
@@ -9,7 +39,7 @@ void DataStreaming::SaveImage(std::wstring nameFile, std::vector<Float4> *dataBu
 
 	int S = height * width;
 
- 	std::vector<BYTE> vImageData(4 * S);
+	std::vector<BYTE> vImageData(4 * S);
 
 	for (int i = 0; i < S; ++i)
 	{
@@ -25,6 +55,98 @@ void DataStreaming::SaveImage(std::wstring nameFile, std::vector<Float4> *dataBu
 	CLSID bmpClsid = { 0x557cf400, 0x1a04, 0x11d3,{ 0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e } };
 
 	int b = bmp->Save(nameFile.c_str(), &bmpClsid, NULL);
+
+	delete bmp;
+
+	GdiplusShutdown(gdiplusToken);
+};
+
+void DataStreaming::SaveImage(std::wstring nameFile, std::vector<float> *dataBuffer, int height, int width)
+{
+	GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR gdiplusToken;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+	int S = height * width;
+
+	std::vector<BYTE> vImageData(4 * S);
+
+	for (int i = 0; i < S; ++i)
+	{
+		vImageData[4 * i] = (BYTE)(dataBuffer->at(i) * 255);
+		vImageData[4 * i + 1] = (BYTE)(dataBuffer->at(i) * 255);
+		vImageData[4 * i + 2] = (BYTE)(dataBuffer->at(i) * 255);
+		vImageData[4 * i + 3] = 0xFF;
+	}
+
+	Bitmap *bmp = new Bitmap(width, height, 4 * width, PixelFormat32bppARGB, &vImageData[0]);
+	Gdiplus::Graphics *g = Gdiplus::Graphics::FromImage(bmp);
+
+	CLSID bmpClsid = { 0x557cf400, 0x1a04, 0x11d3,{ 0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e } };
+
+	int b = bmp->Save(nameFile.c_str(), &bmpClsid, NULL);
+
+	delete bmp;
+
+	GdiplusShutdown(gdiplusToken);
+};
+
+void DataStreaming::SaveImageNorm(std::wstring nameFile, std::vector<float> *dataBuffer, int height, int width)
+{
+	float max = 0.0f;
+
+	for (int i = 0; i < dataBuffer->size(); i += 1)
+	{
+		if (dataBuffer->at(i) > max)
+		{
+			max = dataBuffer->at(i);
+		}
+
+		if (dataBuffer->at(i) < 0.0f)
+		{
+			dataBuffer->at(i) = 0.0f;
+		}
+		/*else
+		{
+			dataBuffer->at(i) = 1.0f;
+		}*/
+	}
+
+	for (int i = 0; i < dataBuffer->size(); i += 1)
+	{
+		dataBuffer->at(i) /= max;
+	}
+
+	SaveImage(nameFile, dataBuffer, height, width);
+}
+
+void DataStreaming::LoadImageFromFile(std::wstring nameFile, std::vector<BYTE4> *dataBuffer, int &height, int &width)
+{
+	GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR gdiplusToken;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+	Bitmap *bmp = new Bitmap(nameFile.c_str());
+	height = bmp->GetHeight();
+	width = bmp->GetWidth();
+	int S = height * width;
+
+	dataBuffer->resize(S);
+
+	Color color;
+
+	for (int j = 0; j < height; ++j)
+	{
+		for (int i = 0; i < width; ++i)
+		{
+			bmp->GetPixel(i, height - j - 1, &color);
+
+			dataBuffer->at(j * width + i).x = color.GetRed();
+			dataBuffer->at(j * width + i).y = color.GetGreen();
+			dataBuffer->at(j * width + i).z = color.GetBlue();
+			dataBuffer->at(j * width + i).w = color.GetAlpha();
+		}
+	}
 
 	delete bmp;
 

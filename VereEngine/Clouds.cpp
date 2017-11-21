@@ -19,9 +19,9 @@ void CloudsRenderMessage::Use()
 
 	XMFLOAT3 EyePos = { 0.0f, 0.0f, 0.0f };
 
-	((CloudsEffect*)m_BaseEffect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
-	((CloudsEffect*)m_BaseEffect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
-	((CloudsEffect*)m_BaseEffect)->SetSpacing(((float)S2));
-	((CloudsEffect*)m_BaseEffect)->SetLevel(1.0f / pow(2, m_Level));
-	((CloudsEffect*)m_BaseEffect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((CloudsEffect*)m_Effect)->SetWorld(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(mesh)));
+	((CloudsEffect*)m_Effect)->SetWorldN(XMLoadFloat4x4(&VereMath::ConvertToXMFLOAT4X4(meshN)));
+	((CloudsEffect*)m_Effect)->SetSpacing(((float)S2));
+	((CloudsEffect*)m_Effect)->SetLevel(1.0f / pow(2, m_Level));
+	((CloudsEffect*)m_Effect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
 }

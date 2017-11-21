@@ -3,13 +3,12 @@
 #include "stdafx.h"
 #include "BaseForTool.h"
 
-class RecalculationMapFromCoord : public BaseForTool
+class RecalculationRiverMapFromCoord : public BaseForTool
 {
 public:
-	RecalculationMapFromCoord();
+	RecalculationRiverMapFromCoord();
 	Float2 GetReCalCoord(Float2 coord, std::vector<Float2> *coordMap, Float2 mapSize, Float2 sourceSize);
 	void GenerateResize();
-	void Generate();
 	void GenerateTiles();
 	void ConvertNormalFromPNGtoRAW();
 private:

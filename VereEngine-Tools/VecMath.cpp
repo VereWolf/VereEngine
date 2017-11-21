@@ -107,6 +107,14 @@ float VMath::Clamp(float i, float min, float max)
 	return i;
 }
 
+float VMath::Wrap(float i, float max)
+{
+	while (i >= max) i -= max;
+	while (i < 0) i += max;
+
+	return i;
+}
+
 float VMath::GetMax(float v1, float v2)
 {
 	if (v1 > v2)
