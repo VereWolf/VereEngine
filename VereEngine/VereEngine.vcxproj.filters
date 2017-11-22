@@ -131,12 +131,15 @@
     <ClCompile Include="GenerateBlockOfLOD.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
     <ClCompile Include="Camera.cpp">
       <Filter>Object%27s Manager</Filter>
     </ClCompile>
     <ClCompile Include="GenerateHeightAndNormalMapWithNoise.cpp">
       <Filter>Planet</Filter>
     </ClCompile>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -380,12 +383,15 @@
     <ClInclude Include="GameOutputTexture.h">
       <Filter>RenderDevice</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
     <ClInclude Include="Camera.h">
       <Filter>Object%27s Manager</Filter>
     </ClInclude>
     <ClInclude Include="GenerateHeightAndNormalMapWithNoise.h">
       <Filter>Planet</Filter>
     </ClInclude>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\Billboard.fx">
@@ -436,9 +442,12 @@
     <CustomBuild Include="FX\GenerateBlockOfLOD.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+<<<<<<< HEAD
+=======
     <CustomBuild Include="FX\GenerateHeightAndNormalMapWithNoise.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

@@ -345,7 +345,10 @@ void RenderDevice::ComputeShader(ComputeMessage *message)
 		XMINT2 ThreadGroup = XMINT2(ceilf(message->m_Width / message->Thread.x), ceilf(message->m_Height / message->Thread.y));
 
 		m_resources->GetD3DDeviceContext()->Dispatch(ThreadGroup.x, ThreadGroup.y, 1);
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
 	}
 
 	m_resources->GetD3DDeviceContext()->CSSetShader(0, 0, 0);

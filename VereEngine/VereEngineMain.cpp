@@ -75,6 +75,10 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
+<<<<<<< HEAD
+	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 10, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
+		528, 10, 8);
+=======
 
 	BuildPlanetMessage buildPlanetMessage;
 
@@ -93,6 +97,7 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	buildPlanetMessage.levelOfBigBlock = 8;
 
 	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(buildPlanetMessage);
+>>>>>>> master
 
 	GameObjectSpace *circleMoonSpace = new GameObjectSpace;
 

@@ -10,6 +10,11 @@ void GenerateBlockOfLODMessage::Use()
 	((GenerateBlockOfLODEffect*)m_Effect)->SetInputEnviromentMap(m_inputEnviromentMapSRV);
 	((GenerateBlockOfLODEffect*)m_Effect)->SetInputTreesMap(m_inputTreesMapSRV);
 	((GenerateBlockOfLODEffect*)m_Effect)->SetInputTileMap(m_tileSRV);
+<<<<<<< HEAD
+	((GenerateBlockOfLODEffect*)m_Effect)->SetOutputHeightMap(m_outputHeightMapUAV);
+	((GenerateBlockOfLODEffect*)m_Effect)->SetOutputNormalMap(m_outputNormalMapUAV);
+=======
+>>>>>>> master
 	((GenerateBlockOfLODEffect*)m_Effect)->SetOutputAngleMap(m_outputAngleMapUAV);
 	((GenerateBlockOfLODEffect*)m_Effect)->SetOutputEnviromentMap(m_outputEnviromentMapUAV);
 	((GenerateBlockOfLODEffect*)m_Effect)->SetOutputTreesMap(m_outputTreesMapUAV);

@@ -57,6 +57,10 @@ bool  DataDepository::CreateTexturesForInput(DX::DeviceResources* resources, int
 	D3D11_SUBRESOURCE_DATA sbd;
 	ZeroMemory(&sbd, sizeof(D3D11_SUBRESOURCE_DATA));
 
+<<<<<<< HEAD
+	sbd.pSysMem = GetTexture(id);
+=======
+>>>>>>> master
 	if (format == DXGI_FORMAT_R8G8B8A8_UNORM)
 	{
 		sbd.SysMemPitch = sizeof(VBYTE4) * m_width;
@@ -65,6 +69,8 @@ bool  DataDepository::CreateTexturesForInput(DX::DeviceResources* resources, int
 	{
 		sbd.SysMemPitch = sizeof(float) * m_width;
 	}
+<<<<<<< HEAD
+=======
 	if (id < 0)
 	{
 		void *M = new char[sbd.SysMemPitch * m_height];
@@ -75,6 +81,7 @@ bool  DataDepository::CreateTexturesForInput(DX::DeviceResources* resources, int
 	{
 		sbd.pSysMem = GetTexture(id);
 	}
+>>>>>>> master
 
 	sbd.SysMemSlicePitch = 0;
 

@@ -192,7 +192,69 @@ void RecalculationMapFromCoord::Generate()
 					TRM2[j].x = 0;
 				}
 
+<<<<<<< HEAD
+				/*min = 9999.0f;
+				max = -9999.0f;
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + C.x >= 0 && sx + C.x < W && sy + C.y >= 0 && sy + C.y < H)
+						{
+							if (HM[(sx + C.x) * H + (sy + C.y)] > max)
+							{
+								max = HM[(sx + C.x) * H + (sy + C.y)];
+								CMAX = INT2(C.x + sx, C.y + sy);
+							}
+
+							if (HM[(sx + C.x) * H + (sy + C.y)] < min)
+							{
+								min = HM[(sx + C.x) * H + (sy + C.y)];
+								CMIN = INT2(C.x + sx, C.y + sy);
+							}
+						}
+					}
+				}
+
+				min = 9999.0f;
+				max = -9999.0f;
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + CMIN.x >= 0 && sx + CMIN.x < W && sy + CMIN.y >= 0 && sy + CMIN.y < H)
+						{
+							if (HM[(sx + CMIN.x) * H + (sy + CMIN.y)] > max)
+							{
+								max = HM[(sx + CMIN.x) * H + (sy + CMIN.y)];
+								CMAX2 = INT2(CMIN.x + sx, CMIN.y + sy);
+							}
+						}
+					}
+				}
+
+				for (int sy = -1; sy < 2; ++sy)
+				{
+					for (int sx = -1; sx < 2; ++sx)
+					{
+						if (sx + CMAX.x >= 0 && sx + CMAX.x < W && sy + CMAX.y >= 0 && sy + CMAX.y < H)
+						{
+
+							if (HM[(sx + CMAX.x) * H + (sy + CMAX.y)] < min)
+							{
+								min = HM[(sx + CMAX.x) * H + (sy + CMAX.y)];
+								CMIN2 = INT2(CMAX.x + sx, CMAX.y + sy);
+							}
+						}
+					}
+				}*/
+
+				if (/*(CMAX2.x == C.x && CMAX2.y == C.y) || (CMIN2.x == C.x && CMIN2.y == C.y) || */(EM[j].x < 0.25f || EM[j].y < 0.31f) || HM2[j] < 20.0f)
+=======
 				if ((EM[j].x < 0.25f || EM[j].y < 0.31f) || HM2[j] < 20.0f)
+>>>>>>> master
 				{
 					TRM2[j].x = 0;
 				}

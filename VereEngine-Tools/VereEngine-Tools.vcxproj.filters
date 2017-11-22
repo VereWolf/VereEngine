@@ -47,12 +47,15 @@
     </ClInclude>
     <ClInclude Include="GenerateTrees.h">
       <Filter>Header Files</Filter>
+<<<<<<< HEAD
+=======
     </ClInclude>
     <ClInclude Include="GenerateRiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RecalculationRiverMapFromCoord.h">
       <Filter>Header Files</Filter>
+>>>>>>> master
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +83,8 @@
     <ClCompile Include="GenerateTrees.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
     <ClCompile Include="GenerateRiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -89,5 +94,6 @@
     <ClCompile Include="WaterErosion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+>>>>>>> master
   </ItemGroup>
 </Project>
