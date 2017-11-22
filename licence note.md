@@ -1,0 +1,1 @@
+My plan is a change in the licence in future. I would like have licence which is similar origin and which enable a assets store and tax from product which run on my engine. It can be importat for future progress of the engine.
