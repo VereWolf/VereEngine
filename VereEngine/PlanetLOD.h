@@ -9,8 +9,6 @@
 #include "TreesLOD.h"
 #include "Clouds.h"
 #include "GenerateBlockOfLOD.h"
-<<<<<<< HEAD
-=======
 #include "GenerateHeightAndNormalMapWithNoise.h"
 
 struct PlanetLODInitMeessage
@@ -30,6 +28,8 @@ struct PlanetLODInitMeessage
 	bool isMap;
 	bool isMap1;
 	bool isMap2;
+	float maxH;
+	float minH;
 	XMINT2 idHeightMapBig;
 	XMINT2 idNormalMapBig;
 	XMINT2 idEnviromentMapBig;
@@ -47,7 +47,6 @@ struct PlanetLODInitMeessage
 	int idBillboardTrees;
 
 };
->>>>>>> master
 
 class PlanetLOD: public GameComponent
 {
@@ -88,22 +87,11 @@ public:
 			}
 		}
 
-<<<<<<< HEAD
-		/*if (m_idHeightMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInFLOATDepository(m_data->GetIDHeightMapSmall(), m_idHeightMapSmall);
-		if (m_idNormalMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDNormalMapSmall(), m_idNormalMapSmall);
-		if (m_idNormalMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDNormalMapSmall(), m_idNormalMapSmall);
-		if (m_idEnviromentMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDEnviromentMapSmall(), m_idEnviromentMapSmall);
-		if (m_idTreesMapBig >= 0) GameStreamingDataHandle->ReleaseBlockInBYTE4Depository(m_data->GetIDTreesMapSmall(), m_idTreesMapSmall);*/
-
-=======
->>>>>>> master
 		if (m_idHeightMapInput >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapInput);
 		if (m_idNormalMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapInput);
 		if (m_idAngleMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idAngleMapInput);
 		if (m_idEnviromentMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapInput);
 		if (m_idTreesMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapInput);
-<<<<<<< HEAD
-=======
 		if (m_idRiverWidth1MapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverWidth1MapInput);
 		if (m_idRiverWidth2MapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverWidth2MapInput);
 		if (m_idRiverLength1MapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverLength1MapInput);
@@ -111,25 +99,16 @@ public:
 		if (m_idRiverType1MapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverType1MapInput);
 		if (m_idRiverType2MapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverType2MapInput);
 		if (m_idRiverHeightMapInput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverHeightMapInput);
->>>>>>> master
 
 		if (m_idHeightMapOutput >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapOutput);
 		if (m_idNormalMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapOutput);
 		if (m_idAngleMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idAngleMapOutput);
 		if (m_idEnviromentMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapOutput);
 		if (m_idTreesMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapOutput);
-<<<<<<< HEAD
-
-		/*if (m_idHeightMapSRT >= 0)	GameRenderDeviceHandle->DeleteTexture(m_idHeightMapSRT);
-		if (m_idNormalMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idNormalMapSRT);
-		if (m_idEnviromentMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapSRT);
-		if (m_idTreesMapSRT >= 0) GameRenderDeviceHandle->DeleteTexture(m_idTreesMapSRT);*/
-=======
 		if (m_idRiverWidth1MapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverWidth1MapOutput);
 		if (m_idRiverLength1MapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverLength1MapOutput);
 		if (m_idRiverType1MapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverType1MapOutput);
 		if (m_idRiverHeightMapOutput >= 0) GameRenderDeviceHandle->DeleteTexture(m_idRiverHeightMapOutput);
->>>>>>> master
 
 		GameRenderDeviceHandle->DeleteModel(m_modelID);
 
@@ -143,15 +122,7 @@ public:
 		}
 	}
 
-<<<<<<< HEAD
-	void Init(PlanetData * master, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling,
-		int levelFromLastLoadData, XMINT2 coordFromLastLoadData, btScalar scalingFromLastLoadData,
-		int levelFromLoadTile, XMINT2 coordFromLoadTile, btScalar scalingFromLoadTile, bool isMap,
-		int idHeightMapBig, int idNormalMapBig, int idEnviromentMapBig, int idTreesMapBig,
-		int idBillboardTreesVertex, std::vector<int> *billboardTreesIndex, btTransform billboardMatrix, int idBillboardTrees);
-=======
 	void Init(PlanetLODInitMeessage message);
->>>>>>> master
 	void Render();
 
 	void DrawTerrain();
@@ -166,17 +137,6 @@ public:
 
 	void CreateNewLevelOfLoD();
 
-<<<<<<< HEAD
-	int GetIDHeightMapBig() { return m_idHeightMapBig; }
-	int GetIDNormalMapBig() { return m_idNormalMapBig; }
-	int GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
-	int GetIDTreesMapBig() { return m_idTreesMapBig; }
-
-	/*int GetIDHeightMapSmall() { return m_idHeightMapSmall; }
-	int GetIDNormalMapSmall() { return m_idNormalMapSmall; }
-	int GetIDEnviromentMapSmall() { return m_idEnviromentMapSmall; }
-	int GetIDTreesMapSmall() { return m_idTreesMapSmall; }*/
-=======
 	XMINT2 GetIDHeightMapBig() { return m_idHeightMapBig; }
 	XMINT2 GetIDNormalMapBig() { return m_idNormalMapBig; }
 	XMINT2 GetIDEnviromentMapBig() { return m_idEnviromentMapBig; }
@@ -188,7 +148,6 @@ public:
 	XMINT2 GetIDRiverType1MapBig() { return m_idRiverType1MapBig; }
 	XMINT2 GetIDRiverType2MapBig() { return m_idRiverType2MapBig; }
 	XMINT2 GetIDRiverHeightMapBig() { return m_idRiverHeightMapBig; }
->>>>>>> master
 
 	int GetValueOfLODBig() { return m_valueOfLODBig; }
 	void SetValueOfLODBig(int d) { m_valueOfLODBig = d; }
@@ -218,23 +177,6 @@ private:
 	GamePlanetTile *m_planetTile;
 
 	bool m_isMap;
-<<<<<<< HEAD
-
-	int m_idHeightMapBig;
-	int m_idNormalMapBig;
-	int m_idEnviromentMapBig;
-	int m_idTreesMapBig;
-
-	//int m_idHeightMapSmall;
-	//int m_idNormalMapSmall;
-	//int m_idEnviromentMapSmall;
-	//int m_idTreesMapSmall;
-
-	//int m_idHeightMapSRT;
-	//int m_idNormalMapSRT;
-	//int m_idEnviromentMapSRT;
-	//int m_idTreesMapSRT;
-=======
 	bool m_isMap1;
 	bool m_isMap2;
 
@@ -249,15 +191,12 @@ private:
 	XMINT2 m_idRiverType1MapBig;
 	XMINT2 m_idRiverType2MapBig;
 	XMINT2 m_idRiverHeightMapBig;
->>>>>>> master
 
 	int m_idHeightMapInput;
 	int m_idNormalMapInput;
 	int m_idAngleMapInput;
 	int m_idEnviromentMapInput;
 	int m_idTreesMapInput;
-<<<<<<< HEAD
-=======
 	int m_idRiverWidth1MapInput;
 	int m_idRiverWidth2MapInput;
 	int m_idRiverLength1MapInput;
@@ -265,15 +204,12 @@ private:
 	int m_idRiverType1MapInput;
 	int m_idRiverType2MapInput;
 	int m_idRiverHeightMapInput;
->>>>>>> master
 
 	int m_idHeightMapOutput;
 	int m_idNormalMapOutput;
 	int m_idAngleMapOutput;
 	int m_idEnviromentMapOutput;
 	int m_idTreesMapOutput;
-<<<<<<< HEAD
-=======
 	int m_idRiverWidth1MapOutput;
 	int m_idRiverWidth2MapOutput;
 	int m_idRiverLength1MapOutput;
@@ -281,7 +217,6 @@ private:
 	int m_idRiverType1MapOutput;
 	int m_idRiverType2MapOutput;
 	int m_idRiverHeightMapOutput;
->>>>>>> master
 
 	btVector3 m_OffsetCubeT;
 	btVector3 m_CentreT;
@@ -321,6 +256,8 @@ private:
 	btVector3 m_MinA;
 	btVector3 m_MaxC;
 	btVector3 m_MinC;
+	float m_MaxH;
+	float m_MinH;
 
 	int m_idH;
 	void *m_VdH;
@@ -352,9 +289,6 @@ private:
 	std::vector<int> *m_billboardTreesIndex;
 	btTransform m_billBoardMatrix;
 	int m_idBillboardTrees;
-<<<<<<< HEAD
-=======
 
 	btVector3 m_dir[4];
->>>>>>> master
 };
