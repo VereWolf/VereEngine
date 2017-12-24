@@ -147,10 +147,7 @@
     <ClInclude Include="CalcCoordForMap.h" />
     <ClInclude Include="ConvertMap.h" />
     <ClInclude Include="DataStreaming.h" />
-<<<<<<< HEAD
-=======
     <ClInclude Include="GenerateRiver.h" />
->>>>>>> master
     <ClInclude Include="GenerateTrees.h" />
     <ClInclude Include="RecalculationMapFromCoord.h" />
     <ClInclude Include="RecalculationRiverMapFromCoord.h" />
@@ -163,10 +160,7 @@
     <ClCompile Include="BaseForTool.cpp" />
     <ClCompile Include="CalcCoordForMap.cpp" />
     <ClCompile Include="DataStreaming.cpp" />
-<<<<<<< HEAD
-=======
     <ClCompile Include="GenerateRiver.cpp" />
->>>>>>> master
     <ClCompile Include="GenerateTrees.cpp" />
     <ClCompile Include="RecalculationMapFromCoord.cpp" />
     <ClCompile Include="RecalculationRiverMapFromCoord.cpp" />

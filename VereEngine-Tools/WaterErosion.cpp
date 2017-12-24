@@ -116,13 +116,13 @@ void WaterErosion::RainWrinkleComplete(float itsLeft, float maxLeft)
 void WaterErosion::Generate(int randomValue)
 {
 	std::vector<Float4> P;
-	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"perlin.png"), &P, mHeight, mHeight);
+	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"perlin.png"), &P, mHeight, mWidth);
 
 	 std::vector<Float4> RT;
-	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"rocky_terrain.png"), &RT, mHeight, mHeight);
+	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"rocky_terrain.png"), &RT, mHeight, mWidth);
 
 	std::vector<Float4> WE;
-	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"water_erosion.png"), &WE, mHeight, mHeight);
+	DataStreaming::LoadImageFromFile(GetWholeFilePatch(L"water_erosion.png"), &WE, mHeight, mWidth);
 
 	mSize = mHeight * mWidth;
 
@@ -152,7 +152,7 @@ void WaterErosion::Generate(int randomValue)
 	{
 		float v = B * (1.0f - heightMap[i]) * mImage.at(i).x + (1.0f - B) * mImage.at(i).x;
 		v += RT[i].x * (VMath::Clamp(heightMap[i], M, 1.0f) - M) / (1.0f - M) * S * P.at(i).x * pow(1.0f - mImage.at(i).z, 2.0f);
-		heightMap[i] = v;
+		heightMap[i] = heightMap[i] * v;
 	}
 
 	mHeight = mHeight - C;

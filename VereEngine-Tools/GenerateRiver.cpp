@@ -295,6 +295,7 @@ void GenerateRiver::InsertRiverNodeBetweenNodes(RiverNode *firstNode, float id, 
 	NM->id = id;
 	NM->pos = pos;
 	NM->size = size;
+	NM->height = height;
 	N1->next = NM;
 	NM->prev = N1;
 	NM->next = N2;
@@ -555,7 +556,7 @@ void GenerateRiver::GenerateRiverMap(int width, int height, int index)
 	m_riverVector2.resize(size, Float2(0.0f, 0.0f));
 	m_waterHeight1.resize(size, -9999.0f);
 	m_waterHeight2.resize(size, -9999.0f);
-	m_riverHeight.resize(size, 0.0f);
+	m_riverHeight.resize(size, -2300.0f);
 
 	m_currentRiverNode = m_startRiverNode;
 
@@ -927,12 +928,12 @@ void GenerateRiver::GenerateRiverMap(int width, int height, int index)
 		m_riverWidth2[i] += 3.0f;
 	}
 
-	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_width1.png"), &m_riverWidth1, height, width);
+	/*DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_width1.png"), &m_riverWidth1, height, width);
 	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_lenght1.png"), &m_riverLength1, height, width);
 	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_type1.png"), &m_riverType1, height, width);
 	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_width2.png"), &m_riverWidth2, height, width);
 	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_lenght2.png"), &m_riverLength2, height, width);
-	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_type2.png"), &m_riverType2, height, width);
+	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_type2.png"), &m_riverType2, height, width);*/
 	DataStreaming::SaveImageNorm(GetWholeFilePatch(L"river_height.png"), &m_riverHeight, height, width);
 }
 

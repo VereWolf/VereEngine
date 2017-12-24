@@ -9,7 +9,7 @@ RecalculationMapFromCoord::RecalculationMapFromCoord()
 
 Float2 RecalculationMapFromCoord::GetReCalCoord(Float2 coord, std::vector<Float2> *coordMap, Float2 mapSize, Float2 sourceSize)
 {
-	Float2 C = Float2(mapSize.x * coord.x / sourceSize.x, mapSize.y * coord.y / sourceSize.y);
+	Float2 C = Float2((mapSize.x - 1) * coord.x / (sourceSize.x - 1), (mapSize.y - 1) * coord.y / (sourceSize.y - 1));
 	INT2 C1 = INT2(C.x, C.y);
 	INT2 C11 = C1;
 	INT2 C12 = INT2(C1.x + 1, C1.y + 1);
@@ -89,8 +89,8 @@ void RecalculationMapFromCoord::Generate()
 	W = 512;
 	H = 512;
 	S = W * H;
-	W2 = 512 + 16;
-	H2 = 512 + 16;
+	W2 = 512 + 1 + 16;
+	H2 = 512 + 1 + 16;
 	S2 = W2 * H2;
 	float W3, H3, S3;
 	W3 = 1792;
@@ -192,69 +192,7 @@ void RecalculationMapFromCoord::Generate()
 					TRM2[j].x = 0;
 				}
 
-<<<<<<< HEAD
-				/*min = 9999.0f;
-				max = -9999.0f;
-
-				for (int sy = -1; sy < 2; ++sy)
-				{
-					for (int sx = -1; sx < 2; ++sx)
-					{
-						if (sx + C.x >= 0 && sx + C.x < W && sy + C.y >= 0 && sy + C.y < H)
-						{
-							if (HM[(sx + C.x) * H + (sy + C.y)] > max)
-							{
-								max = HM[(sx + C.x) * H + (sy + C.y)];
-								CMAX = INT2(C.x + sx, C.y + sy);
-							}
-
-							if (HM[(sx + C.x) * H + (sy + C.y)] < min)
-							{
-								min = HM[(sx + C.x) * H + (sy + C.y)];
-								CMIN = INT2(C.x + sx, C.y + sy);
-							}
-						}
-					}
-				}
-
-				min = 9999.0f;
-				max = -9999.0f;
-
-				for (int sy = -1; sy < 2; ++sy)
-				{
-					for (int sx = -1; sx < 2; ++sx)
-					{
-						if (sx + CMIN.x >= 0 && sx + CMIN.x < W && sy + CMIN.y >= 0 && sy + CMIN.y < H)
-						{
-							if (HM[(sx + CMIN.x) * H + (sy + CMIN.y)] > max)
-							{
-								max = HM[(sx + CMIN.x) * H + (sy + CMIN.y)];
-								CMAX2 = INT2(CMIN.x + sx, CMIN.y + sy);
-							}
-						}
-					}
-				}
-
-				for (int sy = -1; sy < 2; ++sy)
-				{
-					for (int sx = -1; sx < 2; ++sx)
-					{
-						if (sx + CMAX.x >= 0 && sx + CMAX.x < W && sy + CMAX.y >= 0 && sy + CMAX.y < H)
-						{
-
-							if (HM[(sx + CMAX.x) * H + (sy + CMAX.y)] < min)
-							{
-								min = HM[(sx + CMAX.x) * H + (sy + CMAX.y)];
-								CMIN2 = INT2(CMAX.x + sx, CMAX.y + sy);
-							}
-						}
-					}
-				}*/
-
-				if (/*(CMAX2.x == C.x && CMAX2.y == C.y) || (CMIN2.x == C.x && CMIN2.y == C.y) || */(EM[j].x < 0.25f || EM[j].y < 0.31f) || HM2[j] < 20.0f)
-=======
 				if ((EM[j].x < 0.25f || EM[j].y < 0.31f) || HM2[j] < 20.0f)
->>>>>>> master
 				{
 					TRM2[j].x = 0;
 				}
@@ -310,8 +248,8 @@ void RecalculationMapFromCoord::GenerateTiles()
 	W = 8192;
 	H = 8192;
 	S = W * H;
-	W2 = 512 + 2 * 512 / 64;
-	H2 = 512 + 2 * 512 / 64;
+	W2 = 512 + 1 + 2 * 512 / 64;
+	H2 = 512 + 1 + 2 * 512 / 64;
 	WE2 = (8192 - 512) / 64;
 	HE2 = (8192 - 512) / 64;
 	S2 = W2 * H2;
@@ -424,14 +362,14 @@ void RecalculationMapFromCoord::GenerateTiles()
 						{
 							j = l * W2 + k;
 
-							CC = GetReCalCoord(Float2(WE2 + m * 512 + k, HE2 + n * 512 + l), &M, Float2(W2, H2), Float2(W2 * plvl, H2 * plvl));
+							CC = GetReCalCoord(Float2(WE2 + m * 512 + k, HE2 + n * 512 + l), &M, Float2(W2, H2), Float2((W2 - 1) * plvl + 1, (H2 - 1) * plvl + 1));
 
 							M2[j].x = CC.x;
 							M2[j].y = CC.y;
 							M2[j].z = 0.0f;
 							M2[j].w = 0.0f;
 
-							C = INT2(CC.x * H3 - offset.x, CC.y *W3 - offset.y);
+							C = INT2(CC.x * H3 - offset.x, CC.y * W3 - offset.y);
 
 							if (C.x >= 0 && C.x < H && C.y >= 0 && C.y < W && HM[C.x * H + C.y] > -2000.0f)
 							{

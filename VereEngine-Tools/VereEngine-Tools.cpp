@@ -4,16 +4,14 @@
 #include "stdafx.h"
 #include "RecalculationMapFromCoord.h"
 #include "GenerateTrees.h"
-<<<<<<< HEAD
-=======
 #include "GenerateRiver.h"
->>>>>>> master
+#include "WaterErosion.h"
 
 
 int main()
 {
-	RecalculationMapFromCoord RC;
-	RC.Generate();
+	//RecalculationMapFromCoord RC;
+	//RC.Generate();
 	//RC.GenerateTiles();
 	//RC.GenerateResize();
 	//RC.ConvertNormalFromPNGtoRAW();
@@ -22,12 +20,12 @@ int main()
 
 	//GT.Generate(17983);
 
-<<<<<<< HEAD
-=======
-	/*GenerateRiver RG;
-	RG.Generate(8192, 8192);*/
+	//GenerateRiver RG;
+	//RG.Generate(8192, 8192);
 
->>>>>>> master
+	WaterErosion WE;
+	WE.Generate(174631);
+
     return 0;
 }
 
