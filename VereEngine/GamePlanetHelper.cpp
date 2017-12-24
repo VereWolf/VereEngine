@@ -32,12 +32,6 @@ void GamePlanetHelper::Init(DX::DeviceResources *resources)
 		}
 	}
 
-<<<<<<< HEAD
-	GameStreamingDataHandle->DeleteStreamingData(idTile1);
-	GameStreamingDataHandle->DeleteStreamingData(idTile2);
-
-
-=======
 	for (int x = 1; x < 65; ++x)
 	{
 		noise[x] = noise[4224 + x];
@@ -56,7 +50,6 @@ void GamePlanetHelper::Init(DX::DeviceResources *resources)
 	noise[4355] = noise[67];
 
 	m_TileNoiseSRV = GameRenderDeviceHandle->CreateTexture(&noise[0], 66, 66, DXGI_FORMAT_R32_FLOAT, 1);
->>>>>>> master
 
 	int idTreesTiles = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_tiles.raw");
 	int idTreesIndex = GameStreamingDataHandle->LoadData("planet/Tiles/Trees_index.raw");

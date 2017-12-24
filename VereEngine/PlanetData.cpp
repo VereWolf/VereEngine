@@ -467,32 +467,31 @@ void PlanetData::Init()
 int PlanetData::BuildLODBuffers(DX::DeviceResources *resources, UINT &sizeOfVertex, UINT &indicesCount)
 {
 	int32_t PIC = GetNumPointInRowInCell();
-	float W = 1.0f / GetNumPointInRowInCell();
-	UINT verticesCount = pow(PIC + 2, 2);
+	UINT verticesCount = pow(PIC + 1 + 2, 2);
 
 	std::vector <Vertex::TerrainLOD> vertices(verticesCount);
 
-	for (int j = 0; j < (PIC + 2); ++j)
+	for (int j = 0; j < (PIC + 1 + 2); ++j)
 	{
-		for (int i = 0; i < (PIC + 2); ++i)
+		for (int i = 0; i < (PIC + 1 + 2); ++i)
 		{
-			if (i == 0 || i == PIC + 1 || j == 0 || j == PIC + 1)
+			if (i == 0 || i == PIC + 2 || j == 0 || j == PIC + 2)
 			{
-				vertices[j * (PIC + 2) + i].Pos.y = -0.02f;
+				vertices[j * (PIC + 1 + 2) + i].Pos.y = -0.02f;
 			}
 			else
 			{
-				vertices[j * (PIC + 2) + i].Pos.y = 0.0f;
+				vertices[j * (PIC + 1 + 2) + i].Pos.y = 0.0f;
 			}
-			vertices[j * (PIC + 2) + i].Pos.x = -0.5f + static_cast<float>(i - 1) / (PIC - 1.0f);
-			vertices[j * (PIC + 2) + i].Pos.z = -0.5f + static_cast<float>(j - 1) / (PIC - 1.0f);
+			vertices[j * (PIC + 1 + 2) + i].Pos.x = -0.5f + static_cast<float>(i - 1) / (PIC);
+			vertices[j * (PIC + 1 + 2) + i].Pos.z = -0.5f + static_cast<float>(j - 1) / (PIC);
 
-			vertices[j * (PIC + 2) + i].TexTess.x = static_cast<float>(i) / (PIC + 1.0f);
-			vertices[j * (PIC + 2) + i].TexTess.y = static_cast<float>(j) / (PIC + 1.0f);
+			vertices[j * (PIC + 1 + 2) + i].TexTess.x = static_cast<float>(i) / (PIC + 2.0f);
+			vertices[j * (PIC + 1 + 2) + i].TexTess.y = static_cast<float>(j) / (PIC + 2.0f);
 		}
 	}
 
-	PIC = GetNumPointInRowInCell() + 2;
+	PIC = GetNumPointInRowInCell() + 1 + 2;
 	indicesCount = 4 * pow(PIC - 1, 2);
 
 	std::vector<UINT> indices(indicesCount);
@@ -530,8 +529,8 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 {
 	int PL = pow(2, level);
 	btScalar ofs = 1.0 / PL;
-	btScalar HI = ofs / (height - 1);
-	btScalar WI = ofs / (width - 1);
+	btScalar HI = ofs / (height);
+	btScalar WI = ofs / (width);
 	btScalar HE1 = 1.0 / (m_numPointsInRowInCell * PL);
 	btScalar WE1 = 1.0 / (m_numPointsInRowInCell * PL);
 	int HE2 = height / m_numPointsInRowInCell;
@@ -539,21 +538,22 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 	btScalar H, W = 0.0f;
 	btVector3 V = btVector3(0.0, 0.0, 0.0);
 	btVector3 V2 = btVector3(0.0, 0.0, 0.0);
-	std::vector<float> map(2 * (height + 2 * HE2) * (width + 2 * WE2));
+	std::vector<float> map(2 * (height + 1 + 2 * HE2) * (width + 1 + 2 * WE2));
 
 	for (int i = 0; i < 6; ++i)
 	{
-		for (int y = 0; y < ((int)height + 2 * HE2); y += 1)
+		for (int y = 0; y < ((int)height + 1 + 2 * HE2); y += 1)
 		{
-			for (int x = 0; x < ((int)width + 2 * WE2); x += 1)
+			for (int x = 0; x < ((int)width + 1 + 2 * WE2); x += 1)
 			{
-				H = ((float)(y - HE2)) / (height - 1.0f) - 0.5;
-				W = ((float)(x - WE2)) / (width - 1.0f) - 0.5;
+				H = ((float)(y - HE2)) / (height) - 0.5f;
+				W = ((float)(x - WE2)) / (width) - 0.5f;
 				V = PlanetCordinateMat::GetCoordForCylinder(btVector3(btVector3(W, 0.5, H) * GetBlockAnglMatrix(i + 6)).normalize()); // convert from cylinder map to cube side map
-				map.at(2 * (y * (width + 2 * WE2) + x)) = V.getX();
-				map.at(2 * (y * (width + 2 * WE2) + x) + 1) = V.getY();
+				map.at(2 * (y * (width + 1 + 2 * WE2) + x)) = V.getX();
+				map.at(2 * (y * (width + 1 + 2 * WE2) + x) + 1) = V.getY();
 			}
 		}
+
 		int id = GameStreamingDataHandle->CreateStreamingData(&map.at(0), sizeof(float) * map.size());
 
 		stringstream str;
@@ -564,7 +564,7 @@ void PlanetData::GenerateCoord(float height, float width, float level)
 		}
 
 		GameStreamingDataHandle->SaveData(str.str(), id);
-		GameStreamingDataHandle->DeleteStreamingData(id);
+		//GameStreamingDataHandle->DeleteStreamingData(id);
 	}
 }
 

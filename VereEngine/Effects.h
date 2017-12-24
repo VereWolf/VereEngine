@@ -261,10 +261,15 @@ public:
 	void SetOffset(XMFLOAT2 &V) { Offset->SetRawValue(&V, 0, sizeof(XMFLOAT2)); }
 	void SetSpacing(const float& v) { Spacing->SetRawValue(&v, 0, sizeof(float)); }
 	void SetLevel(const float& v) { Level->SetRawValue(&v, 0, sizeof(float)); }
+	void SetIsHeightMap(const bool& v) { IsHeightMap->SetRawValue(&v, 0, sizeof(bool)); }
+	void SetHeightMap(ID3D11ShaderResourceView* tex) { HeightMap->SetResource(tex); }
 
 	ID3DX11EffectVectorVariable* Offset;
 	ID3DX11EffectVariable* Spacing;
 	ID3DX11EffectVariable* Level;
+	ID3DX11EffectVariable* IsHeightMap;
+
+	ID3DX11EffectShaderResourceVariable* HeightMap;
 };
 
 #pragma endregion
@@ -433,11 +438,6 @@ public:
 	void SetInputEnviromentMap(ID3D11ShaderResourceView* tex) { InputEnviromentMap->SetResource(tex); }
 	void SetInputTreesMap(ID3D11ShaderResourceView* tex) { InputTreesMap->SetResource(tex); }
 	void SetInputTileMap(ID3D11ShaderResourceView* tex) { InputTileMap->SetResource(tex); }
-<<<<<<< HEAD
-	void SetOutputHeightMap(ID3D11UnorderedAccessView* tex) { OutputHeightMap->SetUnorderedAccessView(tex); }
-	void SetOutputNormalMap(ID3D11UnorderedAccessView* tex) { OutputNormalMap->SetUnorderedAccessView(tex); }
-=======
->>>>>>> master
 	void SetOutputAngleMap(ID3D11UnorderedAccessView* tex) { OutputAngleMap->SetUnorderedAccessView(tex); }
 	void SetOutputEnviromentMap(ID3D11UnorderedAccessView* tex) { OutputEnviromentMap->SetUnorderedAccessView(tex); }
 	void SetOutputTreesMap(ID3D11UnorderedAccessView* tex) { OutputTreesMap->SetUnorderedAccessView(tex); }
@@ -450,13 +450,6 @@ public:
 	ID3DX11EffectShaderResourceVariable* InputEnviromentMap;
 	ID3DX11EffectShaderResourceVariable* InputTreesMap;
 	ID3DX11EffectShaderResourceVariable* InputTileMap;
-<<<<<<< HEAD
-	ID3DX11EffectUnorderedAccessViewVariable* OutputHeightMap;
-	ID3DX11EffectUnorderedAccessViewVariable* OutputNormalMap;
-	ID3DX11EffectUnorderedAccessViewVariable* OutputAngleMap;
-	ID3DX11EffectUnorderedAccessViewVariable* OutputEnviromentMap;
-	ID3DX11EffectUnorderedAccessViewVariable* OutputTreesMap;
-=======
 	ID3DX11EffectUnorderedAccessViewVariable* OutputAngleMap;
 	ID3DX11EffectUnorderedAccessViewVariable* OutputEnviromentMap;
 	ID3DX11EffectUnorderedAccessViewVariable* OutputTreesMap;
@@ -512,7 +505,6 @@ public:
 	ID3DX11EffectShaderResourceVariable* TileMap;
 	ID3DX11EffectUnorderedAccessViewVariable* OutputHeightMap;
 	ID3DX11EffectUnorderedAccessViewVariable* OutputNormalMap;
->>>>>>> master
 };
 
 #pragma endregion
@@ -539,9 +531,6 @@ public:
 	static GenerateTexturesFromTextureEffect *GenerateFloatTexFromFloatTexFX;
 	static GenerateTexturesFromTextureEffect *GenerateBYTE4TexFromBYTE4TexFX;
 	static GenerateBlockOfLODEffect *GenerateBlockOfLODFX;
-<<<<<<< HEAD
-=======
 	static GenerateHeightAndNormalMapWithNoiseEffect *GenerateHeightAndNormalMapWithNoiseEffectFX;
->>>>>>> master
 };
 #pragma endregion

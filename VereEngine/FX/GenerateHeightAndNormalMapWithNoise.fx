@@ -59,12 +59,12 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 
 	if (gIsMap1 || gIsMap2)
 	{
-		RH = gInputRiverHeight.SampleLevel(samInputMap, float2(rCoord.x, rCoord.y), 0).r - H;
+		RH = gInputRiverHeight.SampleLevel(samInputMap, float2(rCoord.x, rCoord.y), 0).r;
 	}
 
 	float3x3 TNCR = float3x3(float3(1.0f, 0.0f, 0.0f), float3(0.0f, 1.0f, 0.0f), float3(0.0f, 0.0f, 1.0f));
 
-	float MRH2 = 4.0f;
+	float MRH2 = -2.0f;
 
 	if (gIsMap1)
 	{
@@ -85,14 +85,14 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 
 			MRI = abs(clamp(RI, -1.0f, 0.0f));
 
-			RH2[0] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+			RH2[0] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 
 			if (RW1[1] > -100.0f)
 			{
 				RI = 1.0f - abs(1.5f * RW1[1]) / (RT1);
 				RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-				RH2[1] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+				RH2[1] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 			}
 			else
 			{
@@ -105,7 +105,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 				RI = 1.0f - abs(1.5f * RW1[2]) / (RT1);
 				RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-				RH2[2] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+				RH2[2] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 				RI = 1.0f - abs(1.5f * RW1[3]) / (RT1);
 				RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-				RH2[3] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+				RH2[3] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 			}
 			else
 			{
@@ -131,18 +131,18 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 				RI = 1.0f - abs(1.5f * RW1[4]) / (RT1);
 				RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-				RH2[4] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+				RH2[4] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 			}
 			else
 			{
 				RH2[4] = float3(0.0f, 1.0f, 0.0f);
 			}
 
-			RH2[0] *= MRH2;
-			RH2[1] *= MRH2;
-			RH2[2] *= MRH2;
-			RH2[3] *= MRH2;
-			RH2[4] *= MRH2;
+			RH2[0] = RH2[0] * MRH2 + RI2;
+			RH2[1] = RH2[1] * MRH2 + RI2;
+			RH2[2] = RH2[2] * MRH2 + RI2;
+			RH2[3] = RH2[3] * MRH2 + RI2;
+			RH2[4] = RH2[4] * MRH2 + RI2;
 
 			RH2[1] = RH2[0] - RH2[1];
 			RH2[2] = RH2[0] - RH2[2];
@@ -157,6 +157,8 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 			float3x3 TNCR = float3x3(MTan, MNorm, MCot);
 
 			RH1 = RH2[0];
+
+			//RH1 = -450.0f;
 		}
 	}
 
@@ -177,7 +179,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 			float RI = 1.0f - abs(1.5f * RW1[0]) / (RT1);
 			float RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-			RH2[0] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+			RH2[0] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 
 			if (RH2[0] < RH1)
 			{
@@ -188,7 +190,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 					RI = 1.0f - abs(1.5f * RW1[1]) / (RT1);
 					RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-					RH2[1] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+					RH2[1] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 				}
 				else
 				{
@@ -201,7 +203,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 					RI = 1.0f - abs(1.5f * RW1[2]) / (RT1);
 					RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-					RH2[2] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+					RH2[2] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 				}
 				else
 				{
@@ -214,7 +216,7 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 					RI = 1.0f - abs(1.5f * RW1[3]) / (RT1);
 					RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-					RH2[3] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+					RH2[3] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 				}
 				else
 				{
@@ -227,18 +229,18 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 					RI = 1.0f - abs(1.5f * RW1[4]) / (RT1);
 					RI2 = (RH - H) * (1.0f + clamp(RI, -1.0f, 0.0f));
 
-					RH2[4] = /*RI2 - */pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
+					RH2[4] = pow(0.5f * cos(3.1416f * clamp(RI, 0.0, 1.0f)) - 0.5f, 2.0f);
 				}
 				else
 				{
 					RH2[4] = float3(0.0f, 1.0f, 0.0f);
 				}
 
-				RH2[0] *= MRH2;
-				RH2[1] *= MRH2;
-				RH2[2] *= MRH2;
-				RH2[3] *= MRH2;
-				RH2[4] *= MRH2;
+				RH2[0] = RH2[0] * MRH2 + RI2;
+				RH2[1] = RH2[1] * MRH2 + RI2;
+				RH2[2] = RH2[2] * MRH2 + RI2;
+				RH2[3] = RH2[3] * MRH2 + RI2;
+				RH2[4] = RH2[4] * MRH2 + RI2;
 
 				RH2[1] = RH2[0] - RH2[1];
 				RH2[2] = RH2[0] - RH2[2];
@@ -253,6 +255,8 @@ void GenHeightNormalWithNoiseCS(int3 groupThreadID : SV_GroupThreadID,
 				TNCR = float3x3(MTan, MNorm, MCot);
 
 				RH1 = RH2[0];
+
+				RH1 = -450.0f;
 			}
 		}
 	}

@@ -24,4 +24,10 @@ void WaterRenderMessage::Use()
 	((WaterLODEffect*)m_Effect)->SetSpacing(((float)S2));
 	((WaterLODEffect*)m_Effect)->SetLevel(1.0f / pow(2, m_Level));
 	((WaterLODEffect*)m_Effect)->SetOffset(XMFLOAT2(m_Coord.x, m_Coord.y));
+	((WaterLODEffect*)m_Effect)->SetIsHeightMap(m_IsHeightMap);
+
+	if (m_IsHeightMap)
+	{
+		((WaterLODEffect*)m_Effect)->SetHeightMap(m_HeightSRV);
+	}
 }

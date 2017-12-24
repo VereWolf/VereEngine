@@ -8,22 +8,6 @@ bool PlanetLOD::m_onlyRenderText = false;
 
 PlanetLOD::PlanetLOD()
 {
-<<<<<<< HEAD
-	/*m_idHeightMapSRT = -1;
-	m_idNormalMapSRT = -1;
-	m_idEnviromentMapSRT = -1;
-	m_idTreesMapSRT = -1;*/
-
-	m_idHeightMapBig = -1;
-	m_idNormalMapBig = -1;
-	m_idEnviromentMapBig = -1;
-	m_idTreesMapBig = -1;
-
-	/*m_idHeightMapSmall = -1;
-	m_idNormalMapSmall = -1;
-	m_idEnviromentMapSmall = -1;
-	m_idTreesMapSmall = -1;*/
-=======
 	m_idHeightMapBig = XMINT2(-1, -1);
 	m_idNormalMapBig = XMINT2(-1, -1);
 	m_idEnviromentMapBig = XMINT2(-1, -1);
@@ -35,15 +19,12 @@ PlanetLOD::PlanetLOD()
 	m_idRiverType1MapBig = XMINT2(-1, -1);
 	m_idRiverType2MapBig = XMINT2(-1, -1);
 	m_idRiverHeightMapBig = XMINT2(-1, -1);
->>>>>>> master
 
 	m_idHeightMapInput = -1;
 	m_idNormalMapInput = -1;
 	m_idAngleMapInput = -1;
 	m_idEnviromentMapInput = -1;
 	m_idTreesMapInput = -1;
-<<<<<<< HEAD
-=======
 	m_idRiverWidth1MapInput = -1;
 	m_idRiverWidth2MapInput = -1;
 	m_idRiverLength1MapInput = -1;
@@ -51,15 +32,12 @@ PlanetLOD::PlanetLOD()
 	m_idRiverType1MapInput = -1;
 	m_idRiverType2MapInput = -1;
 	m_idRiverHeightMapInput = -1;
->>>>>>> master
 
 	m_idHeightMapOutput = -1;
 	m_idNormalMapOutput = -1;
 	m_idAngleMapOutput = -1;
 	m_idEnviromentMapOutput = -1;
 	m_idTreesMapOutput = -1;
-<<<<<<< HEAD
-=======
 	m_idRiverWidth1MapOutput = -1;
 	m_idRiverWidth2MapOutput = -1;
 	m_idRiverLength1MapOutput = -1;
@@ -67,7 +45,6 @@ PlanetLOD::PlanetLOD()
 	m_idRiverType1MapOutput = -1;
 	m_idRiverType2MapOutput = -1;
 	m_idRiverHeightMapOutput = -1;
->>>>>>> master
 
 	m_isCreateNewLevelInProcess = 0;
 	m_isNewLevel = false;
@@ -87,26 +64,13 @@ PlanetLOD::PlanetLOD()
 	m_idBillboardTreesVertex = -1;
 	m_billboardTreesIndex = NULL;
 	m_idBillboardTrees = -1;
+
+	m_MaxH = -2300.0f;
+	m_MinH = -2300.0f;
 }
 
 PlanetLOD::PlanetLOD(const PlanetLOD & n)
 {
-<<<<<<< HEAD
-	/*m_idHeightMapSRT = -1;
-	m_idNormalMapSRT = -1;
-	m_idEnviromentMapSRT = -1;
-	m_idTreesMapSRT = -1;*/
-
-	m_idHeightMapBig = -1;
-	m_idNormalMapBig = -1;
-	m_idEnviromentMapBig = -1;
-	m_idTreesMapBig = -1;
-
-	/*m_idHeightMapSmall = -1;
-	m_idNormalMapSmall = -1;
-	m_idEnviromentMapSmall = -1;
-	m_idTreesMapSmall = -1;*/
-=======
 	m_idHeightMapBig = XMINT2(-1, -1);
 	m_idNormalMapBig = XMINT2(-1, -1);
 	m_idEnviromentMapBig = XMINT2(-1, -1);
@@ -118,15 +82,12 @@ PlanetLOD::PlanetLOD(const PlanetLOD & n)
 	m_idRiverType1MapBig = XMINT2(-1, -1);
 	m_idRiverType2MapBig = XMINT2(-1, -1);
 	m_idRiverHeightMapBig = XMINT2(-1, -1);
->>>>>>> master
 
 	m_idHeightMapInput = -1;
 	m_idNormalMapInput = -1;
 	m_idAngleMapInput = -1;
 	m_idEnviromentMapInput = -1;
 	m_idTreesMapInput = -1;
-<<<<<<< HEAD
-=======
 	m_idRiverWidth1MapInput = -1;
 	m_idRiverWidth2MapInput = -1;
 	m_idRiverLength1MapInput = -1;
@@ -134,15 +95,12 @@ PlanetLOD::PlanetLOD(const PlanetLOD & n)
 	m_idRiverType1MapInput = -1;
 	m_idRiverType2MapInput = -1;
 	m_idRiverHeightMapInput = -1;
->>>>>>> master
 
 	m_idHeightMapOutput = -1;
 	m_idNormalMapOutput = -1;
 	m_idAngleMapOutput = -1;
 	m_idEnviromentMapOutput = -1;
 	m_idTreesMapOutput = -1;
-<<<<<<< HEAD
-=======
 	m_idRiverWidth1MapOutput = -1;
 	m_idRiverWidth2MapOutput = -1;
 	m_idRiverLength1MapOutput = -1;
@@ -150,7 +108,6 @@ PlanetLOD::PlanetLOD(const PlanetLOD & n)
 	m_idRiverType1MapOutput = -1;
 	m_idRiverType2MapOutput = -1;
 	m_idRiverHeightMapOutput = -1;
->>>>>>> master
 
 	m_isCreateNewLevelInProcess = 0;
 	m_isNewLevel = false;
@@ -170,17 +127,12 @@ PlanetLOD::PlanetLOD(const PlanetLOD & n)
 	m_idBillboardTreesVertex = -1;
 	m_billboardTreesIndex = NULL;
 	m_idBillboardTrees = -1;
+
+	m_MaxH = -2300.0f;
+	m_MinH = -2300.0f;
 }
 
-<<<<<<< HEAD
-void PlanetLOD::Init(PlanetData * data, int side, int level, XMINT2 coord, btVector3 position, btScalar scaling,
-	int levelFromLastLoadData, XMINT2 coordFromLastLoadData, btScalar scalingFromLastLoadData,
-	int levelFromLoadTile, XMINT2 coordFromLoadTile, btScalar scalingFromLoadTile, bool isMap,
-	int idHeightMapBig, int idNormalMapBig, int idEnviromentMapBig, int idTreesMapBig,
-	int idBillboardTreesVertex, std::vector<int> *billboardTreesIndex, btTransform billboardMatrix, int idBillboardTrees)
-=======
 void PlanetLOD::Init(PlanetLODInitMeessage message)
->>>>>>> master
 {
 	m_data = message.master;
 	m_side = message.side;
@@ -197,11 +149,8 @@ void PlanetLOD::Init(PlanetLODInitMeessage message)
 	m_levelFromLoadTile = message.levelFromLoadTile;
 	m_coordFromLoadTile = message.coordFromLoadTile;
 	m_scalingFromLoadTile = message.scalingFromLoadTile;
-	btScalar S = m_data->GetScaling().getRow(0).getX();
-	btScalar S2 = S * message.scaling;
-	int PIR = m_data->GetNumPointInRowInCell();
-	int size = PIR * PIR;
-	float PIRR = 1.0f / ((float)PIR + 2.0f);
+	m_MaxH = message.maxH;
+	m_MinH = message.minH;
 
 	SetId(m_data->m_planetElementID->TakeElement());
 
@@ -220,21 +169,12 @@ void PlanetLOD::Init(PlanetLODInitMeessage message)
 
 	if (message.level != 0)
 	{
-<<<<<<< HEAD
-		m_idHeightMapBig = idHeightMapBig;
-		m_idNormalMapBig = idNormalMapBig;
-=======
 		m_idEnviromentMapBig = message.idEnviromentMapBig;
 		m_idTreesMapBig = message.idTreesMapBig;
->>>>>>> master
 	}
 
 	if (m_level >= m_data->GetLoadDataMaxLvl())
 	{
-<<<<<<< HEAD
-		m_idEnviromentMapBig = idEnviromentMapBig;
-		m_idTreesMapBig = idTreesMapBig;
-=======
 		m_idRiverWidth1MapBig = message.idRiverWidth1MapBig;
 		m_idRiverWidth2MapBig = message.idRiverWidth2MapBig;
 		m_idRiverLength1MapBig = message.idRiverLength1MapBig;
@@ -242,7 +182,6 @@ void PlanetLOD::Init(PlanetLODInitMeessage message)
 		m_idRiverType1MapBig = message.idRiverType1MapBig;
 		m_idRiverType2MapBig = message.idRiverType2MapBig;
 		m_idRiverHeightMapBig = message.idRiverHeightMapBig;
->>>>>>> master
 	}
 
 	if (GameRenderDeviceHandle->GetModel(message.master->GetRenderId()))
@@ -252,17 +191,10 @@ void PlanetLOD::Init(PlanetLODInitMeessage message)
 		m_modelID = GameRenderDeviceHandle->CreateModel(model);
 	}
 
-<<<<<<< HEAD
-	m_idBillboardTreesVertex = idBillboardTreesVertex;
-	m_billboardTreesIndex = billboardTreesIndex;
-	m_billBoardMatrix = billboardMatrix;
-	m_idBillboardTrees = idBillboardTrees;
-=======
 	m_idBillboardTreesVertex = message.idBillboardTreesVertex;
 	m_billboardTreesIndex = message.billboardTreesIndex;
 	m_billBoardMatrix = message.billboardMatrix;
 	m_idBillboardTrees = message.idBillboardTrees;
->>>>>>> master
 }
 
 void PlanetLOD::Render()
@@ -346,7 +278,6 @@ void PlanetLOD::Render()
 	}
 
 	if (m_level == m_data->GetGenerateTreesLvl())
-<<<<<<< HEAD
 	{
 		XMFLOAT4X4 VW;
 		XMStoreFloat4x4(&VW, RenderMessage::m_View);
@@ -360,27 +291,8 @@ void PlanetLOD::Render()
 		}
 	}
 
-	if (m_isNewLevel == false)
-=======
->>>>>>> master
-	{
-		XMFLOAT4X4 VW;
-		XMStoreFloat4x4(&VW, RenderMessage::m_View);
-		btTransform VW2 = VereMath::ConvertTobtTransform(VW);
-		btTransform meshCentre = RenderMessage::m_CameraOffset * GT;
-		btTransform Mat = VW2 * meshCentre;
-
-		//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
-		{
-			DrawTreesBillboard();
-		}
-	}
-
-<<<<<<< HEAD
-=======
 	if (m_level == 0)
 	{
->>>>>>> master
 		//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 		{
 			//DrawAtmosphere();
@@ -389,21 +301,17 @@ void PlanetLOD::Render()
 
 	if (m_isNewLevel == false)
 	{
-		/*XMFLOAT4X4 VW;
+		XMFLOAT4X4 VW;
 		XMStoreFloat4x4(&VW, RenderMessage::m_View);
 		btTransform VW2 = VereMath::ConvertTobtTransform(VW);
 		btTransform meshCentre = RenderMessage::m_CameraOffset * GT;
-		btTransform Mat = VW2 * meshCentre/* * Mat*/;
+		btTransform Mat = VW2 * meshCentre;
 
 		/*btVector3 Vecd = Mat * m_CentreT;*/
 
-<<<<<<< HEAD
-		//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
-=======
 		bool BTW = false;
 
 		for (int i = 0; i < 4; ++i)
->>>>>>> master
 		{
 			if (m_dir[i].length() != 0.0)
 			{
@@ -411,11 +319,7 @@ void PlanetLOD::Render()
 			}
 		}
 
-<<<<<<< HEAD
-		//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
-=======
 		if (BTW == true)
->>>>>>> master
 		{
 
 			//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
@@ -423,9 +327,14 @@ void PlanetLOD::Render()
 				DrawTerrain();
 			}
 
-			//if (VereMath::FrustrumCulling2(m_CentreT, m_OffsetCubeT, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
+			//if (VereMath::FrustrumCulling2(m_CentreW, m_OffsetCubeW, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
 			{
 				DrawWater();
+			}
+
+			//if (VereMath::FrustrumCulling2(m_CentreA, m_OffsetCubeA, RenderMessage::m_FarZ, RenderMessage::m_HeightFar, RenderMessage::m_Aspect, Mat))
+			{
+				DrawAtmosphere();
 			}
 		}
 
@@ -537,6 +446,24 @@ void PlanetLOD::DrawWater()
 	message.m_Level = m_level;
 	message.m_RasterizeState = RenderStates::SolidRS;
 	message.m_BlendState = RenderStates::NoBlendBS;
+	
+	if (m_isMap1 || m_isMap2)
+	{
+		message.m_IsHeightMap = true;
+
+		if (m_idRiverHeightMapInput >= 0)
+		{
+			message.m_HeightSRV = GameRenderDeviceHandle->GetTexture(m_idRiverHeightMapInput);
+		}
+		else
+		{
+			return;
+		}
+	}
+	else
+	{
+		message.m_IsHeightMap = false;
+	}
 
 	GameRenderDeviceHandle->BindRenderTarget(m_data->GetWaterTopTargetMapRTV(), m_data->GetWaterTopDeepMapDSV());
 	GameRenderDeviceHandle->Render(&message);
@@ -688,8 +615,12 @@ bool PlanetLOD::ComponentProccess()
 	btScalar S = m_data->GetScaling().getRow(0).getX();
 	btScalar S2 = S * scaling;
 	int PIR = m_data->GetNumPointInRowInCell();
-	int size = PIR * PIR;
-	float PIRR = 1.0f / ((float)PIR + 1.0f);
+	/*int size = pow(PIR + 1, 2);
+	float PIRR = 1.0f / ((float)PIR + 2.0f);*/
+
+	int PIRB = m_data->GetNumPointInRowInBigCell();;
+	int sizeB = pow(PIRB + 1 + 2 * PIRB / PIR, 2);
+	//float PIRRB = 1.0f / ((float)PIR + 2.0f);
 
 	int L = 512 + 2 * 512 / m_data->GetNumPointInRowInCell();
 	int MS = pow(L, 2);
@@ -713,12 +644,6 @@ bool PlanetLOD::ComponentProccess()
 			m_levelFromLastLoadData = 0;
 			m_coordFromLastLoadData = XMINT2(0, 0);
 
-<<<<<<< HEAD
-			m_idHeightMapBig = GameStreamingDataHandle->CreateNewBlockInFLOATDepository(m_data->GetIDHeightMapBig(), NULL);
-			m_idNormalMapBig = GameStreamingDataHandle->CreateNewBlockInBYTE4Depository(m_data->GetIDNormalMapBig(), NULL);
-			if (level == 0)m_idEnviromentMapBig = GameStreamingDataHandle->CreateNewBlockInBYTE4Depository(m_data->GetIDEnviromentMapBig(), NULL);
-			if (level == 0)m_idTreesMapBig = GameStreamingDataHandle->CreateNewBlockInBYTE4Depository(m_data->GetIDTreesMapBig(), NULL);
-=======
 			m_idH = -1;
 
 			m_idHeightMapBig.x = GameStreamingDataHandle->CreateNewBlockInFLOATDepository(m_data->GetIDHeightMapBig(), NULL);
@@ -779,7 +704,6 @@ bool PlanetLOD::ComponentProccess()
 				GameStreamingDataHandle->GetTextureInputFromFloat(m_data->GetIDRiverHeightMapBig(), GetIDRiverHeightMapBig().x, &inputRiverHeightSRV);
 				m_idRiverHeightMapBig.y = GameRenderDeviceHandle->AddTexture(inputRiverHeightSRV);
 			}
->>>>>>> master
 
 			if (level == 0)
 			{
@@ -814,14 +738,6 @@ bool PlanetLOD::ComponentProccess()
 
 			if (m_isMap == true)
 			{
-<<<<<<< HEAD
-				m_VdH = GameStreamingDataHandle->GetStreamingData(m_idH);
-				m_VsH = GameStreamingDataHandle->GetSizeOfStreamingData(m_idH);
-
-				m_idN = GameStreamingDataHandle->LoadData(m_strN.str());
-				m_VdN = GameStreamingDataHandle->GetStreamingData(m_idN);
-				m_VsN = GameStreamingDataHandle->GetSizeOfStreamingData(m_idN);
-=======
 				if (m_level < m_data->GetLoadDataMaxLvl())
 				{
 					m_VdH = GameStreamingDataHandle->GetStreamingData(m_idH);
@@ -830,8 +746,10 @@ bool PlanetLOD::ComponentProccess()
 					m_idN = GameStreamingDataHandle->LoadData(m_strN.str());
 					m_VdN = GameStreamingDataHandle->GetStreamingData(m_idN);
 					m_VsN = GameStreamingDataHandle->GetSizeOfStreamingData(m_idN);
+
+					m_MinH = ((float*)m_VdH)[m_VsH / sizeof(float) - 2];
+					m_MaxH = ((float*)m_VdH)[m_VsH / sizeof(float) - 1];
 				}
->>>>>>> master
 			}
 		}
 
@@ -855,11 +773,7 @@ bool PlanetLOD::ComponentProccess()
 		}
 		else
 		{
-<<<<<<< HEAD
-			m_progress.z = 4.0f;
-=======
 			m_progress.z = 2.0f;
->>>>>>> master
 		}
 	}
 
@@ -883,11 +797,8 @@ bool PlanetLOD::ComponentProccess()
 				GameStreamingDataHandle->GetTextureInputFromBYTE4(m_data->GetIDNormalMapBig(), GetIDNormalMapBig().x, &inputNormalSRV);
 				m_idNormalMapBig.y = GameRenderDeviceHandle->AddTexture(inputNormalSRV);
 
-<<<<<<< HEAD
-=======
 			}
 
->>>>>>> master
 			if (level == 0)
 			{
 				int idE = GameStreamingDataHandle->LoadData(m_strE.str());
@@ -901,16 +812,6 @@ bool PlanetLOD::ComponentProccess()
 				GameStreamingDataHandle->SetTextureFromBYTE4Depository(m_data->GetIDEnviromentMapBig(), GetIDEnviromentMapBig().x, (VBYTE4*)VdE);
 				GameStreamingDataHandle->DeleteStreamingData(idE);
 
-<<<<<<< HEAD
-				int idT = GameStreamingDataHandle->LoadData(m_strT.str());
-				void *VdT = GameStreamingDataHandle->GetStreamingData(idT);
-				int VsT = GameStreamingDataHandle->GetSizeOfStreamingData(idT);
-
-
-				GameStreamingDataHandle->SetTextureFromBYTE4Depository(m_data->GetIDTreesMapBig(), GetIDTreesMapBig(), (VBYTE4*)VdT);
-
-				GameStreamingDataHandle->DeleteStreamingData(idT);
-=======
 				GameStreamingDataHandle->SetTextureFromBYTE4Depository(m_data->GetIDTreesMapBig(), GetIDTreesMapBig().x, (VBYTE4*)VdT);
 				GameStreamingDataHandle->DeleteStreamingData(idT);
 
@@ -921,7 +822,6 @@ bool PlanetLOD::ComponentProccess()
 				ID3D11ShaderResourceView *inputTreesSRV;
 				GameStreamingDataHandle->GetTextureInputFromBYTE4(m_data->GetIDTreesMapBig(), GetIDTreesMapBig().x, &inputTreesSRV);
 				m_idTreesMapBig.y = GameRenderDeviceHandle->AddTexture(inputTreesSRV);
->>>>>>> master
 			}
 			else if ((level % m_data->GetLoadDataPer()) == 0 && m_level < m_data->GetLoadDataMaxLvl())
 			{
@@ -949,7 +849,7 @@ bool PlanetLOD::ComponentProccess()
 
 				if (m_isMap1 == true)
 				{
-					std::vector<float> test(278784);
+					std::vector<float> test(sizeB);
 
 					void *VdRW1 = GameStreamingDataHandle->GetStreamingData(idRW1);
 					int VsRW1 = GameStreamingDataHandle->GetSizeOfStreamingData(idRW1);
@@ -1046,99 +946,6 @@ bool PlanetLOD::ComponentProccess()
 
 	if (m_progress.z == 2.0f)
 	{
-<<<<<<< HEAD
-		float S = (PIR + 2.0f) * (PIR + 2.0f);
-		float *M = new float[S];
-		float L2 = 1.0f / pow(2, m_levelFromLastLoadData);
-		float H2 = 1.0f / (PIR + 2.0f);
-		float W2 = 1.0f / (PIR + 2.0f);
-		float OC = ((float)PIR) / (PIR + 2.0f);
-		int idInput;
-		int idOutput;
-
-		//float width = GameStreamingDataHandle->GetWidthFromFLOATDepository(m_data->GetIDHeightMapBig());
-		//float height = GameStreamingDataHandle->GetHeightFromFLOATDepository(m_data->GetIDHeightMapBig());
-
-		XMFLOAT2 OF = XMFLOAT2(m_coordFromLastLoadData.x * L2 * OC, m_coordFromLastLoadData.y * L2 * OC);
-		XMFLOAT2 INC = XMFLOAT2(L2 * W2, L2 * H2);
-
-		XMFLOAT2 I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
-
-		ID3D11ShaderResourceView *inputHeightSRV;
-		GameStreamingDataHandle->GetTextureInputFromFloat(m_data->GetIDHeightMapBig(), GetIDHeightMapBig(), &inputHeightSRV);
-		idInput = GameRenderDeviceHandle->AddTexture(inputHeightSRV);
-		idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
-
-		CreateTextureFromTextureMessage messageT;
-		messageT.m_Effect = Effects::GenerateFloatTexFromFloatTexFX;
-		messageT.m_startPos = I;
-		messageT.m_stepSize = INC;
-		messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(idInput);
-		messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
-		messageT.m_Width = PIR + 2;
-		messageT.m_Height = PIR + 2;
-		messageT.Thread = XMFLOAT3(16, 16, 1);
-
-		GameRenderDeviceHandle->ComputeShader(&messageT);
-
-		GameRenderDeviceHandle->DeleteTexture(idInput);
-		m_idHeightMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
-		//m_idHeightMapInput = idInput;
-
-		ID3D11ShaderResourceView *inputNormalSRV;
-		GameStreamingDataHandle->GetTextureInputFromBYTE4(m_data->GetIDNormalMapBig(), GetIDNormalMapBig(), &inputNormalSRV);
-		idInput = GameRenderDeviceHandle->AddTexture(inputNormalSRV);
-		idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-
-		messageT.m_Effect = Effects::GenerateBYTE4TexFromBYTE4TexFX;
-		messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(idInput);
-		messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
-
-		GameRenderDeviceHandle->ComputeShader(&messageT);
-
-		GameRenderDeviceHandle->DeleteTexture(idInput);
-		m_idNormalMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
-		//m_idNormalMapInput = idInput;
-
-		L2 = 1.0f / pow(2, m_level);
-		OF = XMFLOAT2(m_coord.x * L2 * OC, m_coord.y * L2 * OC);
-		INC = XMFLOAT2(L2 * W2, L2 * H2);
-		I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
-
-		ID3D11ShaderResourceView *inputEnviromentSRV;
-		GameStreamingDataHandle->GetTextureInputFromBYTE4(m_data->GetIDEnviromentMapBig(), GetIDEnviromentMapBig(), &inputEnviromentSRV);
-		idInput = GameRenderDeviceHandle->AddTexture(inputEnviromentSRV);
-		idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-
-		messageT.m_startPos = I;
-		messageT.m_stepSize = INC;
-		messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(idInput);
-		messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
-
-		GameRenderDeviceHandle->ComputeShader(&messageT);
-
-		GameRenderDeviceHandle->DeleteTexture(idInput);
-		m_idEnviromentMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
-		//m_idEnviromentMapInput = idInput;
-
-		ID3D11ShaderResourceView *inputTreesSRV;
-		GameStreamingDataHandle->GetTextureInputFromBYTE4(m_data->GetIDTreesMapBig(), GetIDTreesMapBig(), &inputTreesSRV);
-		idInput = GameRenderDeviceHandle->AddTexture(inputTreesSRV);
-		idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-
-		messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(idInput);
-		messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
-
-		GameRenderDeviceHandle->ComputeShader(&messageT);
-
-		GameRenderDeviceHandle->DeleteTexture(idInput);
-		m_idTreesMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
-		//m_idTreesMapInput = idInput;
-
-		/*m_idHeightMapSmall = GameStreamingDataHandle->CreateNewBlockInFLOATDepository(m_data->GetIDHeightMapSmall(),
-			GameStreamingDataHandle->CreateNewMapFromFLOATDepository(m_data->GetIDHeightMapBig(), GetIDHeightMapBig(),
-				m_levelFromLastLoadData, XMFLOAT2(m_coordFromLastLoadData.x, m_coordFromLastLoadData.y), 2.0f, PIR, PIR));
-=======
 		/*if (m_data->GetLoadTilesLvl() <= m_level)
 		{
 			m_planetTile = GamePlanetHelperHandle->GetPlanetTile(0)->CreteNewGamePlanetTileFrom(
@@ -1150,7 +957,6 @@ bool PlanetLOD::ComponentProccess()
 			float W2 = 1.0f / (PIR + 2.0f);
 			float OC = ((float)PIR) / (PIR + 2.0f);
 			int idOutput;
->>>>>>> master
 
 			//float width = GameStreamingDataHandle->GetWidthFromFLOATDepository(m_data->GetIDHeightMapBig());
 			//float height = GameStreamingDataHandle->GetHeightFromFLOATDepository(m_data->GetIDHeightMapBig());
@@ -1158,62 +964,6 @@ bool PlanetLOD::ComponentProccess()
 			XMFLOAT2 OF = XMFLOAT2(m_coordFromLastLoadData.x * L2 * OC, m_coordFromLastLoadData.y * L2 * OC);
 			XMFLOAT2 INC = XMFLOAT2(L2 * W2, L2 * H2);
 
-<<<<<<< HEAD
-		m_idTreesMapSmall = GameStreamingDataHandle->CreateNewBlockInBYTE4Depository(m_data->GetIDTreesMapSmall(),
-			GameStreamingDataHandle->CreateNewMapFromBYTE4Depository(m_data->GetIDTreesMapBig(), GetIDTreesMapBig(),
-				m_level, XMFLOAT2(m_coord.x, m_coord.y), 2.0f, PIR, PIR));*/
-
-		//m_progress.z = 3.0f;
-	//}
-
-	//if (m_progress.z == 3.0f)
-	//{
-		/*m_progress.w = 0.0f;
-
-		btTransform mesh = btTransform(btMatrix3x3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0), btVector3(0.0, 0.5, 0.0));
-		mesh = btTransform(m_data->GetBlockAnglMatrix(side), btVector3(0.0, 0.0, 0.0)) * mesh;*/
-
-		/*if (m_isMap == true)
-		{*/
-
-			int idHeightMapOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
-			int idNormalMapOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-			int idAngleMapOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-			int idEnviromentMapOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-			int idTreesMapOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
-
-			GenerateBlockOfLODMessage message;
-			message.m_Effect = Effects::GenerateBlockOfLODFX;
-			message.m_Height = PIR + 2;
-			message.m_Width = PIR + 2;
-			message.m_offset = -1.0f;
-			message.m_scaling = 1.0f / (float)m_data->GetNumPointInRowInCell();
-			message.m_inputHeightMapSRV = GameRenderDeviceHandle->GetTexture(m_idHeightMapInput);
-			message.m_inputNormalMapSRV = GameRenderDeviceHandle->GetTexture(m_idNormalMapInput);
-			message.m_inputEnviromentMapSRV = GameRenderDeviceHandle->GetTexture(m_idEnviromentMapInput);
-			message.m_inputTreesMapSRV = GameRenderDeviceHandle->GetTexture(m_idTreesMapInput);
-			message.m_outputHeightMapUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idHeightMapOutput);
-			message.m_outputNormalMapUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idNormalMapOutput);
-			message.m_outputAngleMapUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idAngleMapOutput);
-			message.m_outputEnviromentMapUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idEnviromentMapOutput);
-			message.m_outputTreesMapUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idTreesMapOutput);
-			message.Thread = XMFLOAT3(16, 16, 1);
-
-			GameRenderDeviceHandle->ComputeShader(&message);
-
-			GameRenderDeviceHandle->DeleteTexture(m_idHeightMapInput);
-			GameRenderDeviceHandle->DeleteTexture(m_idNormalMapInput);
-			GameRenderDeviceHandle->DeleteTexture(m_idEnviromentMapInput);
-			GameRenderDeviceHandle->DeleteTexture(m_idTreesMapInput);
-
-			m_idHeightMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idHeightMapOutput);
-			m_idNormalMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idNormalMapOutput);
-			m_idAngleMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idAngleMapOutput);
-			m_idEnviromentMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idEnviromentMapOutput);
-			m_idTreesMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idTreesMapOutput);
-
-			/*for (; m_progress.y < (float)PIR + 2.0f; m_progress.y += 1)
-=======
 			XMFLOAT2 I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
 
 			idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
@@ -1233,22 +983,11 @@ bool PlanetLOD::ComponentProccess()
 			m_idHeightMapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
 
 			if (m_isMap1)
->>>>>>> master
 			{
 				idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
 
-<<<<<<< HEAD
-					VBYTE4 B4 = GameStreamingDataHandle->GetValueFromBYTE4Depository(
-						m_data->GetIDNormalMapSmall(), GetIDNormalMapSmall(), m_progress.x * PIRR, m_progress.y * PIRR);
-					XMVECTOR N = XMVector3Normalize(XMLoadFloat3(&XMFLOAT3((float)B4.x - 127.5f, (float)B4.y - 127.5f, (float)B4.z - 127.5f)));
-					//XMVECTOR T = XMVector3Cross(XMLoadFloat3(&XMFLOAT3(1.0f, 0.0f, 0.0f)), N);
-					//XMVECTOR B = XMVector3Cross(N, XMLoadFloat3(&XMFLOAT3(0.0f, 0.0f, 1.0f)));
-					XMVECTOR Z = XMLoadFloat3(&XMFLOAT3(0.0f, 0.0f, 0.0f));
-					XMVECTOR UP = XMLoadFloat3(&XMFLOAT3(0.0f, 1.0f, 0.0f));
-=======
 				messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(GetIDRiverWidth1MapBig().y);
 				messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
->>>>>>> master
 
 				GameRenderDeviceHandle->ComputeShader(&messageT);
 
@@ -1259,86 +998,11 @@ bool PlanetLOD::ComponentProccess()
 				messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(GetIDRiverLength1MapBig().y);
 				messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
 
-<<<<<<< HEAD
-					//XMMATRIX TNB = XMMATRIX(T, N, B, Z);
-=======
 				GameRenderDeviceHandle->ComputeShader(&messageT);
->>>>>>> master
 
 				m_idRiverLength1MapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
 
-<<<<<<< HEAD
-					if (m_data->GetLoadTilesLvl() <= m_level)
-					{
-						float pxo = (px + m_coordFromLoadTile.x) * m_scalingFromLoadTile;
-						float pyo = (py + m_coordFromLoadTile.y) * m_scalingFromLoadTile;
-
-						/*XMFLOAT4 N4 = m_planetTile->GetNormal(XMFLOAT2(px, py), 0.003921f * (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-							m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].w);
-
-						N = XMVector3Transform(XMVector3Normalize(XMLoadFloat3(&XMFLOAT3(N4.x, N4.y, N4.z))), TNB);
-
-						XMStoreFloat4(&N4, N);
-
-						float H = GameStreamingDataHandle->GetValueFromFLOATDepository(
-							m_data->GetIDHeightMapSmall(), GetIDHeightMapSmall(),(m_progress.x)* PIRR, (m_progress.y)* PIRR)
-							+ 50.0f * m_planetTile->GetHeight(XMFLOAT2(px, py), 0.003921f * (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].w
-							+ 0.2f * (255 - (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].w));
-
-						GameStreamingDataHandle->SetValueFromFLOATDepository(
-							m_data->GetIDHeightMapSmall(), GetIDHeightMapSmall(), (int)m_progress.x, (int)m_progress.y, H);
-
-						GameStreamingDataHandle->SetValueFromBYTE4Depository(
-							m_data->GetIDNormalMapSmall(), GetIDNormalMapSmall(), (int)m_progress.x, (int)m_progress.y,
-							VBYTE4((BYTE)((1.0f + N4.x) * 127.0f), (BYTE)((1.0f + N4.y) * 127.0f), (BYTE)((1.0f + N4.z) * 127.0f), 0));*//*
-
-						XMFLOAT3 FE = XMFLOAT3(VereMath::Clamp(0.015686275f * (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-							m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x, 0.0f, 4.0f),
-							VereMath::Clamp(0.015686275f * (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].y, 0.0f, 4.0f),
-							VereMath::Clamp(0.00392157f * (float)GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDTreesMapSmall(), GetIDTreesMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x, 0.0f, 1.0f));
-						XMINT2 IE = XMINT2(FE.x, FE.y);
-						XMFLOAT2 FF = XMFLOAT2(FE.x - (float)IE.x, FE.y - (float)IE.y);
-
-						if (FF.x >= GamePlanetHelperHandle->GetTile1()->GetVariable(pxo, pyo))
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x = 63.75f * ((float)(IE.x + 1));
-						}
-						else
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x = 63.75f * ((float)IE.x);
-						}
-
-						if (FF.y >= GamePlanetHelperHandle->GetTile2()->GetVariable(pxo, pyo))
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].y = 63.75f * ((float)(IE.y + 1));
-						}
-						else
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDEnviromentMapSmall(), GetIDEnviromentMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].y = 63.75f * ((float)IE.y);
-						}
-
-						if (FE.z >= GamePlanetHelperHandle->GetTile1()->GetVariable(pxo, pyo))
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDTreesMapSmall(), GetIDTreesMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x = 255;
-						}
-						else
-						{
-							GameStreamingDataHandle->GetTextureFromBYTE4Depository(
-								m_data->GetIDTreesMapSmall(), GetIDTreesMapSmall())[(int)m_progress.y * (PIR + 2) + (int)m_progress.x].x = 0;
-						}
-					}
-=======
 				idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
->>>>>>> master
 
 				messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(GetIDRiverType1MapBig().y);
 				messageT.m_outputUAV = GameRenderDeviceHandle->GetOutputTextureUAV(idOutput);
@@ -1368,14 +1032,6 @@ bool PlanetLOD::ComponentProccess()
 
 				m_idRiverLength2MapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
 
-<<<<<<< HEAD
-				m_progress.x = 0.0f;
-			}*/
-		//}
-		/*else
-		{
-			m_progress.w = 0;
-=======
 				idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R32_FLOAT, 1);
 
 				messageT.m_inputSRV = GameRenderDeviceHandle->GetTexture(GetIDRiverType2MapBig().y);
@@ -1385,7 +1041,6 @@ bool PlanetLOD::ComponentProccess()
 
 				m_idRiverType2MapInput = GameRenderDeviceHandle->DeleteOutputTextureButSRVToTextureStack(idOutput);
 			}
->>>>>>> master
 
 			if (m_isMap1 || m_isMap2)
 			{
@@ -1415,11 +1070,6 @@ bool PlanetLOD::ComponentProccess()
 			INC = XMFLOAT2(L2 * W2, L2 * H2);
 			I = XMFLOAT2(OF.x + W2 - INC.x, OF.y + H2 - INC.y);
 
-<<<<<<< HEAD
-				m_progress.x = 0.0f;
-			}
-		}*/
-=======
 			idOutput = GameRenderDeviceHandle->CreateOutputTexture(PIR + 2, PIR + 2, DXGI_FORMAT_R8G8B8A8_UNORM, 1);
 
 			messageT.m_startPos = I;
@@ -1477,7 +1127,7 @@ bool PlanetLOD::ComponentProccess()
 			int H = GameStreamingDataHandle->GetHeightFromFLOATDepository(m_data->GetIDHeightMapBig());
 			float H2 = 1.0f / W;
 			float W2 = 1.0f / H;
-			float OC = ((float)W) / (W + 8.0f);
+			float OC = ((float)(W - 1)) / ((W - 1) + 16.0f);
 			int idOutputH;
 			int idOutputN;
 
@@ -1523,7 +1173,6 @@ bool PlanetLOD::ComponentProccess()
 			m_levelFromLastLoadData = 0;
 			m_coordFromLastLoadData = XMINT2(0, 0);
 		}
->>>>>>> master
 
 		m_progress.y = 0.0f;
 
@@ -1532,6 +1181,141 @@ bool PlanetLOD::ComponentProccess()
 
 	if (m_progress.z == 4.0f)
 	{
+		/*m_MaxT = btVector3(m_position.getX() + 0.5 * S2, S, m_position.getZ() + 0.5 * S2).normalize();
+		m_MinT = btVector3(m_position.getX() - 0.5 * S2, S, m_position.getZ() - 0.5 * S2).normalize();
+		m_MaxW = m_MaxT;
+		m_MinW = m_MinT;
+		m_MaxC = m_MaxT;
+		m_MinC = m_MinT;
+		m_MaxA = m_MaxT;
+		m_MinA = m_MinT;
+
+		btScalar HLP1 = ((m_data->GetRadiusOfTerrain() + m_MaxH) * m_MaxT).getY();
+		btScalar HLP2 = ((m_data->GetRadiusOfTerrain() + m_MaxH) * m_MinT).getY();
+
+		if (HLP1 > HLP2)
+		{
+			m_MaxT.setY(HLP1);
+		}
+		else
+		{
+			m_MaxT.setY(HLP2);
+		}
+
+		btScalar HLP1 = ((m_data->GetRadiusOfTerrain() + m_MinH) * m_MaxT).getY();
+		btScalar HLP2 = ((m_data->GetRadiusOfTerrain() + m_MinH) * m_MinT).getY();
+
+		if (HLP1 < HLP2)
+		{
+			m_MinT.setY(HLP1);
+		}
+		else
+		{
+			m_MinT.setY(HLP2);
+		}*/
+
+		m_MaxT = btVector3(-100000000.0, -100000000.0, -100000000.0);
+		m_MinT = btVector3(100000000.0, 100000000.0, 100000000.0);
+		m_MaxW = btVector3(-100000000.0, -100000000.0, -100000000.0);
+		m_MinW = btVector3(100000000.0, 100000000.0, 100000000.0);
+		m_MaxC = btVector3(-100000000.0, -100000000.0, -100000000.0);
+		m_MinC = btVector3(100000000.0, 100000000.0, 100000000.0);
+		m_MaxA = btVector3(-100000000.0, -100000000.0, -100000000.0);
+		m_MinA = btVector3(100000000.0, 100000000.0, 100000000.0);
+
+		{
+			btVector3 CUB[] = { btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize() };
+
+			for (int i = 0; i < 4; ++i)
+			{
+				CUB[i] = -1 * ((m_data->GetRadiusOfWater() + m_MaxH) * CUB[i]) * m_data->GetBlockAnglMatrix(m_side);
+			}
+
+			for (int i = 4; i < 8; ++i)
+			{
+				CUB[i] = ((m_data->GetRadiusOfWater() + m_MinH) * CUB[i]) * m_data->GetBlockAnglMatrix(m_side);
+			}
+
+
+			for (int i = 0; i < 8; ++i)
+			{
+				if (CUB[i].getX() > m_MaxT.getX()) m_MaxT.setX(CUB[i].getX());
+				if (CUB[i].getY() > m_MaxT.getY()) m_MaxT.setY(CUB[i].getY());
+				if (CUB[i].getZ() > m_MaxT.getZ()) m_MaxT.setZ(CUB[i].getZ());
+
+				if (CUB[i].getX() < m_MinT.getX()) m_MinT.setX(CUB[i].getX());
+				if (CUB[i].getY() < m_MinT.getY()) m_MinT.setY(CUB[i].getY());
+				if (CUB[i].getZ() < m_MinT.getZ()) m_MinT.setZ(CUB[i].getZ());
+			}
+		}
+
+		{
+			btVector3 CUB[] = { btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize() };
+
+			for (int i = 0; i < 4; ++i)
+			{
+				CUB[i] = ((m_data->GetRadiusOfWater()) * CUB[i]) * m_data->GetBlockAnglMatrix(m_side);
+
+				if (CUB[i].getX() > m_MaxW.getX()) m_MaxW.setX(CUB[i].getX());
+				if (CUB[i].getY() > m_MaxW.getY()) m_MaxW.setY(CUB[i].getY());
+				if (CUB[i].getZ() > m_MaxW.getZ()) m_MaxW.setZ(CUB[i].getZ());
+
+				if (CUB[i].getX() < m_MinW.getX()) m_MinW.setX(CUB[i].getX());
+				if (CUB[i].getY() < m_MinW.getY()) m_MinW.setY(CUB[i].getY());
+				if (CUB[i].getZ() < m_MinW.getZ()) m_MinW.setZ(CUB[i].getZ());
+			}
+		}
+
+		{
+			btVector3 CUB[] = { btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize() };
+
+			for (int i = 0; i < 4; ++i)
+			{
+				CUB[i] =((m_data->GetRadiusOfClouds()) * CUB[i]) * m_data->GetBlockAnglMatrix(m_side);
+
+				if (CUB[i].getX() > m_MaxC.getX()) m_MaxC.setX(CUB[i].getX());
+				if (CUB[i].getY() > m_MaxC.getY()) m_MaxC.setY(CUB[i].getY());
+				if (CUB[i].getZ() > m_MaxC.getZ()) m_MaxC.setZ(CUB[i].getZ());
+
+				if (CUB[i].getX() < m_MinC.getX()) m_MinC.setX(CUB[i].getX());
+				if (CUB[i].getY() < m_MinC.getY()) m_MinC.setY(CUB[i].getY());
+				if (CUB[i].getZ() < m_MinC.getZ()) m_MinC.setZ(CUB[i].getZ());
+			}
+		}
+
+		{
+			btVector3 CUB[] = { btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() + 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() + 0.5 * S2).normalize(),
+				btVector3(m_position.getX() - 0.5 * S2, -S, m_position.getZ() - 0.5 * S2).normalize() };
+
+			for (int i = 0; i < 4; ++i)
+			{
+				CUB[i] = ((m_data->GetRadiusOfAtmosphere()) * CUB[i]) * m_data->GetBlockAnglMatrix(m_side);
+
+				if (CUB[i].getX() > m_MaxA.getX()) m_MaxA.setX(CUB[i].getX());
+				if (CUB[i].getY() > m_MaxA.getY()) m_MaxA.setY(CUB[i].getY());
+				if (CUB[i].getZ() > m_MaxA.getZ()) m_MaxA.setZ(CUB[i].getZ());
+
+				if (CUB[i].getX() < m_MinA.getX()) m_MinA.setX(CUB[i].getX());
+				if (CUB[i].getY() < m_MinA.getY()) m_MinA.setY(CUB[i].getY());
+				if (CUB[i].getZ() < m_MinA.getZ()) m_MinA.setZ(CUB[i].getZ());
+			}
+		}
+
 		btVector3 offsetT = 0.5 * (m_MaxT - m_MinT);
 		m_OffsetCubeT = offsetT;
 		m_CentreT = m_MinT + offsetT;
@@ -1797,28 +1581,6 @@ void PlanetLOD::CreateNewLevelOfLoD()
 		coordFromLoadTile[3].y = 2 * m_coordFromLoadTile.y + 1;
 	}
 
-<<<<<<< HEAD
-	m_blocks[0]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y), pos[3], 0.5 * m_scaling,
-		m_levelFromLastLoadData + 1, XMINT2(2 * m_coordFromLastLoadData.x, 2 * m_coordFromLastLoadData.y), 0.5 * m_scalingFromLastLoadData,
-		levelFromLoadTile, coordFromLoadTile[0], scalingFromLoadTile, m_isMap,
-		m_idHeightMapBig, m_idNormalMapBig, m_idEnviromentMapBig, m_idTreesMapBig,
-		m_idBillboardTreesVertex, m_billboardTreesIndex, m_billBoardMatrix, m_idBillboardTrees);
-	m_blocks[1]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x, 2 * m_coord.y + 1), pos[2], 0.5 * m_scaling,
-		m_levelFromLastLoadData + 1, XMINT2(2 * m_coordFromLastLoadData.x, 2 * m_coordFromLastLoadData.y + 1), 0.5 * m_scalingFromLastLoadData,
-		levelFromLoadTile, coordFromLoadTile[1], scalingFromLoadTile, m_isMap,
-		m_idHeightMapBig, m_idNormalMapBig, m_idEnviromentMapBig, m_idTreesMapBig,
-		m_idBillboardTreesVertex, m_billboardTreesIndex, m_billBoardMatrix, m_idBillboardTrees);
-	m_blocks[2]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y), pos[1], 0.5 * m_scaling,
-		m_levelFromLastLoadData + 1, XMINT2(2 * m_coordFromLastLoadData.x + 1, 2 * m_coordFromLastLoadData.y), 0.5 * m_scalingFromLastLoadData,
-		levelFromLoadTile, coordFromLoadTile[2], scalingFromLoadTile, m_isMap,
-		m_idHeightMapBig, m_idNormalMapBig, m_idEnviromentMapBig, m_idTreesMapBig,
-		m_idBillboardTreesVertex, m_billboardTreesIndex, m_billBoardMatrix, m_idBillboardTrees);
-	m_blocks[3]->Init(m_data, m_side, m_level + 1, XMINT2(2 * m_coord.x + 1, 2 * m_coord.y + 1), pos[0], 0.5 * m_scaling,
-		m_levelFromLastLoadData + 1, XMINT2(2 * m_coordFromLastLoadData.x + 1, 2 * m_coordFromLastLoadData.y + 1), 0.5 * m_scalingFromLastLoadData,
-		levelFromLoadTile, coordFromLoadTile[3], scalingFromLoadTile, m_isMap,
-		m_idHeightMapBig, m_idNormalMapBig, m_idEnviromentMapBig, m_idTreesMapBig,
-		m_idBillboardTreesVertex, m_billboardTreesIndex, m_billBoardMatrix, m_idBillboardTrees);
-=======
 	PlanetLODInitMeessage initMessage;
 
 	initMessage.master = m_data;
@@ -1847,6 +1609,8 @@ void PlanetLOD::CreateNewLevelOfLoD()
 	initMessage.billboardTreesIndex = m_billboardTreesIndex;
 	initMessage.billboardMatrix = m_billBoardMatrix;
 	initMessage.idBillboardTrees = m_idBillboardTrees;
+	initMessage.maxH = m_MaxH;
+	initMessage.minH = m_MinH;
 
 	initMessage.coord = XMINT2(2 * m_coord.x, 2 * m_coord.y);
 	initMessage.position = pos[3];
@@ -1877,7 +1641,6 @@ void PlanetLOD::CreateNewLevelOfLoD()
 	initMessage.coordFromLoadTile = coordFromLoadTile[3];
 
 	m_blocks[3]->Init(initMessage);
->>>>>>> master
 
 	if (GetValueOfLODSmallForNext() == 4)
 	{

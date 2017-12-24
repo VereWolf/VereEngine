@@ -18,11 +18,6 @@ Texture2D gInputN;
 Texture2D gInputE;
 Texture2D gInputT;
 Texture2D gTile;
-<<<<<<< HEAD
-RWTexture2D<float> gOutputH;
-RWTexture2D<float4> gOutputN;
-=======
->>>>>>> master
 RWTexture2D<float> gOutputA;
 RWTexture2D<float4> gOutputE;
 RWTexture2D<float4> gOutputT;
@@ -45,11 +40,7 @@ void GenBlockOfLODCS(int3 groupThreadID : SV_GroupThreadID,
 
 	float rad = 180.0f * acos(dot(UP, N)) / PI;
 
-<<<<<<< HEAD
-	float2 rCoord = float2(gScaling * (dispatchThreadID.x + gOffset), gScaling * (dispatchThreadID.y + gOffset));
-=======
 	float2 rCoord = float2(gScaling * dispatchThreadID.x, gScaling * dispatchThreadID.y);
->>>>>>> master
 
 	float3 random;
 
@@ -85,11 +76,7 @@ void GenBlockOfLODCS(int3 groupThreadID : SV_GroupThreadID,
 	else if (rad < 45)
 	{
 		E.z = 0.2f;
-<<<<<<< HEAD
-		E.w = 0.5f + 0.05f * (-35.0f + rad);
-=======
 		E.w = 0.5f + 0.05f * (35.0f - rad);
->>>>>>> master
 	}
 	else
 	{
@@ -127,11 +114,6 @@ void GenBlockOfLODCS(int3 groupThreadID : SV_GroupThreadID,
 		}
 	}
 
-<<<<<<< HEAD
-	gOutputH[dispatchThreadID.xy] = H;
-	gOutputN[dispatchThreadID.xy] = float4(0.5f * N + 0.5f, 0.0f);
-=======
->>>>>>> master
 	gOutputA[dispatchThreadID.xy] = rad;
 	gOutputE[dispatchThreadID.xy] = E;
 	gOutputT[dispatchThreadID.xy] = T;

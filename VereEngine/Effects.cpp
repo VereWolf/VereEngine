@@ -210,6 +210,9 @@ WaterLODEffect::WaterLODEffect(DX::DeviceResources *resources, const std::string
 	Offset = mFX->GetVariableByName("gOffset")->AsVector();
 	Spacing = mFX->GetVariableByName("gSpacing");
 	Level = mFX->GetVariableByName("gLevel");
+	IsHeightMap = mFX->GetVariableByName("gIsHeightMap");
+
+	HeightMap = mFX->GetVariableByName("gHeightMap")->AsShaderResource();
 }
 #pragma endregion
 
@@ -307,13 +310,6 @@ GenerateBlockOfLODEffect::GenerateBlockOfLODEffect(DX::DeviceResources *resource
 	InputEnviromentMap = mFX->GetVariableByName("gInputE")->AsShaderResource();
 	InputTreesMap = mFX->GetVariableByName("gInputT")->AsShaderResource();
 	InputTileMap = mFX->GetVariableByName("gTile")->AsShaderResource();
-<<<<<<< HEAD
-	OutputHeightMap = mFX->GetVariableByName("gOutputH")->AsUnorderedAccessView();
-	OutputNormalMap = mFX->GetVariableByName("gOutputN")->AsUnorderedAccessView();
-	OutputAngleMap = mFX->GetVariableByName("gOutputA")->AsUnorderedAccessView();
-	OutputEnviromentMap = mFX->GetVariableByName("gOutputE")->AsUnorderedAccessView();
-	OutputTreesMap = mFX->GetVariableByName("gOutputT")->AsUnorderedAccessView();
-=======
 	OutputAngleMap = mFX->GetVariableByName("gOutputA")->AsUnorderedAccessView();
 	OutputEnviromentMap = mFX->GetVariableByName("gOutputE")->AsUnorderedAccessView();
 	OutputTreesMap = mFX->GetVariableByName("gOutputT")->AsUnorderedAccessView();
@@ -345,7 +341,6 @@ GenerateHeightAndNormalMapWithNoiseEffect::GenerateHeightAndNormalMapWithNoiseEf
 	OutputHeightMap = mFX->GetVariableByName("gOutputHeight")->AsUnorderedAccessView();
 	OutputNormalMap = mFX->GetVariableByName("gOutputNormal")->AsUnorderedAccessView();
 
->>>>>>> master
 }
 #pragma endregion
 
@@ -365,10 +360,7 @@ BillboardEffect* Effects::BillboardFX = 0;
 GenerateTexturesFromTextureEffect* Effects::GenerateFloatTexFromFloatTexFX = 0;
 GenerateTexturesFromTextureEffect* Effects::GenerateBYTE4TexFromBYTE4TexFX = 0;
 GenerateBlockOfLODEffect* Effects::GenerateBlockOfLODFX = 0;
-<<<<<<< HEAD
-=======
 GenerateHeightAndNormalMapWithNoiseEffect* Effects::GenerateHeightAndNormalMapWithNoiseEffectFX = 0;
->>>>>>> master
 
 void Effects::InitAll(DX::DeviceResources *resources)
 {
@@ -386,10 +378,7 @@ void Effects::InitAll(DX::DeviceResources *resources)
 	GenerateFloatTexFromFloatTexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateFloatTexFromFloatTex.fxo");
 	GenerateBYTE4TexFromBYTE4TexFX = new GenerateTexturesFromTextureEffect(resources, "FX/GenerateBYTE4TexFromBYTE4Tex.fxo");
 	GenerateBlockOfLODFX = new GenerateBlockOfLODEffect(resources, "FX/GenerateBlockOfLOD.fxo");
-<<<<<<< HEAD
-=======
 	GenerateHeightAndNormalMapWithNoiseEffectFX = new GenerateHeightAndNormalMapWithNoiseEffect(resources, "FX/GenerateHeightAndNormalMapWithNoise.fxo");
->>>>>>> master
 };
 
 void Effects::DestroyAll()
@@ -408,9 +397,6 @@ void Effects::DestroyAll()
 	delete GenerateFloatTexFromFloatTexFX;
 	delete GenerateBYTE4TexFromBYTE4TexFX;
 	delete GenerateBlockOfLODFX;
-<<<<<<< HEAD
-=======
 	delete GenerateHeightAndNormalMapWithNoiseEffectFX;
->>>>>>> master
 }
 #pragma endregion

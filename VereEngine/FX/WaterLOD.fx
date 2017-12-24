@@ -21,7 +21,18 @@ cbuffer cbPerObject
 	float3 gFogAColor;
 	float3 gFogWColor;
 	float gFogWRange;
+	bool gIsHeightMap;
 };
+
+SamplerState samHeightMap
+{
+	Filter = MIN_MAG_MIP_LINEAR;
+
+	AddressU = CLAMP;
+	AddressV = CLAMP;
+};
+
+Texture2D gHeightMap;
 
 float c = 0.1f;
 
@@ -34,6 +45,7 @@ struct VertexIn
 struct VertexOut
 {
 	float3		PosL:		POSITION;
+	float		PosCH : BLENDWEIGHT;
 	float2		TexTess:		TEXCOORD0;
 };
 
@@ -43,6 +55,15 @@ VertexOut VS(VertexIn vin)
 	vout.TexTess = vin.TexTess;
 
 	vout.PosL = vin.PosL;
+
+	vout.PosCH = 0.0f;
+
+	if (vout.PosL.y != 0.0f)
+	{
+		vout.PosCH = 1.0f;
+	}
+
+	vout.PosL.y = 0.0f;
 
 	return vout;
 }
@@ -71,6 +92,7 @@ PatchTess ConstantHS(InputPatch<VertexOut, 4> patch, uint patchID : SV_Primitive
 struct HullOut
 {
 	float3 PosL     : POSITION;
+	float  PosCH : BLENDWEIGHT;
 	float2 TexTess:		TEXCOORD0;
 };
 
@@ -87,6 +109,7 @@ HullOut HS(InputPatch<VertexOut, 4> p,
 	HullOut hout;
 
 	hout.PosL = p[i].PosL;
+	hout.PosCH = p[i].PosCH;
 	hout.TexTess = p[i].TexTess;
 
 	return hout;
@@ -114,6 +137,11 @@ DomainOut DS(PatchTess patchTess,
 		lerp(quad[2].PosL, quad[3].PosL, uv.x),
 		uv.y);
 
+	float PosCH = lerp(
+		lerp(quad[0].PosCH, quad[1].PosCH, uv.x),
+		lerp(quad[2].PosCH, quad[3].PosCH, uv.x),
+		uv.y);
+
 	dout.TexTess = lerp(
 		lerp(quad[0].TexTess, quad[1].TexTess, uv.x),
 		lerp(quad[2].TexTess, quad[3].TexTess, uv.x),
@@ -127,7 +155,19 @@ DomainOut DS(PatchTess patchTess,
 
 	dout.NormalW = N;
 
-	dout.PosW = gRadiusOfWater * N + gCenterOfPlanet;
+	float H = 0.0f;
+
+	if (gIsHeightMap)
+	{
+		H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x - 2000.0f * PosCH;
+
+		if (H < 0.0f)
+		{
+			H = 0.0f;
+		}
+	}
+
+	dout.PosW = (H + gRadiusOfWater) * N + gCenterOfPlanet;
 
 	dout.PosV = mul(float4(dout.PosW, 1.0f), gViewProj).xyz;
 	dout.PosH = mul(float4(dout.PosW, 1.0f), gViewProj);

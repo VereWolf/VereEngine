@@ -75,16 +75,12 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 
 
 	int id2a = GameObjectStackHandle->CreateObject(id1, btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0), btVector3(250000.0, 250000.0, 250000.0), 1000.0, btVector3(1.0, 1.0, 1.0), 25000000.0, __nullptr);
-<<<<<<< HEAD
-	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet("Vaelhad/", 64, 13, 5, 10, 4, 4, XMFLOAT3(0.0f, 0.698f, 0.894f), XMFLOAT3(0.0f, 0.506f, 0.725f), 200.0f,
-		528, 10, 8);
-=======
 
 	BuildPlanetMessage buildPlanetMessage;
 
 	buildPlanetMessage.planetPath = "Vaelhad/";
 	buildPlanetMessage.cellSize = 64;
-	buildPlanetMessage.maxLevel = 12;
+	buildPlanetMessage.maxLevel = 3;
 	buildPlanetMessage.loadDataMaxLvl = 5;
 	buildPlanetMessage.generateTreesLvl = 10;
 	buildPlanetMessage.loadTilesLvl = 4;
@@ -92,12 +88,11 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	buildPlanetMessage.fogColor = XMFLOAT3(0.0f, 0.698f, 0.894f);
 	buildPlanetMessage.waterColor = XMFLOAT3(0.0f, 0.506f, 0.725f);
 	buildPlanetMessage.waterDeep = 200.0f;
-	buildPlanetMessage.sizeOfBigTile = 528;
+	buildPlanetMessage.sizeOfBigTile = 512;
 	buildPlanetMessage.levelOfSmallBlock = 10;
 	buildPlanetMessage.levelOfBigBlock = 8;
 
 	((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->BuildPlanet(buildPlanetMessage);
->>>>>>> master
 
 	GameObjectSpace *circleMoonSpace = new GameObjectSpace;
 
@@ -106,6 +101,8 @@ VereEngineMain::VereEngineMain(const std::shared_ptr<DX::DeviceResources>& devic
 	((GameObjectSpace*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(id2a);
 	((Planet*)GameObjectStackHandle->GetGameObjectByID(id3a))->CreateGameObject(GameObjectStackHandle->GetMainCamera()->GetId());
 	GameObjectStackHandle->GetMainCamera()->SetLocalPosition(btVector3(350000.0, 100.0, 0.0));
+
+	//((Planet*)GameObjectStackHandle->GetGameObjectByID(id2a))->GenerateCoord(512.0f, 512.0f, 0.0f);
 
 	GameObjectSpace *circlePlanetSpace = new GameObjectSpace;
 

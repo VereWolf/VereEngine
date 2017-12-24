@@ -37,16 +37,16 @@ SamplerState samHeightMap
 {
 	Filter = MIN_MAG_MIP_LINEAR;
 
-	AddressU = WRAP;
-	AddressV = WRAP;
+	AddressU = CLAMP;
+	AddressV = CLAMP;
 };
 
 SamplerState samNormalMap
 {
 	Filter = MIN_MAG_MIP_LINEAR;
 
-	AddressU = WRAP;
-	AddressV = WRAP;
+	AddressU = CLAMP;
+	AddressV = CLAMP;
 };
 
 Texture2D gHeightMap;
@@ -57,13 +57,14 @@ Texture2D gTreesMap;
 struct VertexIn
 {
 	float3		PosL:		POSITION;
-	float2		TexTess:		TEXCOORD0;
+	float2		TexTess:	TEXCOORD0;
 };
 
 struct VertexOut
 {
-	float3		PosL:		POSITION;	
-	float2		TexTess:		TEXCOORD0;
+	float3		PosL:		POSITION;
+	float		PosCH:      BLENDWEIGHT;
+	float2		TexTess:    TEXCOORD0;
 };
 
 VertexOut VS(VertexIn vin)
@@ -72,6 +73,15 @@ VertexOut VS(VertexIn vin)
 	vout.TexTess = vin.TexTess;
 
 	vout.PosL = vin.PosL;
+
+	vout.PosCH = 0.0f;
+
+	if (vout.PosL.y != 0.0f)
+	{
+		vout.PosCH = 1.0f;
+	}
+
+	vout.PosL.y = 0.0f;
 
 	return vout;
 }
@@ -99,7 +109,8 @@ PatchTess ConstantHS(InputPatch<VertexOut, 4> patch, uint patchID : SV_Primitive
 
 struct HullOut
 {
-	float3 PosL     : POSITION;
+	float3 PosL:        POSITION;
+	float  PosCH:       BLENDWEIGHT;
 	float2 TexTess:		TEXCOORD0;
 };
 
@@ -116,6 +127,7 @@ HullOut HS(InputPatch<VertexOut, 4> p,
 	HullOut hout;
 
 	hout.PosL = p[i].PosL;
+	hout.PosCH = p[i].PosCH;
 	hout.TexTess = p[i].TexTess;
 
 	return hout;
@@ -123,7 +135,7 @@ HullOut HS(InputPatch<VertexOut, 4> p,
 
 struct DomainOut
 {
-	float4 PosH     : SV_POSITION;
+	float4 PosH     :SV_POSITION;
 	float3 PosW     :POSITION01;
 	float3 PosV     :POSITION02;
 	float3 NormalW	:NORMAL01;
@@ -142,12 +154,15 @@ DomainOut DS(PatchTess patchTess,
 		lerp(quad[2].PosL, quad[3].PosL, uv.x),
 		uv.y);
 
+	float PosCH = lerp(
+		lerp(quad[0].PosCH, quad[1].PosCH, uv.x),
+		lerp(quad[2].PosCH, quad[3].PosCH, uv.x),
+		uv.y);
+
 	dout.TexTess = lerp(
 		lerp(quad[0].TexTess, quad[1].TexTess, uv.x),
 		lerp(quad[2].TexTess, quad[3].TexTess, uv.x),
 		uv.y);
-
-	float CH = dout.PosW.y * gSpacing;
 
 	dout.PosW = mul(float4(dout.PosW, 1.0f), gWorld).xyz;
 
@@ -155,7 +170,7 @@ DomainOut DS(PatchTess patchTess,
 
 	if (gIsMap == true)
 	{
-		H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x + CH;
+		H = gHeightMap.SampleLevel(samHeightMap, float2(dout.TexTess.x, dout.TexTess.y), 0).x - 2000.0f * PosCH;
 	}
 
 	float3 N = normalize(dout.PosW - gCenterOfPlanet);
@@ -280,7 +295,9 @@ float4 PS(DomainOut  pin) : SV_Target
 
 	float3 N = pin.NormalW;
 
-	color = (0.6f + 0.5f * (dot(N, float3(0.0f, 1.0f, 0.0f)) + 1.0f)) * color / 1.6f;
+	float dl = dot(N, normalize(float3(1.0f, 0.0f, 0.0f)));
+
+	color = (0.3f + (0.4f * dl + 0.6f * dl * dl)) * color / 1.3f;
 
 	float d = clamp(CalcWater(gCenterOfPlanet, pin.PosW, float3(0.0f, 0.0f, 0.0f), gRadiusOfWater, gFogWRange), 0.0f, 1.0f);
 
@@ -292,10 +309,7 @@ float4 PS(DomainOut  pin) : SV_Target
 
 	return float4(color, 1.0f);
 	//return float4(E.zw, 0.0f, 1.0f);
-<<<<<<< HEAD
-=======
 	//return float4(N, 1.0f);
->>>>>>> master
 }
 
 technique11 LightTech

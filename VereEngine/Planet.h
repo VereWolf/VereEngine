@@ -56,13 +56,7 @@ public:
 	void DrawWCA();
 	void DrawPlanet();
 
-<<<<<<< HEAD
-	void BuildPlanet(std::string planetPath, int cellSize, int maxLevel, int loadDataMaxLvl, int generateTreesLvl, int loadTilesLvl, int loadDataPer,
-		XMFLOAT3 fogColor, XMFLOAT3 waterColor, float waterDeep,
-		int sizeOfBigTile, int levelOfSmallBlock, int levelOfBigBlock);
-=======
 	void BuildPlanet(BuildPlanetMessage message);
->>>>>>> master
 
 	GameObject* Clone() { return new Planet(*this); }
 	PlanetLOD *GetPlanetLOD(int i) { return &m_PlanetLOD[i]; }

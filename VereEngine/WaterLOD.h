@@ -13,4 +13,7 @@ public:
 	btScalar m_Spacing1;
 	btScalar m_Spacing2;
 	float m_Level;
+	bool m_IsHeightMap;
+
+	ID3D11ShaderResourceView * m_HeightSRV;
 };

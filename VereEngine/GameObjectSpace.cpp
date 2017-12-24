@@ -24,8 +24,8 @@ void GameObjectSpace::Render()
 
 void GameObjectSpace::Update()
 {
-	Rotation(btVector3(0.0, 1.0, 0.0), 0.02 * GetDeltaTime());
-	Circuit(btVector3(0.0, 1.0, 0.0), 0.04 * GetDeltaTime());
+	//Rotation(btVector3(0.0, 1.0, 0.0), 0.02 * GetDeltaTime());
+	//Circuit(btVector3(0.0, 1.0, 0.0), 0.04 * GetDeltaTime());
 }
 
 int GameObjectSpace::CreateGameObject(int id)
